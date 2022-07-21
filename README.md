@@ -9,16 +9,8 @@ cd Modern-and-Magic-Chess-Online
 
 1) Copy config from `.env.example` to `.env` and modify (set variables).
 
-2) Copy config from config-db-ex.json to server/src/db/config/config.json and modify.
+2) Copy config from server/config-db-example.json to server/src/db/config/config.json and modify.
 
-3) Write the following lines:
-```
-cd server
-yarn
-yarn start
-cd src/db 
-sequelize db:create
-node ./create.js
-```
+3) Run bash install_web.sh
 
 For development use `yarn dev` instead of `yarn start`.

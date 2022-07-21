@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    user1Id: {
+    firstUser: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    user2Id: {
+    secondUser: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
