@@ -11,7 +11,7 @@ cd Modern-and-Magic-Chess-Online
 
 2) Copy config from config-db-ex.json to server/src/db/config/config.json and modify.
 
-2) Write the following lines:
+3) Write the following lines:
 ```
 cd server
 yarn
