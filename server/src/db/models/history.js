@@ -16,8 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   History.init({
     gameId: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+      allowNull: false
     },
     moveNum: {
       type: DataTypes.INTEGER,

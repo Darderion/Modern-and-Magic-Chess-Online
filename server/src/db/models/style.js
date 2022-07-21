@@ -21,10 +21,17 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       primaryKey: true
     },
-    src: DataTypes.STRING,
-    isField: {
+    fieldId: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    isForBlack: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    shapeType: {
+      type: DataTypes.INTEGER,
+      allowNull: true //null for fields
     }
   }, {
     sequelize,

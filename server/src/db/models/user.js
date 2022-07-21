@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ Game, userStyles }) {
       this.hasMany(userStyles, {foreignKey: 'userId'});
-      this.hasMany(Game, {foreignKey: 'user1Id'});
-      this.hasMany(Game, {foreignKey: 'user2Id'});
+      this.hasMany(Game, {foreignKey: 'firstUser'});
+      this.hasMany(Game, {foreignKey: 'secondUser'});
       this.hasMany(Game, {foreignKey: 'winnerId'});
     }
   }
@@ -26,11 +26,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    password: {
+    passwordHash: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    iconSrc: DataTypes.STRING,
+    iconFileId: DataTypes.INTEGER,
     chessStyleId: {
       type: DataTypes.INTEGER,
       allowNull: false
