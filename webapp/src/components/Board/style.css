@@ -1,0 +1,76 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.board {
+    width: 800px;
+    height: 800px;
+    display: grid;
+    grid-template: repeat(8, 1fr) / repeat(8, 1fr);
+    background-color: #ebecd0;
+}
+
+.box {
+    height: 100px;
+    width: 100px;
+}
+
+/* За код спасибо: https://codepen.io/jeansarlon/pen/WpZNda */
+
+.box:nth-child(-2n+8),
+.box:nth-child(8)~div:nth-child(-2n+15),
+.box:nth-child(16)~div:nth-child(-2n+24),
+.box:nth-child(24)~div:nth-child(-2n+31),
+.box:nth-child(32)~div:nth-child(-2n+40),
+.box:nth-child(40)~div:nth-child(-2n+47),
+.box:nth-child(48)~div:nth-child(-2n+56),
+.box:nth-child(56)~div:nth-child(-2n+63) {
+    background-color: #779556;
+}
+
+.box img {
+    position: relative;
+    top: -100px;
+    z-index: 1;
+    width: 90%;
+}
+
+.box .bishop {
+    margin-left: 20%;
+    margin-top: 10%;
+}
+
+.box .pawn {
+    margin-left: 25%;
+    margin-top: 20%;
+}
+
+.box .rook {
+    margin-left: 22%;
+    margin-top: 19%;
+}
+
+.box .knight {
+    margin-left: 15%;
+    margin-top: 12%;
+}
+
+.box .queen {
+    margin-left: 10%;
+    margin-top: 12%;
+}
+
+.box .king {
+    margin-left: 11.5%;
+    margin-top: 10%;
+}
+
+.box .overlay {
+    position: relative;
+    z-index: 100;
+    top: 0px;
+    width: 100px;
+    height: 100px;
+}
