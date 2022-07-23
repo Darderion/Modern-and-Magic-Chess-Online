@@ -1,8 +1,11 @@
 
 /* Placeholder */
 .wrapper {
-    width: 600px;
+    width: 1250px;
     height: 600px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .board {

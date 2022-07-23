@@ -37,6 +37,7 @@ const PieceComponent = ({
 		'white rook': require('./images/skins/default/white/rook.svg').default,
 	};
 
+
 	const handleClick = () => {
 		action.current.push(index);
 		console.log(action.current);
@@ -74,6 +75,7 @@ const PieceComponent = ({
 						return { ...elem };
 					});
 				});
+            // Ход не валиден -> action принимает значение из только второго индекса
 			} else {
 				action.current = [second];
 				setField((prev) => {
