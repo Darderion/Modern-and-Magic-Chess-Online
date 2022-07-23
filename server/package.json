@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/server",
     "dev": "nodemon src/server",
-    "test": "jest"
+    "test": "jest",
+    "createdb": "sequelize db:create --config src/db/config/config.json && node ./src/db/create.js"
   },
   "author": "vs9lh",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "node": "^18.5.0",
     "pg": "^8.7.3",
     "sequelize": "^6.21.3",
+    "sequelize-cli": "6.4.1",
     "uuid": "^8.3.2",
     "ws": "^8.8.1"
   },
