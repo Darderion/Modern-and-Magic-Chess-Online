@@ -1,53 +1,192 @@
-import React, { useState, useRef } from "react";
-import PieceComponent from "./PieceComponent";
-import FieldContext from "./FieldContext";
+import React, { useState, useRef } from 'react';
+import PieceComponent from './PieceComponent';
+import FieldContext from './FieldContext';
 
 const BoardComponent = () => {
-  const [field, setField] = useState(
-    [].concat(
-      [
-        ["black", "rook"],
-        ["black", "knight"],
-        ["black", "bishop"],
-        ["black", "queen"],
-        ["black", "king"],
-        ["black", "bishop"],
-        ["black", "knight"],
-        ["black", "rook"],
-      ],
-      Array(8).fill(["black", "pawn"]),
-      Array(4 * 8).fill(["_", "_"]),
-      Array(8).fill(["white", "pawn"]),
-      [
-        ["white", "rook"],
-        ["white", "knight"],
-        ["white", "bishop"],
-        ["white", "queen"],
-        ["white", "king"],
-        ["white", "bishop"],
-        ["white", "knight"],
-        ["white", "rook"],
-      ]
-    )
-  );
+    const yourColor = "white"
+    const enemyColor = "black"
+	const [field, setField] = useState(
+		[].concat(
+			[
+				{
+					skin: 'default',
+					color: enemyColor,
+					name: 'rook',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: enemyColor,
+					name: 'knight',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: enemyColor,
+					name: 'bishop',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: enemyColor,
+					name: 'queen',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: enemyColor,
+					name: 'king',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: enemyColor,
+					name: 'bishop',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: enemyColor,
+					name: 'knight',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: enemyColor,
+					name: 'rook',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+			],
+			Array(8).fill({
+				skin: 'default',
+				color: enemyColor,
+				name: 'pawn',
+				selected: false,
+				targeted: false,
+				idle: false,
+			}),
+			Array(4 * 8).fill({...{
+                skin: 'default',
+                color: null,
+                name: null,
+                selected: false,
+				targeted: false,
+				idle: false,
+            }}),
+			Array(8).fill({...{
+				skin: 'default',
+				color: yourColor,
+				name: 'pawn',
+				selected: false,
+				targeted: false,
+				idle: false,
+			}}),
+			[
+				{
+					skin: 'default',
+					color: yourColor,
+					name: 'rook',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: yourColor,
+					name: 'knight',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: yourColor,
+					name: 'bishop',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: yourColor,
+					name: 'queen',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: yourColor,
+					name: 'king',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: yourColor,
+					name: 'bishop',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: yourColor,
+					name: 'knight',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+				{
+					skin: 'default',
+					color: yourColor,
+					name: 'rook',
+					selected: false,
+					targeted: false,
+					idle: false,
+				},
+			],
+		),
+	);
 
-  const action = useRef([]);
+	const action = useRef([]);
 
-  return (
-    <FieldContext.Provider value={{ field, setField }}>
-      <div className="board">
-        {[...field].map((elem, i) => (
-          <PieceComponent
-            key={i}
-            color={elem[0]}
-            name={elem[1]}
-            action={action}
-            index={i}
-          />
-        ))}
-      </div>
-    </FieldContext.Provider>
-  );
+	return (
+		<FieldContext.Provider value={{ field, setField }}>
+			<div className="board">
+				{[...field].map((elem, i) => (
+					<PieceComponent
+						key={i}
+                        skin={elem.skin}
+						color={elem.color}
+						name={elem.name}
+                        selected={elem.selected}
+                        targeted={elem.targeted}
+                        idle={elem.idle}
+						action={action}
+						index={i}
+					/>
+				))}
+			</div>
+		</FieldContext.Provider>
+	);
 };
 
 export default BoardComponent;

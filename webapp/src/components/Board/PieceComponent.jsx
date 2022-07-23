@@ -1,8 +1,17 @@
 import React, { useContext } from 'react';
 import FieldContext from './FieldContext';
 
-const PieceComponent = ({ color, name, action, index }) => {
-	let requiresImg = !(color === '_');
+const PieceComponent = ({
+	skin,
+	color,
+	name,
+	selected,
+	targeted,
+	idle,
+	action,
+	index,
+}) => {
+	let requiresImg = color !== null;
 
 	const { field, setField } = useContext(FieldContext);
 
@@ -23,22 +32,35 @@ const PieceComponent = ({ color, name, action, index }) => {
 	};
 
 	const handleClick = () => {
-		action.current.push(index)
-        console.log(action.current)
-		if (action.current.length === 1){
-            if (field[action.current[0]] === '_')
-                action.current = []
-            // Подсветить и добавить варианты для хода
-            return
-        }
+		action.current.push(index);
+		console.log(action.current);
+		if (action.current.length === 1) {
+			if (field[action.current[0]].color === null) action.current = [];
+			// Подсветить и добавить варианты для хода
+			setField((prev) => {
+				let next = prev.map((elem) => {
+					return { ...elem };
+				});
+				next[index].selected = true;
+				return next.map((elem) => {
+					return { ...elem };
+				});
+			});
+			return;
+		}
 		const first = action.current[0];
 		const second = action.current[1];
-		if (field[first][0] !== '_' && field[second][0] === '_') {
+		if (field[second].color === null) {
 			setField((prev) => {
-				let next = [...prev];
-				next[second] = prev[first];
-				next[first] = prev[second];
-				return [...next];
+				let next = prev.map((elem) => {
+					return { ...elem };
+				});
+				next[second] = { ...prev[first] };
+				next[first] = { ...prev[second] };
+				next[second].selected = false
+				return next.map((elem) => {
+					return { ...elem };
+				});
 			});
 		}
 		action.current = [];
@@ -46,6 +68,7 @@ const PieceComponent = ({ color, name, action, index }) => {
 
 	return (
 		<div className="box">
+            <div className={`underlay ${selected ? 'selected' : null}`}/>
 			<div className="overlay" onClick={handleClick} />
 			{requiresImg ? (
 				<img
