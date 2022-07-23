@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({History}) {
-      this.hasMany(History, {foreignKey: 'gameId'});
+    static associate() {
+      //
     }
   }
   Game.init({
@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
     finishTime: DataTypes.TIME,
     isFinished: {
       type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
       allowNull: false
     },
     winnerId: DataTypes.INTEGER

@@ -31,18 +31,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     iconFileId: DataTypes.INTEGER,
-    chessStyleId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    fieldStyleId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
     salt: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    chatStyleId: DataTypes.INTEGER //null = default
   }, {
     sequelize,
     tableName: 'user',
