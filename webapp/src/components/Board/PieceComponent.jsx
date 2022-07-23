@@ -37,7 +37,6 @@ const PieceComponent = ({
 		'white rook': require('./images/skins/default/white/rook.svg').default,
 	};
 
-
 	const handleClick = () => {
 		action.current.push(index);
 		console.log(action.current);
@@ -62,33 +61,20 @@ const PieceComponent = ({
 			const first = action.current[0];
 			const second = action.current[1];
 			// TODO: проверка валидности
-			if (field[second].color === null) {
-				action.current = [];
-				setField((prev) => {
-					let next = prev.map((elem) => {
-						return { ...elem };
-					});
-					next[second] = { ...prev[first] };
-					next[first] = { ...prev[second] };
-					next[second].selected = false;
-					return next.map((elem) => {
-						return { ...elem };
-					});
+			action.current = [];
+			setField((prev) => {
+				let next = prev.map((elem) => {
+					return { ...elem };
 				});
-            // Ход не валиден -> action принимает значение из только второго индекса
-			} else {
-				action.current = [second];
-				setField((prev) => {
-					let next = prev.map((elem) => {
-						return { ...elem };
-					});
-					next[first].selected = false;
-					next[second].selected = true;
-					return next.map((elem) => {
-						return { ...elem };
-					});
+				next[second] = { ...prev[first] };
+				next[first].selected = false;
+				next[first].color = null;
+				next[first].name = null;
+				next[second].selected = false;
+				return next.map((elem) => {
+					return { ...elem };
 				});
-			}
+			});
 		}
 	};
 
