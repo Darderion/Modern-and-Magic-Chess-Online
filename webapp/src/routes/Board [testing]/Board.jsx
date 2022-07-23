@@ -4,7 +4,7 @@ import "../../components/Board/style.css"
 
 const Board = () => {
     return (
-        <div>
+        <div className="wrapper">
             <BoardComponent />
         </div>
     )

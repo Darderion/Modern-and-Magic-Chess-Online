@@ -1,20 +1,21 @@
+
+/* Placeholder */
 .wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 600px;
+    height: 600px;
 }
 
 .board {
-    width: 800px;
-    height: 800px;
+    width: 600px;
+    height: 600px;
     display: grid;
     grid-template: repeat(8, 1fr) / repeat(8, 1fr);
     background-color: #ebecd0;
 }
 
 .box {
-    height: 100px;
-    width: 100px;
+    height: 75px;
+    width: 75px;
 }
 
 /* За код спасибо: https://codepen.io/jeansarlon/pen/WpZNda */
@@ -39,38 +40,38 @@
 
 .box .bishop {
     margin-left: 20%;
-    margin-top: 10%;
+    margin-top: 40%;
 }
 
 .box .pawn {
     margin-left: 25%;
-    margin-top: 20%;
+    margin-top: 50%;
 }
 
 .box .rook {
     margin-left: 22%;
-    margin-top: 19%;
+    margin-top: 49%;
 }
 
 .box .knight {
     margin-left: 15%;
-    margin-top: 12%;
+    margin-top: 42%;
 }
 
 .box .queen {
     margin-left: 10%;
-    margin-top: 12%;
+    margin-top: 42%;
 }
 
 .box .king {
     margin-left: 11.5%;
-    margin-top: 10%;
+    margin-top: 40%;
 }
 
 .box .overlay {
     position: relative;
     z-index: 100;
     top: 0px;
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 100%;
 }
