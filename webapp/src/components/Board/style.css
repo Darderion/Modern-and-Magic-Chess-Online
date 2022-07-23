@@ -31,8 +31,12 @@
     background-color: #779556;
 }
 
-.selected {
-    background-color: rgb(247, 247, 123);
+.selected-white {
+    background-color: #f6f48b;
+}
+
+.selected-black {
+    background-color: #bbca47;
 }
 
 .box img {
