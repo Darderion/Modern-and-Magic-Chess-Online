@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
     salt: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    chatStyleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   }, {
     sequelize,
