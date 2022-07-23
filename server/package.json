@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server",
-    "dev": "nodemon src/server",
+    "dev": "nodemon -L src/server",
     "test": "jest",
     "createdb": "sequelize db:create --config src/db/config/config.json && node ./src/db/create.js"
   },
