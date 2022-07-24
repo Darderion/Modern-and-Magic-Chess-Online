@@ -3,6 +3,7 @@ const express = require('express');
 // const api = require('./controllers/api');
 const ping = require('./controllers/ping');
 const { auth } = require('./controllers');
+const { history } = require('./controllers');
 const getAccessToken = require('./middlewares/getAccessToken');
 const verifyAccess = require('./middlewares/verifyAccess');
 const setRefreshToken = require('./middlewares/setRefreshToken');
@@ -23,16 +24,8 @@ authRouter.post('/login', auth.login, setRefreshToken, getAccessToken);
 authRouter.post('/refresh', auth.refresh, setRefreshToken, getAccessToken);
 authRouter.get('/logout', auth.logout);
 mainRouter.get('/ping', verifyAccess, ping);
-apiRouter.get(
-  '/history/get/:id',
-  verifyAccess,
-  historyController.getGameHistory
-);
-apiRouter.put(
-  '/history/set/:id',
-  verifyAccess,
-  historyController.setGameHistory
-);
+apiRouter.get('/history/get/:id', verifyAccess, history.get);
+apiRouter.put('/history/set/:id', verifyAccess, history.put);
 
 exports.mainRouter = mainRouter;
 exports.apiRouter = apiRouter;
