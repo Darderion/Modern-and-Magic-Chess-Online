@@ -7,13 +7,13 @@ module.exports = async (req, res, next) => {
   try {
     const refreshToken = jwt.sign(
       { userId: user.userId },
-      process.env.REFRESH_TOKEN_SECRET,
+      env.refreshTokenSecret,
       {
-        expiresIn: '7d',
+        expiresIn: env.refreshTokenExpTime,
       }
     );
 
-    res.cookie(process.env.COOKIE_NAME, refreshToken, {
+    res.cookie(env.cookieName, refreshToken, {
       httpOnly: true,
       secure: env.isSecureCookies,
       sameSite: 'none',

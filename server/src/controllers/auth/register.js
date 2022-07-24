@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
       passwordHash,
       salt,
     });
-    req.user = { id: newUser.id, nick: newUser.nick };
+    req.user = { id: newUser.id };
     return res.json(req.user);
   } catch (e) {
     new ApiError(500, e.message).sendResponse(res);

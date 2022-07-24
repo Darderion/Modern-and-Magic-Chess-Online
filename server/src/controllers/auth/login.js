@@ -25,6 +25,6 @@ module.exports = async (req, res, next) => {
     return new ApiError(403, 'Wrong credentials').sendResponse(res);
   }
 
-  req.user = { id: user.id, nick: user.nick };
+  req.user = { id: user.id };
   next();
 };
