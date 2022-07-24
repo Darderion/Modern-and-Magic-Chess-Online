@@ -1,21 +1,23 @@
 const express = require('express');
 
-// const api = require('./controllers/api');
+const api = require('./controllers/api');
 const ping = require('./controllers/ping');
 const { auth } = require('./controllers');
 const getAccessToken = require('./middlewares/getAccessToken');
 const verifyAccess = require('./middlewares/verifyAccess');
 const setRefreshToken = require('./middlewares/setRefreshToken');
+const lobbyExists = require('./middlewares/lobbyExists');
 const apiRouter = new express.Router();
 const mainRouter = new express.Router();
 const authRouter = new express.Router();
 
-/*
-apiRouter.get('/lobbies', verifyAccess, api.getLobbies);
-apiRouter.get('/lobby/:id', verifyAccess, lobbyExists, api.getLobby);
-apiRouter.post('/lobby', verifyAccess, api.addLobby);
-apiRouter.delete('/lobbies/:id', verifyAccess, api.deleteLobby);
-*/
+apiRouter.get('/gameStatus/:id', /*verifyAccess,*/ api.getGameStatus);
+apiRouter.get('/lobby/:id', /*verifyAccess,*/ lobbyExists, api.getLobby);
+apiRouter.get('/lobbies', /*verifyAccess,*/ api.getLobbies);
+apiRouter.delete('/lobbies/:id', /*verifyAccess,*/ api.deleteLobby);
+apiRouter.post('/createLobby', /*verifyAccess,*/ api.createLobby);
+apiRouter.post('/makeMove', /*verifyAccess,*/ api.makeMove);
+apiRouter.post('/highlightMoves', /*verifyAccess,*/ api.highlightMoves);
 
 authRouter.post('/register', auth.register);
 authRouter.post('/login', auth.login, setRefreshToken, getAccessToken);
