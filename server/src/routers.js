@@ -2,12 +2,10 @@ const express = require('express');
 
 // const api = require('./controllers/api');
 const ping = require('./controllers/ping');
-const { auth } = require('./controllers');
-const { history } = require('./controllers');
+const { auth, api } = require('./controllers');
 const getAccessToken = require('./middlewares/getAccessToken');
 const verifyAccess = require('./middlewares/verifyAccess');
 const setRefreshToken = require('./middlewares/setRefreshToken');
-const historyController = require('./controllers/api/history');
 const apiRouter = new express.Router();
 const mainRouter = new express.Router();
 const authRouter = new express.Router();
@@ -24,8 +22,7 @@ authRouter.post('/login', auth.login, setRefreshToken, getAccessToken);
 authRouter.post('/refresh', auth.refresh, setRefreshToken, getAccessToken);
 authRouter.get('/logout', auth.logout);
 mainRouter.get('/ping', verifyAccess, ping);
-apiRouter.get('/history/get/:id', verifyAccess, history.get);
-apiRouter.put('/history/set/:id', verifyAccess, history.put);
+apiRouter.get('/history/get/:id', verifyAccess, api.history.get);
 
 exports.mainRouter = mainRouter;
 exports.apiRouter = apiRouter;

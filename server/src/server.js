@@ -1,12 +1,7 @@
 const http = require('http');
 const express = require('express');
 const config = require('./config');
-const {
-  apiRouter,
-  mainRouter,
-  authRouter,
-  historyRouter,
-} = require('./routers');
+const { apiRouter, mainRouter, authRouter } = require('./routers');
 const setupMiddlewares = require('./middlewares');
 
 const app = express();
