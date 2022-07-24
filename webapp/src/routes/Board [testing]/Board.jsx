@@ -51,15 +51,16 @@ const Board = () => {
 		],
 	];
 
+
 	const turn = 'white';
 	const from = 'e2';
 	const to = null;
-	const targeted = ["d2", "f2"];
+	const targeted = [];
 	const idle = ["e3", "e4"];
 
 	return (
 		<div className="wrapper">
-			<div><BoardComponent
+			<div className='board-container'><BoardComponent
 				field={field}
 				turn={turn}
 				view={'white'}
@@ -68,7 +69,7 @@ const Board = () => {
 				targeted={targeted}
 				idle={idle}
 			/><h1>White</h1></div>
-			<div><BoardComponent
+			<div className='board-container'><BoardComponent
 				field={field}
 				turn={turn}
 				view={'black'}
@@ -77,7 +78,7 @@ const Board = () => {
 				targeted={targeted}
 				idle={idle}
 			/><h1>Black</h1></div>
-			<div><BoardComponent
+			<div className='board-container'><BoardComponent
 				field={field}
 				turn={turn}
 				view={'observer'}

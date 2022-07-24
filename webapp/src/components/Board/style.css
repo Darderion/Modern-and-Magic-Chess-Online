@@ -1,24 +1,33 @@
 
 /* Placeholder */
 .wrapper {
-    width: 1900px;
-    height: 600px;
+    width: 1300px;
+    height: 400px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
+/* Placeholder */
+
+/* Placeholder */
+.board-container {
+    width: 400px;
+    height: 400px;
+}
+/* Placeholder */
 
 .board {
-    width: 600px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
     display: grid;
     grid-template: repeat(8, 1fr) / repeat(8, 1fr);
     background-color: #ebecd0;
 }
 
 .box {
-    height: 75px;
-    width: 75px;
+    width: 100%;
+    min-height: 100%;
+    max-height: 100%;
 }
 
 /* За код спасибо: https://codepen.io/jeansarlon/pen/WpZNda */
@@ -44,7 +53,7 @@
 
 .box img {
     position: relative;
-    top: -150px;
+    top: -200%;
     z-index: 50;
     width: 90%;
 }
@@ -99,14 +108,14 @@
     width: 60%;
     z-index: 2;
     position: relative;
-    top: 21px;
-    left: 5px;
+    top: 29%;
+    left: 9%;
 }
 
 .box .targeted {
     width: 139%;
     z-index: 2;
     position: relative;
-    top: 0px;
-    left: 0px;
+    top: 0%;
+    left: 0%;
 }

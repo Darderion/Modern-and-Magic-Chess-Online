@@ -7,9 +7,8 @@ const PieceComponent = ({
 	selected,
 	targeted,
 	idle,
-	index
+	index,
 }) => {
-
 	const isBlackCell = (ind) => {
 		const row = Math.floor(ind / 8);
 		const col = ind % 8;
@@ -31,9 +30,10 @@ const PieceComponent = ({
 		'white queen': require('./images/skins/default/white/queen.svg').default,
 		'white rook': require('./images/skins/default/white/rook.svg').default,
 	};
+	//   Placeholder
 
-	const idleSRC = require('./idle.svg').default
-	const targetedSRC = require('./targeted.svg').default
+	const idleSRC = require('./idle.svg').default;
+	const targetedSRC = require('./targeted.svg').default;
 
 	return (
 		<div className="box">
@@ -44,10 +44,11 @@ const PieceComponent = ({
 							? 'selected-black'
 							: 'selected-white'
 						: null
-				}`}
-			>
-				{idle ? <img src={idleSRC} alt="idle" className='idle'/> : null}
-				{targeted ? <img src={targetedSRC} alt="targeted" className='targeted'/> : null}
+				}`}>
+				{idle ? <img src={idleSRC} alt="idle" className="idle" /> : null}
+				{targeted ? (
+					<img src={targetedSRC} alt="targeted" className="targeted" />
+				) : null}
 			</div>
 			<div className="overlay" onClick={null} />
 			{color !== null ? (
