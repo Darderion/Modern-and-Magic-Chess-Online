@@ -1,4 +1,4 @@
-const { User, sequelize } = require('../../db/models');
+const { User/* sequelize */ } = require('../../db/models');
 //const { env } = require('../../config/index');
 const WebSocket = require('ws');
 const GameMaster = require('./gameMaster');
@@ -7,20 +7,24 @@ const GameMaster = require('./gameMaster');
 const serverInfo = {
     wsServer: undefined,
     lobbyClients: new Set(),
-    lobbies: [],
-    games: new Map() //key = ws.user.id, value = GameMaster;
+    lobbies: new Set(),
+    games: new Map() //key = ws, value = GameMaster;
 };
 
-const whereWS = {beforeLobbies: 0, inLobbies: 1, inLobbie: 2, inGame: 3};
 const errorMessages = {
     notAuth: 'Not authorized user',
     wrongLobbyID: 'Wrond lobbyID',
-    wrongStep: 'Wrong step or not your step'
+    wrongStep: 'Wrong step or not your step',
+    userIsInGame: 'This user is in game',
+    userIsntInGame: 'This user isn\'t in game',
+    incorrectData: 'This user isn\'t in game or data wasn\'t sent to server',
+    noOpenLobby: 'No open lobby'
 }
 const successMessages = {
     auth: 'Authorised',
     guestAuth: 'Authorized as guest',
-    connected: 'Connected'
+    connected: 'Connected',
+    lobbyClosed: 'Lobby closed'
 }
 class Message {
     constructor(message) {
@@ -28,32 +32,36 @@ class Message {
     }
 }
 
-const getStyle = (ws) => {
-    sequelize.query(`SELECT chatStyle.* FROM user, chatStyle WHERE user.id = ${ws.user.id} AND chatStyle.id = user.`)
+const getStyle = (/* ws */) => {
     //возовем функцию из стилей для получения всех стилей из ws.user.id
     const data = {};
     return data;
 }
 const createGame = (ws1, ws2) => {
+    closeLobby(ws1);
     const gameMaster = new GameMaster(ws1, ws2, serverInfo, 
         (gameID, pgn) => {
-            ws1.where = whereWS.inGame;
-            ws2.where = whereWS.inGame;
-            serverInfo.games.set(ws1.user.id, gameMaster);
-            serverInfo.games.set(ws2.user.id, gameMaster);
+            serverInfo.games.set(ws1, gameMaster);
+            serverInfo.games.set(ws2, gameMaster);
             sendToWS(ws1, 'createGame', 200, {
                 gameID, pgn, isFirst: gameMaster.isFirstFirst, styles: getStyle(ws1) });
             sendToWS(ws2, 'createGame', 200, {
                 gameID, pgn, isFirst: !gameMaster.isFirstFirst, styles: getStyle(ws2)});
         });
 }
-const removeFromArr = (arr, el) => {
-    return arr.filter(el2 => el2 !== el);
+const removeFromLobbies = (ws) => {
+    serverInfo.lobbies.delete(ws);
+    serverInfo.lobbyClients.delete(ws);
+}
+const closeGame = (ws) => {
+
+    removeFromLobbies(serverInfo.games.get(ws)?.getOtherWS(ws));
 }
 const addOnError = (ws) => {
     ws.on('error', () => ws.close());
     ws.on('close', () => {
-        moveBeforeLobbies(ws);
+        removeFromLobbies(ws);
+        closeGame(ws);
     });
 }
 const sendToWS = (ws, type, code, data) => {
@@ -61,90 +69,107 @@ const sendToWS = (ws, type, code, data) => {
         ws.send(JSON.stringify({type: type, data: data, 
             code: code}));
 }
-const moveToLobbies = (ws, fromOtherGameWS = false) => {
-    ws.where = whereWS.inLobbies;
-    if(serverInfo.lobbies.includes(ws)) {
-        serverInfo.lobbies = removeFromArr(serverInfo.lobbies, ws);
-    }
-    if(!fromOtherGameWS && serverInfo.games.has(ws)) {
-        moveToLobbies(serverInfo.games.get(ws).getOtherWS(ws), true);
-    }
-    ws.games.delete(ws);
-    serverInfo.lobbyClients.add(ws);
+const sendAllLobbiesForWS = (ws) => {
+    sendToWS(ws, 'allLobbies', 200, 
+        Array.from(serverInfo.lobbies)
+            .map((el) => {return {
+            lobbyID: el.lobbyID,
+            lobbyName: el.lobbyName,
+            userName: el.user.nick
+        }}));
 }
-const moveBeforeLobbies = (ws) => {
-    ws.where = whereWS.beforeLobbies;
-    serverInfo.lobbies = removeFromArr(serverInfo.lobbies, ws);
-    serverInfo.lobbyClients.delete(ws);
-    if(ws.user) {
-        const gameMaster = serverInfo.games.get(ws.user.id);
-        if(gameMaster) {
-            moveToLobbies(gameMaster.getOtherWS(ws), true);
-            gameMaster.ws1 = gameMaster.ws2 = undefined;
-        }
-    }
+const sendAllLobbies = () => {
+    serverInfo.lobbyClients.forEach(ws => 
+        sendAllLobbiesForWS(ws));
+}
+const closeLobby = (ws) => {
+    serverInfo.lobbies.delete(ws);
+    ws.lobbyID = undefined;
+    ws.lobbyName = undefined;
 }
 const workWithWS = (ws, data) => {
+    console.log(data);
     switch(data.type) {
         case 'openLobby':
-            console.log(ws.user);
-            if(ws.user && ws.where === whereWS.inLobbies) {
+            if(ws.user && !serverInfo.games.has(ws)) {
                 ws.lobbyName = data.data.lobbyName || 'Unnamed';
-                ws.where = whereWS.inLobbie;
                 ws.lobbyID = serverInfo.lobbies.maxID++;
+                serverInfo.lobbies.add(ws);
                 sendToWS(ws, 'openLobby', 200, 
                 {lobbyID: ws.lobbyID, lobbyName: ws.lobbyName});
-                serverInfo.lobbyClients.delete(ws);
-                serverInfo.lobbies.push(ws);
+                sendAllLobbies();
             } else {
-                sendToWS(ws, 'openLobby', 400, new Message( 
-                    errorMessages.notAuth));
+                if(!ws.user) {
+                    sendToWS(ws, 'openLobby', 400, 
+                        new Message(errorMessages.notAuth));
+                } else {
+                    sendToWS(ws, 'openLobby', 400, new Message( 
+                        errorMessages.userIsInGame));
+                }
+            }
+            break;
+        case 'closeLobby':
+            if(serverInfo.lobbies.has(ws)) {
+                closeLobby(ws);
+                sendToWS(ws, 'closeLobby', 200, 
+                    new Message(successMessages.lobbyClosed));
+            } else {
+                sendToWS(ws, 'closeLobby', 400, 
+                    new Message(errorMessages.noOpenLobby))
             }
             break;
         case 'allLobbies':
             serverInfo.lobbyClients.add(ws);
-            ws.where = whereWS.inLobbies;
-            sendToWS(ws, 'allLobbies', 200, 
-                serverInfo.lobbies
-                    .map((el) => {return {
-                    lobbyID: el.lobbyID,
-                    lobbyName: el.lobbyName,
-                    userName: el.user.nick
-                }}));
+            sendAllLobbiesForWS(ws);
+            break;
+        case 'unsubAllLobbies':
+            serverInfo.lobbyClients.delete(ws);
+            sendToWS(ws, 'unsubAllLobbies', 200);
             break;
         case 'connectToLobby':
             if(ws.user) {
-                const lobbyID = data.data.lobbyID;
-                const lobbie = serverInfo.lobbies
-                    .filter((el) => el.lobbyID === lobbyID);
-                if(lobbie.lenght === 0) {
-                    sendToWS(ws, 'connectToLobby', 400, 
-                        new Message(errorMessages.wrongLobbyID));
+                if(serverInfo.games.has(ws)){
+                    sendToWS(ws, 400, new Message(errorMessages.userIsInGame));
                 } else {
-                    createGame(lobbie[0], ws);
+                    let ws2 = undefined;
+                    serverInfo.lobbies.forEach(el => {
+                        if(el.lobbyID === data.data.lobbyID) {
+                            ws2 = el;
+                        }
+                    });
+                    if(!ws2) {
+                        sendToWS(ws, 'connectToLobby', 400, 
+                            new Message(errorMessages.wrongLobbyID));
+                    } else {
+                        createGame(ws2, ws);
+                    }
                 }
             } else {
                 sendToWS(ws, 400, new Message(errorMessages.notAuth));
             }
             break;
         case 'sendMessage':
-            if(ws.where === whereWS.inGame && data.data.message) {
+            if(serverInfo.games.has(ws) && data.data.message) {
                 serverInfo.games.get(ws).messages.push([ws.user.id, data.data.message]);
                 sendToWS(serverInfo.games.get(ws).getOtherWS(ws), 'message', 200, new Message(data.data.message));
+            } else if (!serverInfo.games.has(ws)) {
+                sendToWS(ws, 400, new Message(errorMessages.userIsntInGame));
             }
             break;
         case 'myStep':
-            if(ws.where === whereWS.inGame && data.data.move) {
+            if(serverInfo.games.has(ws) && data.data.move) {
                 const pgn = serverInfo.games.get(ws).move(ws, data.data.move)
                 if(pgn) {
                     const ws2 = serverInfo.games.get(ws).getOtherWS(ws);
                     sendToWS(ws, 'myStep', 200, { pgn });
                     sendToWS(ws2, 'otherStep', 200, { pgn: pgn });
                 } else {
-                    sendToWS(ws, 'myStep', 400, new Message(errorMessages.wrongStep));
+                    sendToWS(ws, 'myStep', 400, 
+                        new Message(errorMessages.wrongStep));
                 }
             } else {
-                sendToWS(ws, 'myStep', 400, new Message(errorMessages.wrongStep));
+                sendToWS(ws, 'myStep', 400, 
+                    new Message(errorMessages.incorrectData));
             }
             break;
         case 'auth'://for test
@@ -158,10 +183,10 @@ const workWithWS = (ws, data) => {
             })();
             break;
     }
-    console.log(ws.where)
+    console.log('lobbies count: ', serverInfo.lobbies.size);
     console.log('lobbyClientsSize: ', serverInfo.lobbyClients.size);
-    console.log('lobbies: ', serverInfo.lobbies);
-    console.log('games: ', serverInfo.games);
+    //console.log('lobbies: ', serverInfo.lobbies);
+    console.log('games size: ', serverInfo.games.size);
 }
 
 /* const getUser = (req) => {
@@ -188,7 +213,6 @@ module.exports = (server) => {
         }
         addOnError(ws);
         if(req.url === '/main') {
-            ws.where = whereWS.beforeLobbies;
             ws.on('message', (message) => {
                 const data = JSON.parse(message);
                 workWithWS(ws, data);

@@ -27,8 +27,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    startTime: DataTypes.TIME,
-    finishTime: DataTypes.TIME,
+    startTime: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    finishTime: DataTypes.DATE,
     isFinished: {
       type: DataTypes.INTEGER,
       allowNull: false

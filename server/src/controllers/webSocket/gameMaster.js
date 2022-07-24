@@ -1,5 +1,5 @@
 const { Chess } = require('chess.js');
-const { Game, fn } = require('../../db/models');
+const { Game, sequelize } = require('../../db/models');
 
 class GameMaster {
     constructor(ws1, ws2, serverInfo, callback, reject = console.log) {
@@ -17,8 +17,8 @@ class GameMaster {
                 const newGame = await Game.create({
                     firstUser: ws1.user.id,
                     secondUser: ws2.user.id,
-                    startTime: fn('NOW'),
-                    isFinished: false,
+                    startTime: sequelize.fn('NOW'),
+                    isFinished: 0,
                     description: this.chess.pgn()
                 });
                 callback(newGame.id, this.chess.pgn());
@@ -33,11 +33,29 @@ class GameMaster {
     }
     move(ws, move) {
         if(ws === this.currentStep) {
-            if(this.chess.move(move)) {
+            const move2 = this.chess.move(move, { sloppy: true });
+            console.log(move2);
+            if(move2) {
+                if(this.chess.in_checkmate()) {
+                    this.game.update({
+                        description: this.chess.pgn(),
+                        isFinished: 1,
+                        winnerId: ws.user.id,
+                        finishTime: sequelize.fn('NOW')
+                    });
+                }
+                this.currentStep = ws === this.ws1 ? this.ws2 : this.ws1;
                 return this.chess.pgn();
             }
-        } 
+        }
         return undefined;
+    }
+    save() {
+        if(!this.game.isFinished) {
+            this.game.update({
+                description: this.chess.pgn()
+            });
+        }
     }
 }
 
