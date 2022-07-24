@@ -68,7 +68,7 @@ const Board = () => {
 				to={to}
 				targeted={targeted}
 				idle={idle}
-			/><h1>White</h1></div>
+			/>White</div>
 			<div className='board-container'><BoardComponent
 				field={field}
 				turn={turn}
@@ -77,7 +77,7 @@ const Board = () => {
 				to={to}
 				targeted={targeted}
 				idle={idle}
-			/><h1>Black</h1></div>
+			/>Black</div>
 			<div className='board-container'><BoardComponent
 				field={field}
 				turn={turn}
@@ -86,7 +86,7 @@ const Board = () => {
 				to={to}
 				targeted={targeted}
 				idle={idle}
-			/><h1>Observer</h1></div>
+			/>Observer</div>
 		</div>
 	);
 };

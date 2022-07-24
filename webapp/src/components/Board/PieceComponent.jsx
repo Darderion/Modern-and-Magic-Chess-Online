@@ -55,7 +55,7 @@ const PieceComponent = ({
 				<img
 					src={src[`${color} ${name}`]}
 					alt={`${color} ${name}`}
-					className={name}
+					className={`${skin}-${name}`}
 				/>
 			) : null}
 		</div>

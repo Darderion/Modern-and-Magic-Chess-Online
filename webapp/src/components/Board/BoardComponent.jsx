@@ -1,7 +1,7 @@
 import React from 'react';
 import PieceComponent from './PieceComponent';
 /**
- * Для рендера доски принимает параметры для корректного отбражения игровой ситуации
+ * Рендерит ситуацию на доске с учетом статуса наблюдателя
  * @param {Array.<{field: Array.<Array.<{squre: String, type: String, color: String}>>, turn: String, view: String, from: String, to: String, targeted: Array.<String>, idle: Array.<String>}>} props
  * @returns
  */
