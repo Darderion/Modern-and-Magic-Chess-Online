@@ -14,6 +14,8 @@ module.exports = {
     cookieName: process.env.COOKIE_NAME,
     accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
     refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+    accessTokenExpTime: process.env.ACCESS_TOKEN_EXPIRATION_TIME,
+    refreshTokenExpTime: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
   },
   server: {
     port: process.env.SERVER_PORT,
