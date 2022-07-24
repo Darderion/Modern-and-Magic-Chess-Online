@@ -56,7 +56,7 @@ const Board = () => {
 	const from = 'e2';
 	const to = null;
 	const targeted = [];
-	const idle = ["e3", "e4"];
+	const idle = ['e3', 'e4'];
 
 	return (
 		<div className="wrapper">

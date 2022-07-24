@@ -6,8 +6,6 @@ import PieceComponent from './PieceComponent';
  * @returns
  */
 const BoardComponent = ({ field, turn, view, from, to, targeted, idle }) => {
-	console.log('from', from);
-	console.log('to', to);
 
 	const codes = {
 		h: 7,
@@ -90,6 +88,9 @@ const BoardComponent = ({ field, turn, view, from, to, targeted, idle }) => {
 		});
 	}
 
+	const selectColor = turn
+	const canSelect = (turn === view)
+
 	return (
 		<div className="board">
 			{layout.map((elem, i) => (
@@ -102,6 +103,8 @@ const BoardComponent = ({ field, turn, view, from, to, targeted, idle }) => {
 					targeted={elem.targeted}
 					idle={elem.idle}
 					index={view === 'black' ? 63 - i : i}
+					selectColor={selectColor}
+					canSelect={canSelect}
 				/>
 			))}
 		</div>

@@ -8,11 +8,19 @@ const PieceComponent = ({
 	targeted,
 	idle,
 	index,
+	selectColor,
+	canSelect,
 }) => {
 	const isBlackCell = (ind) => {
 		const row = Math.floor(ind / 8);
 		const col = ind % 8;
 		return (row % 2 === 0 && col % 2 === 1) || (row % 2 === 1 && col % 2 === 0);
+	};
+
+	const codes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
+	const transform = (ind) => {
+		return codes[ind % 8] + String(8 - Math.floor(ind / 8));
 	};
 
 	//   Placeholder
@@ -35,6 +43,16 @@ const PieceComponent = ({
 	const idleSRC = require('./idle.svg').default;
 	const targetedSRC = require('./targeted.svg').default;
 
+	const handleClick = () => {
+		if (!canSelect) return;
+
+		if (targeted || idle) {
+			alert(`POST a move to ${transform(index)}`);
+		} else if (selectColor === color && !selected) {
+			alert(`POST a highlight to ${transform(index)}`)
+		}
+	};
+
 	return (
 		<div className="box">
 			<div
@@ -50,7 +68,7 @@ const PieceComponent = ({
 					<img src={targetedSRC} alt="targeted" className="targeted" />
 				) : null}
 			</div>
-			<div className="overlay" onClick={null} />
+			<div className="overlay" onClick={handleClick} />
 			{color !== null ? (
 				<img
 					src={src[`${color} ${name}`]}
