@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import FieldContext from './FieldContext';
+import React from 'react';
 
 const PieceComponent = ({
 	skin,
@@ -8,12 +7,8 @@ const PieceComponent = ({
 	selected,
 	targeted,
 	idle,
-	action,
-	index,
+	index
 }) => {
-	let requiresImg = color !== null;
-
-	const { field, setField } = useContext(FieldContext);
 
 	const isBlackCell = (ind) => {
 		const row = Math.floor(ind / 8);
@@ -37,47 +32,6 @@ const PieceComponent = ({
 		'white rook': require('./images/skins/default/white/rook.svg').default,
 	};
 
-	const handleClick = () => {
-		action.current.push(index);
-		console.log(action.current);
-		// в action только один индекс
-		if (action.current.length === 1) {
-			// индекс указывает на пустую клетку
-			if (field[action.current[0]].color === null) action.current = [];
-			// TODO: добавить варианты для хода и проверку валидности
-			else {
-				setField((prev) => {
-					let next = prev.map((elem) => {
-						return { ...elem };
-					});
-					next[index].selected = true;
-					return next.map((elem) => {
-						return { ...elem };
-					});
-				});
-			}
-			// в action 2 индекса
-		} else {
-			const first = action.current[0];
-			const second = action.current[1];
-			// TODO: проверка валидности
-			action.current = [];
-			setField((prev) => {
-				let next = prev.map((elem) => {
-					return { ...elem };
-				});
-				next[second] = { ...prev[first] };
-				next[first].selected = false;
-				next[first].color = null;
-				next[first].name = null;
-				next[second].selected = false;
-				return next.map((elem) => {
-					return { ...elem };
-				});
-			});
-		}
-	};
-
 	return (
 		<div className="box">
 			<div
@@ -89,8 +43,8 @@ const PieceComponent = ({
 						: null
 				}`}
 			/>
-			<div className="overlay" onClick={handleClick} />
-			{requiresImg ? (
+			<div className="overlay" onClick={null} />
+			{color !== null ? (
 				<img
 					src={src[`${color} ${name}`]}
 					alt={`${color} ${name}`}
