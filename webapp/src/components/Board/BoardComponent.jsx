@@ -2,7 +2,7 @@ import React from 'react';
 import PieceComponent from './PieceComponent';
 /**
  * Для рендера доски принимает параметры для корректного отбражения игровой ситуации
- * @param {Array.<{field: Array.<Array.<{squre: String, type: String, color: String}>>, turn: String, viewer: String, from: String, to: String, targeted: Array.<String>, idle: Array.<String>}>} props
+ * @param {Array.<{field: Array.<Array.<{squre: String, type: String, color: String}>>, turn: String, view: String, from: String, to: String, targeted: Array.<String>, idle: Array.<String>}>} props
  * @returns
  */
 const BoardComponent = ({ field, turn, view, from, to, targeted, idle }) => {
@@ -52,23 +52,30 @@ const BoardComponent = ({ field, turn, view, from, to, targeted, idle }) => {
 		})
 	});
 
+	const i = transform(from)
 
 	if (to === null) {
 		if (turn === view) {
-			Board[transform(from)].selected = true
-			// Подсветка и отметки
+			Board[i].selected = true
+			targeted.forEach(code => {
+				Board[transform(code)].targeted = true
+			})
+			idle.forEach(code => {
+				Board[transform(code)].idle = true
+			})
 		}
 	}
 	else {
-		const i = transform(from)
 		const j = transform(to)
 		Board[j].color = Board[i].color
 		Board[j].name = Board[i].name
 		Board[j].skin = Board[i].skin
 		Board[i].color = null
 		Board[i].name = null
-		console.log(from, Board[i])
-		console.log(to, Board[j])
+		if (view !== turn) {
+			Board[i].selected = true
+			Board[j].selected = true
+		}
 	}
 
 	let layout;

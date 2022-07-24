@@ -32,6 +32,9 @@ const PieceComponent = ({
 		'white rook': require('./images/skins/default/white/rook.svg').default,
 	};
 
+	const idleSRC = require('./idle.svg').default
+	const targetedSRC = require('./targeted.svg').default
+
 	return (
 		<div className="box">
 			<div
@@ -42,7 +45,10 @@ const PieceComponent = ({
 							: 'selected-white'
 						: null
 				}`}
-			/>
+			>
+				{idle ? <img src={idleSRC} alt="idle" className='idle'/> : null}
+				{targeted ? <img src={targetedSRC} alt="targeted" className='targeted'/> : null}
+			</div>
 			<div className="overlay" onClick={null} />
 			{color !== null ? (
 				<img
