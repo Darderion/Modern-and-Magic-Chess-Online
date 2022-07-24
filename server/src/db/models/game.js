@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Game extends Model {
     /**
@@ -13,12 +11,34 @@ module.exports = (sequelize, DataTypes) => {
       //
     }
   }
-  Game.init({
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+  Game.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      firstUser: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      secondUser: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      startTime: DataTypes.TIME,
+      finishTime: DataTypes.TIME,
+      isFinished: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      winnerId: DataTypes.INTEGER,
     },
+<<<<<<< HEAD
     firstUser: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -46,5 +66,13 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'game',
     modelName: 'Game',
   });
+=======
+    {
+      sequelize,
+      tableName: 'game',
+      modelName: 'Game',
+    }
+  );
+>>>>>>> c4fe440 (Added lobby support)
   return Game;
 };
