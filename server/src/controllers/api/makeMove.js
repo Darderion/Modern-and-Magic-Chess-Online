@@ -4,12 +4,9 @@ const { Game } = require('../../db/models');
 const {
   DatabaseConnectionError,
 } = require('../../validators/errors/ConnectionError');
-const {
-  PgnLoadingChessError,
-  MakeMoveChessError,
-} = require('../../validators/errors/ChessError');
+const { PgnLoadingChessError } = require('../../validators/errors/ChessError');
 
-const DateConverter = require('../../middlewares/DateConverter');
+const GameExecutor = require('../../middlewares/GameExecutor');
 
 // TEST
 // curl -X POST -H "Content-Type: application/json" -d '{"lobbyId": "2", "from": "a2", "to": "a3"}' http://localhost:5000/api/makeMove
@@ -40,44 +37,18 @@ module.exports = async (req, res) => {
     return databaseError.sendResponse(res);
   }
 
-  const currPiece = game.get(from);
+  const { move, fieldsToUpdate, success, error } = GameExecutor.makeMove(
+    game,
+    from,
+    to
+  );
 
-  if (currPiece === null) {
-    const moveError = new MakeMoveChessError();
-    return moveError.sendResponse(res);
+  if (!success) {
+    return error.sendResponse(res);
   }
-
-  const move = game.move({
-    from: from,
-    to: to,
-  });
-
-  if (move === null) {
-    const moveError = new MakeMoveChessError();
-    return moveError.sendResponse(res);
-  }
-
-  let winnerId = null;
-  const newPgn = game.pgn();
-
-  if (game.game_over()) {
-    const header = game.header();
-
-    winnerId =
-      game.turn() === 'w' ? Number(header.Black) : Number(header.White);
-  }
-
-  const newFields = game.game_over()
-    ? {
-        isFinished: 1,
-        finishTime: DateConverter.toDatabaseDateTime(new Date()),
-        description: newPgn,
-        winnerId: winnerId,
-      }
-    : { description: newPgn };
 
   try {
-    await Game.update(newFields, {
+    await Game.update(fieldsToUpdate, {
       where: { id: lobbyId },
     });
   } catch (err) {
