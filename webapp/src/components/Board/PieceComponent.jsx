@@ -23,22 +23,21 @@ const PieceComponent = ({
 		return codes[ind % 8] + String(8 - Math.floor(ind / 8));
 	};
 
-	//   Placeholder
+	//   TODO: добавить плучение svg запросом
 	const src = {
-		'black bishop': require('./images/skins/default/black/bishop.svg').default,
-		'black king': require('./images/skins/default/black/king.svg').default,
-		'black knight': require('./images/skins/default/black/knight.svg').default,
-		'black pawn': require('./images/skins/default/black/pawn.svg').default,
-		'black queen': require('./images/skins/default/black/queen.svg').default,
-		'black rook': require('./images/skins/default/black/rook.svg').default,
-		'white bishop': require('./images/skins/default/white/bishop.svg').default,
-		'white king': require('./images/skins/default/white/king.svg').default,
-		'white knight': require('./images/skins/default/white/knight.svg').default,
-		'white pawn': require('./images/skins/default/white/pawn.svg').default,
-		'white queen': require('./images/skins/default/white/queen.svg').default,
-		'white rook': require('./images/skins/default/white/rook.svg').default,
+		'black bishop': require('./black/bishop.svg').default,
+		'black king': require('./black/king.svg').default,
+		'black knight': require('./black/knight.svg').default,
+		'black pawn': require('./black/pawn.svg').default,
+		'black queen': require('./black/queen.svg').default,
+		'black rook': require('./black/rook.svg').default,
+		'white bishop': require('./white/bishop.svg').default,
+		'white king': require('./white/king.svg').default,
+		'white knight': require('./white/knight.svg').default,
+		'white pawn': require('./white/pawn.svg').default,
+		'white queen': require('./white/queen.svg').default,
+		'white rook': require('./white/rook.svg').default,
 	};
-	//   Placeholder
 
 	const idleSRC = require('./idle.svg').default;
 	const targetedSRC = require('./targeted.svg').default;
@@ -49,7 +48,7 @@ const PieceComponent = ({
 		if (targeted || idle) {
 			alert(`POST a move to ${transform(index)}`);
 		} else if (selectColor === color && !selected) {
-			alert(`POST a highlight to ${transform(index)}`)
+			alert(`POST a highlight to ${transform(index)}`);
 		}
 	};
 
