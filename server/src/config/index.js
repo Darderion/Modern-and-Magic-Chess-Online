@@ -5,6 +5,8 @@ module.exports = {
     syncType: process.env.MODELS_SYNC_TYPE,
   },
   env: {
+    cookiePass: process.env.COOKIE_PASSWORD,
+    cookieUsername: process.env.USER_USERNAME,
     nodeEnv: process.env.NODE_ENV,
     isDevelopment: process.env.NODE_ENV === 'development',
     isProduction: process.env.NODE_ENV === 'production',
