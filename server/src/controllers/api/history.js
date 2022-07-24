@@ -11,7 +11,7 @@ class HistoryController {
     });
 
     if (!game) {
-      res.json('No games matches id');
+      res.json('No game matches id');
     } else {
       res.json(game);
     }
@@ -28,7 +28,7 @@ class HistoryController {
     });
 
     if (!game) {
-      res.json('No games matches id');
+      res.json('No game matches id');
     } else {
       const updatedInfo = await Game.update(
         {

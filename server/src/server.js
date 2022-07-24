@@ -13,7 +13,6 @@ const app = express();
 
 setupMiddlewares(app);
 
-app.use('/api/history', historyRouter);
 app.use('/api', apiRouter);
 app.use('/auth', authRouter);
 app.use('/', mainRouter);
