@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(User, { foreignKey: 'chatStyleId' });
     }
   }
+
   ChatStyle.init(
     {
       id: {
