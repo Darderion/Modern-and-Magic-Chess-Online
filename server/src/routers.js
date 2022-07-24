@@ -24,10 +24,11 @@ authRouter.post('/login', auth.login, setRefreshToken, getAccessToken);
 authRouter.post('/refresh', auth.refresh, setRefreshToken, getAccessToken);
 authRouter.get('/logout', auth.logout);
 mainRouter.get('/ping', verifyAccess, ping);
-historyRouter.get('/get_history/:id', historyController.getGameHistory);
-historyRouter.post('/set_history/:id', historyController.setGameHistory);
+historyRouter.get('/get/:id', verifyAccess, historyController.getGameHistory);
+historyRouter.post('/set/:id', verifyAccess, historyController.setGameHistory);
 
 
 exports.mainRouter = mainRouter;
 exports.apiRouter = apiRouter;
 exports.authRouter = authRouter;
+exports.historyRouter = historyRouter;

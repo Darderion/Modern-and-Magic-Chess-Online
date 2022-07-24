@@ -4,18 +4,17 @@ const { Game } = require('../db/models');
 class HistoryController {
 
     async getGameHistory(req, res) {
-        const gameId = req.params.id;
+        const id = req.params.id;
+
 
         const game = await Game.findOne( {
             where : {
-                id : gameId
+                id
             }
         });
 
-        console.log(game);
-
         if (!game) {
-            throw new Error('No game matches id');
+            res.json("No games matches id");
         }
         else {
             res.json(game);
@@ -24,27 +23,27 @@ class HistoryController {
     }
 
     async setGameHistory(req, res) {
-        const gameId = req.params.id;
+        const id = req.params.id;
         const {description} = req.body;
 
         const game = await Game.findOne( {
             where : {
-                id : gameId,
-            },
+                id
+            }
         });
 
         if (!game) {
-            throw new Error('No game matches id');
+            res.json("No games matches id");
         }
         else {
-            const upd = await Game.update({
-                description : description
+            const updatedInfo = await Game.update({
+                description
             },
             {
-                where : { id : gameId }
+                where :  id
             });
 
-            res.json(upd);
+            res.json(updatedInfo);
         }
     }
 
