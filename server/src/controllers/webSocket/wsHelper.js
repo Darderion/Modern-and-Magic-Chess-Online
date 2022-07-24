@@ -21,7 +21,7 @@ const createGame = (ws1, ws2, serverInfo) => {
 const removeFromArr = (arr, el) => {
     return arr.filter(el2 => el2 !== el);
 }
-const tryAuth = (nick, passwordHash) => {
+const tryAuth = async (nick, passwordHash) => {
     if(nick && passwordHash) {
         const user = await User.findOne({
             where: { nick: nick } });
@@ -52,14 +52,17 @@ const workWithWS = (ws, serverInfo, data) => {
     switch(data.type) {
         case 'auth':
             moveBeforeLobbies(ws, serverInfo);
-            ws.user = tryAuth(data.data.nick, data.data.passwordHash);
-            if(ws.user) {
-                sendToWS(ws, 'auth', 200, {message: successMessanges.auth,
-                    userID: ws.user.id});
-            } else {
-                sendToWS(ws, 'connection', 400, 
-                    Message(errorMessanges.guestAuth));
-            }
+            ws.user = tryAuth(data.data.nick, 
+                data.data.passwordHash).then((res) => {
+                ws.user = res;
+                if(ws.user) {
+                    sendToWS(ws, 'auth', 200, {message: successMessanges.auth,
+                        userID: ws.user.id});
+                } else {
+                    sendToWS(ws, 'connection', 400, 
+                        Message(errorMessanges.guestAuth));
+                }
+            });
             break;
         case 'openLobby':
             if(ws.user) {
@@ -95,7 +98,7 @@ const workWithWS = (ws, serverInfo, data) => {
                     sendToWS(ws, 'connectToLobby', 400, 
                         Message(errorMessanges.wrongLobbyID));
                 } else {
-                    
+                    createGame(lobbie[0], ws);
                 }
             } else {
                 sendToWS(ws, 400, Message(errorMessanges.notAuth));
