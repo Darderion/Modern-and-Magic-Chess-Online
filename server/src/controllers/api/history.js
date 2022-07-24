@@ -1,4 +1,4 @@
-const { Game } = require('../db/models');
+const { Game } = require('../../db/models');
 
 class HistoryController {
   async getGameHistory(req, res) {
