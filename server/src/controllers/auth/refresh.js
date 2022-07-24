@@ -3,14 +3,15 @@ const {
   BadRequestApiError,
 } = require('../../validators/errors/ApiError');
 const jwt = require('jsonwebtoken');
+const { env } = require('../../config');
 module.exports = async (req, res, next) => {
-  if (!req.cookies[process.env.COOKIE_NAME]) {
+  if (!req.cookies[env.cookieName]) {
     return new ApiError(403, 'Refresh token is not provided').sendResponse(res);
   }
   try {
     const decodedPayload = jwt.verify(
-      req.cookies[process.env.COOKIE_NAME],
-      process.env.REFRESH_TOKEN_SECRET
+      req.cookies[env.cookieName],
+      env.refreshTokenSecret
     );
 
     if (!decodedPayload) {
