@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
   if (!user) new ApiError(400, 'User must be provided').sendResponse(res);
   try {
     const accessToken = jwt.sign({ id: req.user.id }, env.accessTokenSecret, {
-      expiresIn: '1h',
+      expiresIn: env.accessTokenExpTime,
     });
 
     res.json({

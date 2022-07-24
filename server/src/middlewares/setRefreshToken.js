@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
       { userId: user.userId },
       env.refreshTokenSecret,
       {
-        expiresIn: '7d',
+        expiresIn: env.refreshTokenExpTime,
       }
     );
 
