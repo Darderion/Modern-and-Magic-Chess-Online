@@ -10,7 +10,6 @@ const historyController = require('./controllers/api/history');
 const apiRouter = new express.Router();
 const mainRouter = new express.Router();
 const authRouter = new express.Router();
-const historyRouter = new express.Router();
 
 /*
 apiRouter.get('/lobbies', verifyAccess, api.getLobbies);
@@ -24,10 +23,17 @@ authRouter.post('/login', auth.login, setRefreshToken, getAccessToken);
 authRouter.post('/refresh', auth.refresh, setRefreshToken, getAccessToken);
 authRouter.get('/logout', auth.logout);
 mainRouter.get('/ping', verifyAccess, ping);
-historyRouter.get('/get/:id', verifyAccess, historyController.getGameHistory);
-historyRouter.post('/set/:id', verifyAccess, historyController.setGameHistory);
+apiRouter.get(
+  '/history/get/:id',
+  verifyAccess,
+  historyController.getGameHistory
+);
+apiRouter.put(
+  '/history/set/:id',
+  verifyAccess,
+  historyController.setGameHistory
+);
 
 exports.mainRouter = mainRouter;
 exports.apiRouter = apiRouter;
 exports.authRouter = authRouter;
-exports.historyRouter = historyRouter;
