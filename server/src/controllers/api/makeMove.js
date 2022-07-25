@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     const gameModels = await Game.findAll({
       attributes: ['description'],
       where: { id: lobbyId },
-    }); // SELECT firstUser, secondUser, history FROM game WHERE id = $lobbyId;
+    });
 
     gameModel = gameModels[0];
     pgn = gameModel.description;

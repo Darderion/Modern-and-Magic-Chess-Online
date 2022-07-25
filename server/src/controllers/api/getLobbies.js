@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     gameModels = await Game.findAll({
       attributes: ['id', 'firstUser', 'secondUser', 'startTime'],
       where: { isFinished: 0 },
-    }); // SELECT firstUser, secondUser, startTime FROM game WHERE isFinished = 0;
+    });
   } catch (err) {
     const databaseError = new DatabaseConnectionError(err);
     return databaseError.sendResponse(res);
