@@ -2,15 +2,12 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Game extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate() {
-      //
+    static associate({ User }) {
+      Game.belongsTo(User, { foreignKey: 'whitePiecesUserId' });
+      Game.belongsTo(User, { foreignKey: 'blackPiecesUserId' });
     }
   }
+
   Game.init(
     {
       id: {
@@ -18,25 +15,26 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      firstUser: {
+      whitePiecesUserId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      secondUser: {
+      blackPiecesUserId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      startTime: DataTypes.TIME,
-      finishTime: DataTypes.TIME,
+      startTime: DataTypes.STRING, //iso 8601
+      finishTime: DataTypes.STRING,
       isFinished: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
       },
       description: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: false,
       },
-      winnerId: DataTypes.INTEGER,
+      result: DataTypes.ENUM('draw', 'black', 'white'),
     },
     {
       sequelize,

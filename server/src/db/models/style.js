@@ -7,12 +7,11 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ User, userStyles }) {
-      this.hasMany(userStyles, { foreignKey: 'styleId' });
-      this.hasMany(User, { foreignKey: 'chessStyleId' });
-      this.hasMany(User, { foreignKey: 'fieldStyleId' });
+    static associate({ User, UserStyle }) {
+      Style.belongsToMany(User, { through: UserStyle });
     }
   }
+
   Style.init(
     {
       id: {
@@ -20,17 +19,25 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      fieldId: {
-        type: DataTypes.INTEGER,
+
+      pieceColor: {
+        type: DataTypes.ENUM('black', 'white'),
         allowNull: false,
       },
-      isForBlack: {
-        type: DataTypes.INTEGER,
+
+      typeOfPiece: {
+        type: DataTypes.ENUM('bishop', 'king', 'pawn', 'queen', 'rook'),
         allowNull: false,
       },
-      shapeType: {
+
+      packName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+
+      fileId: {
         type: DataTypes.INTEGER,
-        allowNull: true, //null for fields
+        allowNull: false,
       },
     },
     {
