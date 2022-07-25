@@ -1,7 +1,5 @@
 const { MakeMoveChessError } = require('../../validators/errors/ChessError');
 
-const DateConverter = require('../../util/DateConverter');
-
 class GameExecutor {
   constructor() {}
 
@@ -31,22 +29,19 @@ class GameExecutor {
       };
     }
 
-    let winnerId = null;
+    let result = null;
     const newPgn = game.pgn();
 
     if (game.game_over()) {
-      const header = game.header();
-
-      winnerId =
-        game.turn() === 'w' ? Number(header.Black) : Number(header.White);
+      result = game.turn() === 'w' ? 'black' : 'white';
     }
 
     const fieldsToUpdate = game.game_over()
       ? {
-          isFinished: 1,
-          finishTime: DateConverter.toDatabaseDateTime(new Date()),
+          isFinished: true,
+          finishTime: new Date(Date.now()).toISOString(),
           description: newPgn,
-          winnerId: winnerId,
+          result: result,
         }
       : { description: newPgn };
 

@@ -8,8 +8,8 @@ module.exports = async (req, res) => {
 
   const games = await Game.findAll({
     where: {
-      [Op.or]: [{ firstUser: id }, { secondUser: id }],
-      isFinished: 1,
+      [Op.or]: [{ whitePiecesUserId: id }, { blackPiecesUserId: id }],
+      isFinished: true,
     },
     order: [['finishTime', 'DESC']],
     offset: offset,

@@ -11,15 +11,15 @@ module.exports = async (req, res) => {
 
   try {
     const gameModels = await Game.findAll({
-      attributes: ['isFinished', 'winnerId'],
+      attributes: ['isFinished', 'result'],
       where: { id },
     });
 
-    const { isFinished, winnerId } = gameModels[0];
+    const { isFinished, result } = gameModels[0];
 
     return res.json({
       isFinished,
-      winnerId,
+      result,
     });
   } catch (err) {
     const databaseError = new DatabaseConnectionError(err);

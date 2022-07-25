@@ -7,13 +7,11 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Game, userStyles }) {
-      this.hasMany(userStyles, { foreignKey: 'userId' });
-      this.hasMany(Game, { foreignKey: 'firstUser' });
-      this.hasMany(Game, { foreignKey: 'secondUser' });
-      this.hasMany(Game, { foreignKey: 'winnerId' });
+    static associate({ UserStyle, Style }) {
+      User.belongsToMany(Style, { through: UserStyle });
     }
   }
+
   User.init(
     {
       id: {
@@ -30,12 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      iconFileId: DataTypes.INTEGER,
       salt: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      chatStyleId: DataTypes.INTEGER, //null = default
     },
     {
       sequelize,

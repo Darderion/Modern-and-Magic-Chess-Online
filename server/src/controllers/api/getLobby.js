@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
 
   try {
     const gameModels = await Game.findAll({
-      attributes: ['firstUser', 'secondUser', 'startTime'],
+      attributes: ['whitePiecesUserId', 'blackPiecesUserId', 'startTime'],
       where: { id },
     });
 
@@ -23,12 +23,12 @@ module.exports = async (req, res) => {
     return databaseError.sendResponse(res);
   }
 
-  const { firstUser, secondUser, startTime } = gameModel;
+  const { whitePiecesUserId, blackPiecesUserId, startTime } = gameModel;
 
   const lobby = {
     id,
-    firstUser,
-    secondUser,
+    whitePiecesUserId,
+    blackPiecesUserId,
     startTime,
   };
 
