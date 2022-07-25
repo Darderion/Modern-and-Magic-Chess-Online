@@ -35,10 +35,8 @@ class GameMaster {
   }
   move(ws, move) {
     if (ws === this.currentStep) {
-      const move2 = this.chess.move(move, { sloppy: true });
-      console.log(move2);
-      if (move2) {
-        const movement = gameExecutor.makeMove(this.chess, move.from, move.to);
+      const movement = gameExecutor.makeMove(this.chess, move.from, move.to);
+      if(movement.success) {
         if(movement?.fieldsToUpdate.isFinished) {
           this.isFinished = false;
           this.game.update({
@@ -47,6 +45,8 @@ class GameMaster {
             winnerId: movement.fieldsToUpdate.winnerId,
             finishTime: sequelize.fn('NOW'),
           });
+        } else {
+          this.save();
         }
         this.currentStep = ws === this.ws1 ? this.ws2 : this.ws1;
         return this.chess.pgn();
