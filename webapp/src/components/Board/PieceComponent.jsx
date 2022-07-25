@@ -1,4 +1,8 @@
 import React from 'react';
+import { useContext } from 'react';
+import ChessContext from './ChessContext';
+import BoardContext from './BoardContext';
+import { Chess } from 'chess.js';
 
 const PieceComponent = ({
 	skin,
@@ -10,6 +14,7 @@ const PieceComponent = ({
 	index,
 	selectColor,
 	canSelect,
+	anotherSelected,
 }) => {
 	const isBlackCell = (ind) => {
 		const row = Math.floor(ind / 8);
@@ -17,10 +22,26 @@ const PieceComponent = ({
 		return (row % 2 === 0 && col % 2 === 1) || (row % 2 === 1 && col % 2 === 0);
 	};
 
-	const codes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-
-	const transform = (ind) => {
+	const getCODE = (ind) => {
+		const codes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 		return codes[ind % 8] + String(8 - Math.floor(ind / 8));
+	};
+
+	const getIND = (code) => {
+
+		const pos = String(code)
+			
+		const codes = {
+			h: 7,
+			g: 6,
+			f: 5,
+			e: 4,
+			d: 3,
+			c: 2,
+			b: 1,
+			a: 0,
+		};
+		return codes[pos[0]] + (8 - Number(pos[1])) * 8;
 	};
 
 	//   TODO: добавить плучение svg запросом
@@ -42,13 +63,53 @@ const PieceComponent = ({
 	const idleSRC = require('./idle.svg').default;
 	const targetedSRC = require('./targeted.svg').default;
 
+	const { chess, setChess } = useContext(ChessContext);
+	const { board, setBoard } = useContext(BoardContext);
+
 	const handleClick = () => {
 		if (!canSelect) return;
 
 		if (targeted || idle) {
-			alert(`POST a move to ${transform(index)}`);
-		} else if (selectColor === color && !selected) {
-			alert(`POST a highlight to ${transform(index)}`);
+			// alert(`POST a move to ${getCODE(index)}`);
+			setChess(prev => {
+				const history = prev.fen()
+				const next = new Chess(history)
+				next.move({from: getCODE(anotherSelected), to: getCODE(index)})
+				console.log(getCODE(anotherSelected), getCODE(index))
+				return next
+			})
+		} else if (selectColor === color) {
+			// alert(`POST a highlight to ${getCODE(index)}`);
+			setBoard((prev) => {
+				const next = [...prev].map((elem) => {
+					return { ...elem };
+				});
+				next.map(elem => {
+					elem.selected = false;
+					elem.targeted = false;
+					elem.idle = false;
+					return {...elem}
+				});
+				if (!selected)
+				{
+					next[index].selected = true;
+					const code = getCODE(index)
+					const moves = chess.moves({square: code, verbose: true})
+					console.log(moves)
+					moves.forEach(dict => {
+						const pos = dict.to
+						const ind = getIND(pos)
+						if (next[ind].color === null)
+							next[ind].idle = true
+						else next[ind].targeted = true
+					})
+				}
+					
+
+				return [...next].map((elem) => {
+					return { ...elem };
+				});
+			});
 		}
 	};
 
