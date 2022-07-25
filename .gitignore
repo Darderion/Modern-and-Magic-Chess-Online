@@ -5,3 +5,4 @@
 package-lock.json
 server/src/db/config/config.json
 server/yarn.lock
+yarn.lock
