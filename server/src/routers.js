@@ -11,13 +11,13 @@ const apiRouter = new express.Router();
 const mainRouter = new express.Router();
 const authRouter = new express.Router();
 
-apiRouter.get('/gameStatus/:id', /*verifyAccess,*/ api.getGameStatus);
-apiRouter.get('/lobby/:id', /*verifyAccess,*/ lobbyExists, api.getLobby);
-apiRouter.get('/lobbies', /*verifyAccess,*/ api.getLobbies);
-apiRouter.delete('/lobbies/:id', /*verifyAccess,*/ api.deleteLobby);
-apiRouter.post('/createLobby', /*verifyAccess,*/ api.createLobby);
-apiRouter.post('/makeMove', /*verifyAccess,*/ api.makeMove);
-apiRouter.post('/highlightMoves', /*verifyAccess,*/ api.highlightMoves);
+apiRouter.get('/gameStatus/:id', verifyAccess, api.getGameStatus);
+apiRouter.get('/lobby/:id', verifyAccess, lobbyExists, api.getLobby);
+apiRouter.get('/lobbies', verifyAccess, api.getLobbies);
+apiRouter.delete('/lobbies/:id', verifyAccess, api.deleteLobby);
+apiRouter.post('/createLobby', verifyAccess, api.createLobby);
+apiRouter.post('/makeMove', verifyAccess, api.makeMove);
+apiRouter.post('/highlightMoves', verifyAccess, api.highlightMoves);
 
 authRouter.post('/register', auth.register);
 authRouter.post('/login', auth.login, setRefreshToken, getAccessToken);
