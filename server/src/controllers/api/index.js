@@ -7,6 +7,7 @@ const highlightMoves = require('./highlightMoves');
 const makeMove = require('./makeMove');
 
 module.exports = {
+  history: require('./history'),
   createLobby,
   deleteLobby,
   getGameStatus,
