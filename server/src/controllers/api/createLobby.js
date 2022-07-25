@@ -5,7 +5,7 @@ const {
   DatabaseConnectionError,
 } = require('../../validators/errors/ConnectionError');
 
-const DateConverter = require('../../middlewares/DateConverter');
+const DateConverter = require('../../util/DateConverter');
 
 // TEST
 // curl -X POST -H "Content-Type: application/json" --header "userid: 1" -d '{"secondUser": "2", "firstUserColor": "w"}' http://localhost:5000/api/createLobby

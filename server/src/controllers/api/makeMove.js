@@ -6,7 +6,7 @@ const {
 } = require('../../validators/errors/ConnectionError');
 const { PgnLoadingChessError } = require('../../validators/errors/ChessError');
 
-const GameExecutor = require('../../middlewares/GameExecutor');
+const GameExecutor = require('../sharedFunctions/GameExecutor');
 
 // TEST
 // curl -X POST -H "Content-Type: application/json" -d '{"lobbyId": "2", "from": "a2", "to": "a3"}' http://localhost:5000/api/makeMove
