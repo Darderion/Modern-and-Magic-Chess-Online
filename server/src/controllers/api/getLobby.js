@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
     const gameModels = await Game.findAll({
       attributes: ['firstUser', 'secondUser', 'startTime'],
       where: { id },
-    }); // SELECT firstUser, secondUser, startTime FROM game WHERE id = $id;
+    });
 
     gameModel = gameModels[0];
   } catch (err) {
