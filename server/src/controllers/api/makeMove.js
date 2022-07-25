@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
     return databaseError.sendResponse(res);
   }
 
-  const { move, fieldsToUpdate, success, error } = GameExecutor.makeMove(
+  const { fieldsToUpdate, success, error } = GameExecutor.makeMove(
     game,
     from,
     to
@@ -57,10 +57,8 @@ module.exports = async (req, res) => {
   }
 
   const info = {
-    move: move,
-    turn: game.turn(),
-    isFinished: game.game_over(),
-    board: game.board(),
+    game,
+    lobbyId,
   };
 
   return res.json(info);

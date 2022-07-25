@@ -67,6 +67,5 @@ module.exports = async (req, res) => {
     moves: moves,
     eatMoves: eatMoves,
     turn: game.turn(),
-    board: game.board(),
   });
 };
