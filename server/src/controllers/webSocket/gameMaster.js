@@ -1,5 +1,6 @@
 const { Chess } = require('chess.js');
 const { Game, sequelize } = require('../../db/models');
+const gameExecutor = require('../sharedFunctions/GameExecutor');
 
 class GameMaster {
   constructor(ws1, ws2, serverInfo, callback, reject = console.log) {
@@ -9,9 +10,10 @@ class GameMaster {
     this.chess = new Chess();
     this.isFirstFirst = true;
     //пока так, потом сделаем выбор первого хода
-    this.chess.header('White', ws1.user.nick);
-    this.chess.header('Black', ws2.user.nick);
+    this.chess.header('White', ws1.user.id);
+    this.chess.header('Black', ws2.user.id);
     this.currentStep = ws1;
+    this.isFinished = false;
     try {
       (async () => {
         const newGame = await Game.create({
@@ -36,11 +38,13 @@ class GameMaster {
       const move2 = this.chess.move(move, { sloppy: true });
       console.log(move2);
       if (move2) {
-        if (this.chess.in_checkmate()) {
+        const movement = gameExecutor.makeMove(this.chess, move.from, move.to);
+        if(movement?.fieldsToUpdate.isFinished) {
+          this.isFinished = false;
           this.game.update({
             description: this.chess.pgn(),
             isFinished: 1,
-            winnerId: ws.user.id,
+            winnerId: movement.fieldsToUpdate.winnerId,
             finishTime: sequelize.fn('NOW'),
           });
         }
