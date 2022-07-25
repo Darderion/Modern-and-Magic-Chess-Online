@@ -19,6 +19,7 @@ const errorMessages = {
   userIsntInGame: "This user isn't in game",
   incorrectData: "This user isn't in game or data wasn't sent to server",
   noOpenLobby: 'No open lobby',
+  otherUserLeft: 'Other user have left',
 };
 const successMessages = {
   auth: 'Authorised',
@@ -39,6 +40,7 @@ const getStyle = (/* ws */) => {
 };
 const createGame = (ws1, ws2) => {
   closeLobby(ws1);
+  closeLobby(ws2);
   const gameMaster = new GameMaster(ws1, ws2, serverInfo, (gameID, pgn) => {
     serverInfo.games.set(ws1, gameMaster);
     serverInfo.games.set(ws2, gameMaster);
@@ -61,7 +63,13 @@ const removeFromLobbies = (ws) => {
   serverInfo.lobbyClients.delete(ws);
 };
 const closeGame = (ws) => {
-  removeFromLobbies(serverInfo.games.get(ws)?.getOtherWS(ws));
+  if(serverInfo.games.has(ws)) {
+    serverInfo.games.get(ws).save();
+    const ws2 = serverInfo.games.get(ws).getOtherWS(ws);
+    sendToWS(ws2, 'closeGame', 200, new Message(errorMessages.otherUserLeft));
+    serverInfo.games.delete(ws);
+    serverInfo.games.delete(ws2);
+  }
 };
 const addOnError = (ws) => {
   ws.on('error', () => ws.close());
