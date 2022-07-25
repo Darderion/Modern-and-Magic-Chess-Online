@@ -26,8 +26,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      startTime: DataTypes.TIME,
-      finishTime: DataTypes.TIME,
+      startTime: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
+      finishTime: DataTypes.DATE,
       isFinished: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -38,41 +41,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       winnerId: DataTypes.INTEGER,
     },
-<<<<<<< HEAD
-    firstUser: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    secondUser: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    startTime: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    finishTime: DataTypes.DATE,
-    isFinished: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
-    winnerId: DataTypes.INTEGER
-  }, {
-    sequelize,
-    tableName: 'game',
-    modelName: 'Game',
-  });
-=======
     {
       sequelize,
       tableName: 'game',
       modelName: 'Game',
     }
   );
->>>>>>> c4fe440 (Added lobby support)
   return Game;
 };
