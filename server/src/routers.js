@@ -1,8 +1,7 @@
 const express = require('express');
 
-const api = require('./controllers/api');
 const ping = require('./controllers/ping');
-const { auth } = require('./controllers');
+const { auth, api } = require('./controllers');
 const getAccessToken = require('./middlewares/getAccessToken');
 const verifyAccess = require('./middlewares/verifyAccess');
 const setRefreshToken = require('./middlewares/setRefreshToken');
