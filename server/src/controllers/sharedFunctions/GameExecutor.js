@@ -1,6 +1,6 @@
-const { MakeMoveChessError } = require('../validators/errors/ChessError');
+const { MakeMoveChessError } = require('../../validators/errors/ChessError');
 
-const DateConverter = require('../middlewares/DateConverter');
+const DateConverter = require('../../util/DateConverter');
 
 class GameExecutor {
   constructor() {}
