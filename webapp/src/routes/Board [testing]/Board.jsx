@@ -1,10 +1,8 @@
+import React, { useState } from 'react';
 import { Chess } from 'chess.js';
-import React from 'react';
-import { useState } from 'react';
-import { useRef } from 'react'
-import BoardComponent from '../../components/Board/BoardComponent';
-import '../../components/Board/style.css';
-import ChessContext from '../../components/Board/ChessContext';
+import BoardComponent from './BoardComponent'
+import './style.css'
+import ChessContext from './ChessContext'
 
 const Board = () => {
 
@@ -14,15 +12,12 @@ const Board = () => {
 		<ChessContext.Provider value={{chess, setChess}}>
 		<div className="wrapper">
 			<div className='board-container'><BoardComponent
-				chess={chess}
 				view={'white'}
 			/>White</div>
 			<div className='board-container'><BoardComponent
-				chess={chess}
 				view={'black'}
 			/>Black</div>
 			<div className='board-container'><BoardComponent
-				chess={chess}
 				view={'observer'}
 			/>Observer</div>
 		</div>

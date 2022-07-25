@@ -1,6 +1,8 @@
-import React, { useContext } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { useContext } from 'react';
+import ChessContext from './ChessContext';
 import BoardContext from './BoardContext';
+import { Chess } from 'chess.js';
 
 const PieceComponent = ({
 	skin,
@@ -10,37 +12,21 @@ const PieceComponent = ({
 	targeted,
 	idle,
 	index,
-	turn,
-	access,
-	from,
-	lobbyID,
-	chess,
+	selectColor,
+	canSelect,
+	anotherSelected,
 }) => {
-	/**
-	 * Вернет true, если клетка черная
-	 * @param {int} ind 0 - 63
-	 * @returns
-	 */
 	const isBlackCell = (ind) => {
 		const row = Math.floor(ind / 8);
 		const col = ind % 8;
 		return (row % 2 === 0 && col % 2 === 1) || (row % 2 === 1 && col % 2 === 0);
 	};
-	/**
-	 * Преобразует индекс клетки в классическую нотацию
-	 * @param {int} ind 0 - 63
-	 * @returns
-	 */
+
 	const getCODE = (ind) => {
 		const codes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 		return codes[ind % 8] + String(8 - Math.floor(ind / 8));
 	};
 
-	/**
-	 * Преобразует индекс клетки из классической нотации в число от 0 до 63
-	 * @param {String} code
-	 * @returns
-	 */
 	const getIND = (code) => {
 		const pos = String(code);
 
@@ -76,47 +62,41 @@ const PieceComponent = ({
 	const idleSRC = require('./idle.svg').default;
 	const targetedSRC = require('./targeted.svg').default;
 
+	const { chess, setChess } = useContext(ChessContext);
 	const { board, setBoard } = useContext(BoardContext);
 
 	const handleClick = () => {
-		// Если нет доступа, ничего не делаем
-		if (!access) return;
-		// Если нажатая клетка уже помечена как таргетед или свободная для хода, то просто делаем туда ход
+		if (!canSelect) return;
+
 		if (targeted || idle) {
-			axios({
-				method: 'POST',
-				url: '/api/makeMove',
-				data: {
-					lobbyId: lobbyID,
-					from: getCODE(from),
-					to: getCODE(index),
-				},
+			setChess((prev) => {
+				const history = prev.fen();
+				const next = new Chess(history);
+				next.move({ from: getCODE(anotherSelected), to: getCODE(index) });
+				console.log(getCODE(anotherSelected), getCODE(index));
+				return next;
 			});
-			// Если нажал на непомеченную клетку своего цвета, то надо для этого игрока изменить доску из BoardComponent
-		} else if (turn === color) {
+		} else if (selectColor === color) {
 			setBoard((prev) => {
 				const next = [...prev].map((elem) => {
 					return { ...elem };
 				});
-				// Убрать все отметки
 				next.map((elem) => {
 					elem.selected = false;
 					elem.targeted = false;
 					elem.idle = false;
 					return { ...elem };
 				});
-				// Если она не была подсвечена после предыдущего нажатия
 				if (!selected) {
-					next[index].selected = true; // пометим как нажатую
-					const code = getCODE(index); // получим код в классической нотации
-					const moves = chess.moves({ square: code, verbose: true }); // получим все возможные ходы из нее
+					next[index].selected = true;
+					const code = getCODE(index);
+					const moves = chess.moves({ square: code, verbose: true });
 					console.log(moves);
 					moves.forEach((dict) => {
 						const pos = dict.to;
 						const ind = getIND(pos);
-						if (next[ind].color === null)
-							next[ind].idle = true; // если клетка путсая, отметим как idle
-						else next[ind].targeted = true; // иначе не пустая, значит targeted
+						if (next[ind].color === null) next[ind].idle = true;
+						else next[ind].targeted = true;
 					});
 				}
 

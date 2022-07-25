@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState  } from 'react';
 import PieceComponent from './PieceComponent';
 import BoardContext from './BoardContext';
+import ChessContext from './ChessContext';
 
-const BoardComponent = ({ chess, view, lobbyID }) => {
+const BoardComponent = ({ view }) => {
+
 	const names = {
 		k: 'king',
 		n: 'knight',
@@ -11,6 +13,8 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 		p: 'pawn',
 		b: 'bishop',
 	};
+
+	const { chess, setChess } = useContext(ChessContext);
 
 	const turn = String(chess.turn()) === 'b' ? 'black' : 'white';
 
@@ -36,6 +40,9 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 			});
 	});
 
+	const selectColor = turn;
+	const canSelect = turn === view;
+
 	const [board, setBoard] = useState(
 		[...Board].map((elem) => {
 			return { ...elem };
@@ -50,9 +57,7 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 		});
 	}, [chess]);
 
-	const access = turn === view;
-
-	let from = null;
+	let anotherSelected = null;
 	board.forEach((elem, i) => {
 		if (elem.selected && elem.color === turn) anotherSelected = i;
 	});
@@ -82,11 +87,9 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 						targeted={elem.targeted}
 						idle={elem.idle}
 						index={view === 'black' ? 63 - i : i}
-						turn={turn}
-						access={access}
-						from={from}
-						lobbyID={lobbyID}
-						chess={chess}
+						selectColor={selectColor}
+						canSelect={canSelect}
+						anotherSelected={anotherSelected}
 					/>
 				))}
 			</div>
