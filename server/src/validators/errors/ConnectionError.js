@@ -1,12 +1,8 @@
-class ConnectionError extends Error {
+const { ApiError } = require('./ApiError');
+
+class ConnectionError extends ApiError {
   constructor(status, message) {
-    super(message);
-
-    this.status = status;
-  }
-
-  sendResponse(res) {
-    return res.status(this.status).json({ message: this.message });
+    super(status, message);
   }
 }
 
