@@ -23,6 +23,8 @@ authRouter.post('/refresh', auth.refresh, setRefreshToken, getAccessToken);
 authRouter.get('/logout', auth.logout);
 mainRouter.get('/ping', verifyAccess, ping);
 apiRouter.get('/history/get/:id', verifyAccess, api.history.get);
+apiRouter.get('/history/getForUser/:id', api.history.getForUser);
+apiRouter.get('/history/getForAll', api.history.getForAll);
 
 exports.mainRouter = mainRouter;
 exports.apiRouter = apiRouter;
