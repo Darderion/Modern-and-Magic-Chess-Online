@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
 
   const games = await Game.findAll({
     where: {
-      isFinished: 1,
+      isFinished: true,
     },
     order: [['finishTime', 'DESC']],
     offset: offset,

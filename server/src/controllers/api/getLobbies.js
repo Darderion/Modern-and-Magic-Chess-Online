@@ -11,17 +11,22 @@ module.exports = async (req, res) => {
 
   try {
     gameModels = await Game.findAll({
-      attributes: ['id', 'firstUser', 'secondUser', 'startTime'],
-      where: { isFinished: 0 },
+      attributes: ['id', 'whitePiecesUserId', 'blackPiecesUserId', 'startTime'],
+      where: { isFinished: false },
     });
   } catch (err) {
     const databaseError = new DatabaseConnectionError(err);
     return databaseError.sendResponse(res);
   }
-
-  const lobbies = gameModels.map(({ id, firstUser, secondUser, startTime }) => {
-    id, firstUser, secondUser, startTime;
-  });
-
+  const lobbies = gameModels.map(
+    ({ id, whitePiecesUserId, blackPiecesUserId, startTime }) => {
+      return {
+        id,
+        whitePiecesUserId,
+        blackPiecesUserId,
+        startTime,
+      };
+    }
+  );
   return res.json(lobbies);
 };
