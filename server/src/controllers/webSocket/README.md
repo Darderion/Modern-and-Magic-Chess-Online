@@ -11,3 +11,4 @@
     8) Сделать ход: {"type":"myStep","data":{"move":"e2e4"}} -> {"type":"myStep","data":{"message":"This user isn't in game or data wasn't sent to server"},"code":400}, {"type":"myStep","data":{"message":"Wrong step or not your step"},"code":400}, {"type":"myStep","data":{"pgn":"[White \"Geo\"]\n[Black \"Mike\"]\n\n1. e4 e5"},"code":200}
     9) У другого игрока при ходе первого: {"type":"otherStep","data":{"pgn":"[White \"Geo\"]\n[Black \"Mike\"]\n\n1. e4 e5"},"code":200}
     10) При выходе одного из игроков второму придёт: {"type":"closeGame","data":{"message":"Other user have left"},"code":200}
+    11) Закрытие игры: {"type":"closeGame"} -> {"type":"closeGame","data":{"message":"Game was closed"},"code":200}, {"type":"closeGame","data":{"message":"This user isn't in game or data wasn't sent to server"},"code":400}

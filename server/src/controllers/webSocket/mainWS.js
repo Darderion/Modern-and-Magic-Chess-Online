@@ -25,7 +25,8 @@ const successMessages = {
   auth: 'Authorised',
   guestAuth: 'Authorized as guest',
   connected: 'Connected',
-  lobbyClosed: 'Lobby closed',
+  lobbyClosed: 'Lobby was closed',
+  gameClosed: 'Game was closed',
 };
 class Message {
   constructor(message) {
@@ -202,6 +203,14 @@ const workWithWS = (ws, data) => {
         }
       } else {
         sendToWS(ws, 'myStep', 400, new Message(errorMessages.incorrectData));
+      }
+      break;
+    case 'closeGame':
+      if (serverInfo.games.has(ws)) {
+        closeGame(ws);
+        sendToWS(ws, 'closeGame', 200, new Message(successMessages.gameClosed));
+      } else {
+        sendToWS(ws, 'closeGame', 400, new Message(errorMessages.userIsntInGame));
       }
       break;
     case 'auth': //for test
