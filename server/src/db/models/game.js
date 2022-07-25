@@ -37,12 +37,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       winnerId: DataTypes.INTEGER,
-    },
-    {
-      sequelize,
-      tableName: 'game',
-      modelName: 'Game',
-    }
-  );
+    });
   return Game;
 };
