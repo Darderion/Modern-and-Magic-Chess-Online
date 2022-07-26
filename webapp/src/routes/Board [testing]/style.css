@@ -1,6 +1,6 @@
 /* Placeholder */
 .wrapper {
-	width: 1300px;
+	width: 1200px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -9,8 +9,8 @@
 
 /* Placeholder */
 .board-container {
-	width: 400px;
-	height: 400px;
+	width: 360px;
+	height: 360px;
 	margin: 20px;
 }
 /* Placeholder */
@@ -118,4 +118,13 @@
 .box .default-king {
 	margin-left: 11.5%;
 	margin-top: 10%;
+}
+
+.box .wikipedia-bishop, .wikipedia-king, .wikipedia-knight, .wikipedia-pawn, .wikipedia-queen, .wikipedia-rook {
+	width: 100%;
+	margin-top: 2%;
+}
+
+.box .wikipedia-bishop {
+	margin-top: -3%;
 }

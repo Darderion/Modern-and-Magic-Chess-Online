@@ -54,18 +54,30 @@ const PieceComponent = ({
 
 	//   TODO: добавить плучение svg запросом
 	const src = {
-		'black bishop': require('./black/bishop.svg').default,
-		'black king': require('./black/king.svg').default,
-		'black knight': require('./black/knight.svg').default,
-		'black pawn': require('./black/pawn.svg').default,
-		'black queen': require('./black/queen.svg').default,
-		'black rook': require('./black/rook.svg').default,
-		'white bishop': require('./white/bishop.svg').default,
-		'white king': require('./white/king.svg').default,
-		'white knight': require('./white/knight.svg').default,
-		'white pawn': require('./white/pawn.svg').default,
-		'white queen': require('./white/queen.svg').default,
-		'white rook': require('./white/rook.svg').default,
+		'default black bishop': require('./default/black/bishop.svg').default,
+		'default black king': require('./default/black/king.svg').default,
+		'default black knight': require('./default/black/knight.svg').default,
+		'default black pawn': require('./default/black/pawn.svg').default,
+		'default black queen': require('./default/black/queen.svg').default,
+		'default black rook': require('./default/black/rook.svg').default,
+		'default white bishop': require('./default/white/bishop.svg').default,
+		'default white king': require('./default/white/king.svg').default,
+		'default white knight': require('./default/white/knight.svg').default,
+		'default white pawn': require('./default/white/pawn.svg').default,
+		'default white queen': require('./default/white/queen.svg').default,
+		'default white rook': require('./default/white/rook.svg').default,
+		'wikipedia black bishop': require('./wikipedia/black/bishop.svg').default,
+		'wikipedia black king': require('./wikipedia/black/king.svg').default,
+		'wikipedia black knight': require('./wikipedia/black/knight.svg').default,
+		'wikipedia black pawn': require('./wikipedia/black/pawn.svg').default,
+		'wikipedia black queen': require('./wikipedia/black/queen.svg').default,
+		'wikipedia black rook': require('./wikipedia/black/rook.svg').default,
+		'wikipedia white bishop': require('./wikipedia/white/bishop.svg').default,
+		'wikipedia white king': require('./wikipedia/white/king.svg').default,
+		'wikipedia white knight': require('./wikipedia/white/knight.svg').default,
+		'wikipedia white pawn': require('./wikipedia/white/pawn.svg').default,
+		'wikipedia white queen': require('./wikipedia/white/queen.svg').default,
+		'wikipedia white rook': require('./wikipedia/white/rook.svg').default,
 	};
 
 	const idleSRC = require('./idle.svg').default;
@@ -93,7 +105,8 @@ const PieceComponent = ({
 					return { ...elem };
 				});
 				next.map((elem) => {
-					elem.selected = false;
+					if (elem.color === SideEnum)
+						elem.selected = false;
 					elem.targeted = false;
 					elem.idle = false;
 					return { ...elem };
@@ -136,7 +149,7 @@ const PieceComponent = ({
 			<div className="overlay" onClick={handleClick} />
 			{color !== null ? (
 				<img
-					src={src[`${color} ${name}`]}
+					src={src[`${skin} ${color} ${name}`]}
 					alt={`${color} ${name}`}
 					className={`${skin}-${name}`}
 				/>
