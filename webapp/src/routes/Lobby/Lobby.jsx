@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import './Lobby.css';
 
 export default function Main(props) {
