@@ -16,3 +16,11 @@ cd Modern-and-Magic-Chess-Online
 4) Run `yarn start`
 
 For development use `yarn dev` instead of `yarn start`.
+
+## React configuring
+
+1) Copy config from `.env.example` to `.env` and modify (set variables).
+
+2) Run `yarn install`
+
+3) Run `yarn start`

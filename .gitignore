@@ -2,6 +2,7 @@
 */.idea
 .idea
 .env
-package-lock.json
+*/package-lock.json
 server/src/db/config/config.json
 */yarn.lock
+/webapp/.vscode
