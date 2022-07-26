@@ -17,6 +17,7 @@ app.use('/auth', authRouter);
 app.use('/', mainRouter);
 
 const server = http.createServer(app);
+mainWS(server);
 
 const { port } = config.server;
 
