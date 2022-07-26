@@ -10,10 +10,11 @@ const mainWS = require('./controllers/webSocket/mainWS');
 
 const app = express();
 
+app.use(express.static(path.resolve(__dirname, "static")));
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 setupMiddlewares(app);
-app.use(express.static(path.resolve(__dirname, "static")));
+
 app.use('/api', apiRouter);
 app.use('/auth', authRouter);
 app.use('/', mainRouter);
