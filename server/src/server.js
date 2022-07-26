@@ -5,7 +5,6 @@ const config = require('./config');
 const { apiRouter, mainRouter, authRouter } = require('./routers');
 const setupMiddlewares = require('./middlewares');
 const swaggerSpec = require('./docs/index');
-const mainWS = require('./controllers/webSocket/mainWS');
 
 const app = express();
 
