@@ -18,13 +18,6 @@ apiRouter.post('/createLobby', verifyAccess, api.createLobby);
 apiRouter.post('/makeMove', verifyAccess, api.makeMove);
 apiRouter.post('/highlightMoves', verifyAccess, api.highlightMoves);
 
-/**
- * @swagger
- * /auth/register:
- *   post:
- *     summary: put your nick and password into db
- *     description: put your nick and password into db
- */
 authRouter.post('/register', auth.register);
 authRouter.post('/login', auth.login, setRefreshToken, getAccessToken);
 authRouter.post('/refresh', auth.refresh, setRefreshToken, getAccessToken);
