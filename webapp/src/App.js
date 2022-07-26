@@ -4,8 +4,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import About from './routes/About/About'
 import Main from './routes/Main/Main'
 import Inventory from './routes/Inventory/Inventory';
+<<<<<<< HEAD
 import Lobby from './routes/Lobby/Lobby';
 import LobbyInfo from './routes/Lobby/lobbyInfo';
+=======
+>>>>>>> 6750ffd (Add inventory, add styles on server, add static support on server, add webSocketSuppert on server.)
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -23,8 +26,11 @@ function App() {
 					<Route path="/" element={<Main></Main>}></Route>
 					<Route path="/about" element={<About></About>}></Route>
 					<Route path="/inventory" element={<Inventory></Inventory>}></Route>
+<<<<<<< HEAD
 					<Route path="/lobby" element={<Lobby lobbies={lobbies}></Lobby>}></Route>
 					<Route path="/about" element={<About></About>}></Route>
+=======
+>>>>>>> 6750ffd (Add inventory, add styles on server, add static support on server, add webSocketSuppert on server.)
 				</Routes>
 			</div>
 		</BrowserRouter>
