@@ -1,14 +1,21 @@
 const http = require('http');
 const express = require('express');
+const swaggerUI = require('swagger-ui-express');
+
 const config = require('./config');
 const { apiRouter, mainRouter, authRouter } = require('./routers');
+
 const setupMiddlewares = require('./middlewares');
 const path = require("path");
 const mainWS = require('./controllers/webSocket/mainWS');
+const swaggerSpec = require('./docs/index');
 
 const app = express();
 
 setupMiddlewares(app);
+
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
 app.use(express.static(path.resolve(__dirname, "static")));
 app.use('/api', apiRouter);
 app.use('/auth', authRouter);
@@ -16,6 +23,7 @@ app.use('/', mainRouter);
 
 const server = http.createServer(app);
 mainWS(server);
+
 const { port } = config.server;
 
 server.listen(port, () => {
