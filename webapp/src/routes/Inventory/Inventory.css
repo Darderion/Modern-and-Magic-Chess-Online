@@ -6,7 +6,7 @@
 [type=radio] + img {
     cursor: pointer;
 }
-label.checked {
+label.selected {
     outline: 2px solid green;
     border-radius: 2rem;
 }

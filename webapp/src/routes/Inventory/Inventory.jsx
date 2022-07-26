@@ -6,8 +6,13 @@ import React, { useState } from 'react';
 import './Inventory.css';
 import { startCase } from 'lodash';
 import config from '../../config/index.js';
+<<<<<<< HEAD
 const server = config.server;
 <<<<<<< HEAD
+=======
+
+const { server } = config;
+>>>>>>> 833c915 (Huge code refactoring: inventary, lobby, readme, new install_web.hs)
 
 const imageSource = server.serverURL + server.skinFolder + '/';
 const figures = ['bishop', 'king', 'knight', 'queen', 'pawn', 'rook'];
@@ -30,6 +35,7 @@ const stylesSelected = {
 		rook: 'go',
 	},
 };
+
 const packs = ['go', 'br', 'default'];
 
 const allFiguresWithStyles = Object.fromEntries(
@@ -40,75 +46,74 @@ const stylesAll = Object.fromEntries(
 	colors.map((color) => [color, allFiguresWithStyles]),
 );
 
-export default function Inventory() {
-	const [showColor, setColor] = useState('black');
-	const [showFigure, setFigure] = useState('bishop');
-	const [selectedStyle, setStyle] = useState('default');
+function Figure({ isSelected, figureInfo, onClick }) {
+	const { color, figure, style } = figureInfo;
+	return (
+		<label
+			className={isSelected() ? 'selected' : ''}
+			onClick={onClick}
+			id={`${figure}__${color}__${style}`}>
+			<img
+				src={`${imageSource}${style}/${color}/${figure}.svg`}
+				alt={`${style}`}
+			/>
+		</label>
+	);
+}
 
-	const setAll = (color, figure, style) => {
-		setColor(() => color);
-		setFigure(() => figure);
-		setStyle(() => style);
-	};
+export default function Inventory() {
+	const [current, setCurrent] = useState({
+		color: 'black',
+		figure: 'bishop',
+		style: 'default',
+	});
 
 	return (
 		<div className="figures">
 			<div className="selected">
-				{colors.map((color) => {
-					return (
-						<div className="selected__line" key={`color__${color}`}>
-							<p className="color">{startCase(color)} styles:</p>
-							{figures.map((figure) => {
-								return (
-									<label
-										className={
-											showColor === color && showFigure === figure
-												? 'figure checked'
-												: 'figure'
-										}
-										key={`${color}__${figure}`}
-										onClick={() =>
-											setAll(color, figure, stylesSelected[color][figure])
-										}
-										id={`${figure}__${color}__${stylesSelected[color][figure]}`}>
-										<img
-											src={`${imageSource}${
-												showColor === color && showFigure === figure
-													? selectedStyle
-													: stylesSelected[color][figure]
-											}/${color}/${figure}.svg`}
-											alt={`${color}__${figure}`}
-										/>
-									</label>
-								);
-							})}
-						</div>
-					);
-				})}
+				{colors.map((color) => (
+					<div className="selected__line" key={`color__${color}`}>
+						<p className="color">{startCase(color)} styles:</p>
+						{figures.map((figure) => {
+							const isSelected = () =>
+								current.color === color && current.figure === figure;
+							const figureInfo = {
+								color,
+								figure,
+								style: stylesSelected[color][figure],
+							};
+							return (
+								<Figure
+									isSelected={isSelected}
+									key={`${color}__${figure}`}
+									onClick={() => setCurrent(() => figureInfo)}
+									figureInfo={figureInfo}
+								/>
+							);
+						})}
+					</div>
+				))}
 			</div>
 			<div className="selector">
 				<p className="colorFigure">
-					Select a style for {showColor} {showFigure}:
+					Select a style for {current.color} {current.figure}:
 				</p>
 				<div className="show__line">
-					{stylesAll[showColor][showFigure].map((style) => {
-						return (
-							<label
-								className={selectedStyle === style ? 'checked' : ''}
-								key={`style__${style}`}
-								onClick={() => {
-									setStyle((prev) => style);
-									stylesSelected[showColor][showFigure] = style;
-									//later send it to server
-								}}
-								id={`${showFigure}__${showColor}__${style}`}>
-								<img
-									src={`${imageSource}${style}/${showColor}/${showFigure}.svg`}
-									alt={`${style}`}
-								/>
-							</label>
-						);
-					})}
+					{stylesAll[current.color][current.figure].map((style) => (
+						<Figure
+							isSelected={() => current.style === style}
+							key={`style_${style}`}
+							onClick={() => {
+								setCurrent((prev) => ({ ...prev, style }));
+								stylesSelected[current.color][current.figure] = style;
+								// send request to save selected color
+							}}
+							figureInfo={{
+								...current,
+								style,
+							}}
+						/>
+					))}
 				</div>
 			</div>
 =======
