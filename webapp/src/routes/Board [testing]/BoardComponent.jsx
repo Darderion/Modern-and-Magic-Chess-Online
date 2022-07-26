@@ -1,11 +1,10 @@
-import React, { useEffect, useContext, useState  } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import PieceComponent from './PieceComponent';
 import BoardContext from './BoardContext';
 import ChessContext from './ChessContext';
 
 const BoardComponent = ({ view }) => {
-
-	const names = {
+	const PiecesEnum = {
 		k: 'king',
 		n: 'knight',
 		r: 'rook',
@@ -16,54 +15,38 @@ const BoardComponent = ({ view }) => {
 
 	const { chess, setChess } = useContext(ChessContext);
 
-	const turn = String(chess.turn()) === 'b' ? 'black' : 'white';
+	const SideEnum = String(chess.turn()) === 'b' ? 'black' : 'white';
 
 	const field = chess.board();
 
 	const Board = [];
 
 	field.forEach((row) => {
-		[...row]
-			.map((elem) => {
-				const tmp = {
-					skin: 'default',
-					color: elem === null ? null : elem.color === 'b' ? 'black' : 'white',
-					name: elem === null ? null : names[elem.type],
-					selected: false,
-					targeted: false,
-					idle: false,
-				};
-				return { ...tmp };
-			})
-			.forEach((dict) => {
-				Board.push({ ...dict });
-			});
-	});
-
-	const selectColor = turn;
-	const canSelect = turn === view;
-
-	const [board, setBoard] = useState(
-		[...Board].map((elem) => {
-			return { ...elem };
-		}),
-	);
-
-	useEffect(() => {
-		setBoard((prev) => {
-			return [...Board].map((elem) => {
-				return { ...elem };
+		row.forEach((it) => {
+			Board.push({
+				skin: 'default',
+				color: it === null ? null : it.color === 'b' ? 'black' : 'white',
+				name: it === null ? null : PiecesEnum[it.type],
+				selected: false,
+				targeted: false,
+				idle: false,
 			});
 		});
+	});
+	const access = SideEnum === view;
+
+	const [board, setBoard] = useState(Board.map((it) => ({ ...it })));
+
+	useEffect(() => {
+		setBoard(Board.map((it) => ({ ...it })));
 	}, [chess]);
 
-	let anotherSelected = null;
+	let from = null;
 	board.forEach((elem, i) => {
-		if (elem.selected && elem.color === turn) anotherSelected = i;
+		if (elem.selected && elem.color === SideEnum) from = i;
 	});
 
 	let layout;
-
 	if (view === 'black') {
 		layout = [...board].reverse().map((elem) => {
 			return { ...elem };
@@ -87,9 +70,8 @@ const BoardComponent = ({ view }) => {
 						targeted={elem.targeted}
 						idle={elem.idle}
 						index={view === 'black' ? 63 - i : i}
-						selectColor={selectColor}
-						canSelect={canSelect}
-						anotherSelected={anotherSelected}
+						access={access}
+						from={from}
 					/>
 				))}
 			</div>

@@ -12,9 +12,8 @@ const PieceComponent = ({
 	targeted,
 	idle,
 	index,
-	selectColor,
-	canSelect,
-	anotherSelected,
+	access,
+	from,
 }) => {
 	const isBlackCell = (ind) => {
 		const row = Math.floor(ind / 8);
@@ -22,10 +21,8 @@ const PieceComponent = ({
 		return (row % 2 === 0 && col % 2 === 1) || (row % 2 === 1 && col % 2 === 0);
 	};
 
-	const getCODE = (ind) => {
-		const codes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-		return codes[ind % 8] + String(8 - Math.floor(ind / 8));
-	};
+	const getCODE = (ind) =>
+		`${String.fromCharCode(97 + (ind % 8))}${8 - Math.floor(ind / 8)}`;
 
 	const getIND = (code) => {
 		const pos = String(code);
@@ -42,6 +39,18 @@ const PieceComponent = ({
 		};
 		return codes[pos[0]] + (8 - Number(pos[1])) * 8;
 	};
+
+	// console.log({
+	// 	'index': index,
+	// 	'code': getCODE(index),
+	// 	'color': color,
+	// 	'name': name,
+	// 	'selected': selected,
+	// 	'targeted': targeted,
+	// 	'idle': idle,
+	// 	'access': access,
+	// 	'from': from,
+	// })
 
 	//   TODO: добавить плучение svg запросом
 	const src = {
@@ -65,18 +74,20 @@ const PieceComponent = ({
 	const { chess, setChess } = useContext(ChessContext);
 	const { board, setBoard } = useContext(BoardContext);
 
+	const SideEnum = String(chess.turn()) === 'b' ? 'black' : 'white';
+
 	const handleClick = () => {
-		if (!canSelect) return;
+		if (!access) return;
 
 		if (targeted || idle) {
 			setChess((prev) => {
 				const history = prev.fen();
 				const next = new Chess(history);
-				next.move({ from: getCODE(anotherSelected), to: getCODE(index) });
-				console.log(getCODE(anotherSelected), getCODE(index));
+				next.move({ from: getCODE(from), to: getCODE(index) });
+				console.log(getCODE(from), getCODE(index));
 				return next;
 			});
-		} else if (selectColor === color) {
+		} else if (SideEnum === color) {
 			setBoard((prev) => {
 				const next = [...prev].map((elem) => {
 					return { ...elem };

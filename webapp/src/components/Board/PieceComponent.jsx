@@ -10,7 +10,6 @@ const PieceComponent = ({
 	targeted,
 	idle,
 	index,
-	turn,
 	access,
 	from,
 	lobbyID,
@@ -31,10 +30,8 @@ const PieceComponent = ({
 	 * @param {int} ind 0 - 63
 	 * @returns
 	 */
-	const getCODE = (ind) => {
-		const codes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-		return codes[ind % 8] + String(8 - Math.floor(ind / 8));
-	};
+	const getCODE = (ind) =>
+		`${String.fromCharCode(97 + (ind % 8))}${8 - Math.floor(ind / 8)}`;
 
 	/**
 	 * Преобразует индекс клетки из классической нотации в число от 0 до 63
@@ -57,32 +54,22 @@ const PieceComponent = ({
 		return codes[pos[0]] + (8 - Number(pos[1])) * 8;
 	};
 
-	//   TODO: добавить плучение svg запросом
-	const src = {
-		'black bishop': require('./black/bishop.svg').default,
-		'black king': require('./black/king.svg').default,
-		'black knight': require('./black/knight.svg').default,
-		'black pawn': require('./black/pawn.svg').default,
-		'black queen': require('./black/queen.svg').default,
-		'black rook': require('./black/rook.svg').default,
-		'white bishop': require('./white/bishop.svg').default,
-		'white king': require('./white/king.svg').default,
-		'white knight': require('./white/knight.svg').default,
-		'white pawn': require('./white/pawn.svg').default,
-		'white queen': require('./white/queen.svg').default,
-		'white rook': require('./white/rook.svg').default,
-	};
+	//   Приблизительно так будет выглядеть запрос
+	const src = axios.get(`localhost:5000/skins/${skin}/${color}/${name}.svg`);
 
 	const idleSRC = require('./idle.svg').default;
 	const targetedSRC = require('./targeted.svg').default;
 
 	const { board, setBoard } = useContext(BoardContext);
 
+	const SideEnum = String(chess.turn()) === 'b' ? 'black' : 'white';
+
 	const handleClick = () => {
 		// Если нет доступа, ничего не делаем
 		if (!access) return;
 		// Если нажатая клетка уже помечена как таргетед или свободная для хода, то просто делаем туда ход
 		if (targeted || idle) {
+			// Приблизительно так будет выглядеть запрос
 			axios({
 				method: 'POST',
 				url: '/api/makeMove',
@@ -144,11 +131,7 @@ const PieceComponent = ({
 			</div>
 			<div className="overlay" onClick={handleClick} />
 			{color !== null ? (
-				<img
-					src={src[`${color} ${name}`]}
-					alt={`${color} ${name}`}
-					className={`${skin}-${name}`}
-				/>
+				<img src={src} alt={`${color} ${name}`} className={`${skin}-${name}`} />
 			) : null}
 		</div>
 	);

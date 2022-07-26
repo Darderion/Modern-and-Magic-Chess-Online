@@ -3,7 +3,7 @@ import PieceComponent from './PieceComponent';
 import BoardContext from './BoardContext';
 
 const BoardComponent = ({ chess, view, lobbyID }) => {
-	const names = {
+	const PiecesEnum = {
 		k: 'king',
 		n: 'knight',
 		r: 'rook',
@@ -19,46 +19,32 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 	const Board = [];
 
 	field.forEach((row) => {
-		[...row]
-			.map((elem) => {
-				const tmp = {
-					skin: 'default',
-					color: elem === null ? null : elem.color === 'b' ? 'black' : 'white',
-					name: elem === null ? null : names[elem.type],
-					selected: false,
-					targeted: false,
-					idle: false,
-				};
-				return { ...tmp };
-			})
-			.forEach((dict) => {
-				Board.push({ ...dict });
-			});
-	});
-
-	const [board, setBoard] = useState(
-		[...Board].map((elem) => {
-			return { ...elem };
-		}),
-	);
-
-	useEffect(() => {
-		setBoard((prev) => {
-			return [...Board].map((elem) => {
-				return { ...elem };
+		row.forEach((it) => {
+			Board.push({
+				skin: 'default',
+				color: it === null ? null : it.color === 'b' ? 'black' : 'white',
+				name: it === null ? null : PiecesEnum[it.type],
+				selected: false,
+				targeted: false,
+				idle: false,
 			});
 		});
-	}, [chess]);
+	});
 
-	const access = turn === view;
+	const access = SideEnum === view;
+
+	const [board, setBoard] = useState(Board.map((it) => ({ ...it })));
+
+	useEffect(() => {
+		setBoard(Board.map((it) => ({ ...it })));
+	}, [chess]);
 
 	let from = null;
 	board.forEach((elem, i) => {
-		if (elem.selected && elem.color === turn) anotherSelected = i;
+		if (elem.selected && elem.color === turn) from = i;
 	});
 
 	let layout;
-
 	if (view === 'black') {
 		layout = [...board].reverse().map((elem) => {
 			return { ...elem };
@@ -82,7 +68,6 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 						targeted={elem.targeted}
 						idle={elem.idle}
 						index={view === 'black' ? 63 - i : i}
-						turn={turn}
 						access={access}
 						from={from}
 						lobbyID={lobbyID}
