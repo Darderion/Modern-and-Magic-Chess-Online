@@ -1,18 +1,33 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 const ConnectorContext = React.createContext();
-const ChatTypes = [];
-const BoardTypes = ['myStep', 'otherStep', 'closeGame'];
-const LobbyTypes = ['allLobbies', 'unsubAllLobbies', 'openLobby', 'closeLobby', 'connectToLobby'];
 
 function Connector(props) {
     const ws = useRef(null);
+
     const [chatData, setChatData] = useState({});
     const [boardData, setBoardData] = useState({});
     const [lobbyData, setLobbyData] = useState({});
     const [generalData, setGeneralData] = useState({});
 
+    const webSocketMessageTypes = [
+        [setChatData,
+            ['sendMessage', 'message']],
+        [setBoardData,
+            ['myStep', 'otherStep', 'closeGame']],
+        [setLobbyData,
+            [
+                'allLobbies',
+                'unsubAllLobbies',
+                'openLobby',
+                'closeLobby',
+                'connectToLobby',
+            ],
+        ],
+    ];
+
     function connect() {
+        // TODO generate url from config file
         ws.current = new WebSocket("ws://localhost:5000/main");
         ws.current.onopen = onOpen;
         ws.current.onclose = onClose;
@@ -21,17 +36,17 @@ function Connector(props) {
     }
 
     function onOpen(event) {
-        // console.log(event);
-        // setGeneralData(event);
+        setGeneralData({ status: "opened" })
+    }
+
+    function reset(event) {
+        webSocketMessageTypes.forEach(([setData]) => setData({}));
     }
 
     function onClose(event) {
-        // console.log(event);
-        // setGeneralData(event);
-        setChatData({});
-        setBoardData({});
-        setLobbyData({});
-        setGeneralData({});
+        reset();
+        setGeneralData({ status: "closed" })
+        
         setTimeout(() => { connect(); }, 5000)
     }
 
@@ -39,32 +54,23 @@ function Connector(props) {
         console.log(event);
         if (event.data) {
             const data = JSON.parse(event.data);
-            const dataType = data.type;
-            if (ChatTypes.includes(dataType)) {
-                setChatData(data);
-            } else if (BoardTypes.includes(dataType)) {
-                setBoardData(data);
-            } else if (LobbyTypes.includes(dataType)) {
-                setLobbyData(data);
-            } else {
-                setGeneralData(data);
-            }
+            const { type } = data;
+            const value = webSocketMessageTypes.find(([_, types]) =>
+                types.includes(type),
+            );
+            const setData = value ? value[0] : setGeneralData;
+            setData(data);
         }
     }
 
     function onError(error) {
         console.error(error);
-        // setGeneralData(error);
+        setGeneralData({ status: "error" })
     }
 
-    useEffect(
-        () => {
-            connect();
-        }, []
-    );
+    useEffect(connect, []);
 
     function sendMessage(message) {
-        // console.log(message);
         if (ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(JSON.stringify(message || {}));
         }
