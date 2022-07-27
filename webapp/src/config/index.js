@@ -10,7 +10,7 @@ const config = {
         serverWebsockerURL: process.env.REACT_APP_SERVER_WEBSOCKET_PROTOCOL + '://' +
             process.env.REACT_APP_SERVER_HOST + ':' +
             process.env.REACT_APP_SERVER_PORT + '/' +
-            process.env.REACT_APP_SERVER_WEBSOCKET_PATH + '/',
+            process.env.REACT_APP_SERVER_WEBSOCKET_PATH,
         skinFolder: process.env.REACT_APP_SERVER_STYLE_FOLDER,
     },
 };
