@@ -13,18 +13,9 @@ export default function Nav() {
 					<NavComponent.Link as={Link} to="/">
 						Home
 					</NavComponent.Link>
-<<<<<<< HEAD
-<<<<<<< HEAD
 					<NavComponent.Link as={Link} to="/Lobby">
 						Lobby
 					</NavComponent.Link>
-=======
->>>>>>> 6750ffd (Add inventory, add styles on server, add static support on server, add webSocketSuppert on server.)
-=======
-					<NavComponent.Link as={Link} to="/Lobby">
-						Lobby
-					</NavComponent.Link>
->>>>>>> 675e7ed (Create lobby route)
 					<NavComponent.Link as={Link} to="/Inventory">
 						Inventory
 					</NavComponent.Link>
