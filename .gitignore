@@ -5,4 +5,4 @@
 */package-lock.json
 server/src/db/config/config.json
 */yarn.lock
-*/.vscode
+/webapp/.vscode

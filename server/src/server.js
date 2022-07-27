@@ -9,14 +9,16 @@ const setupMiddlewares = require('./middlewares');
 const path = require("path");
 const mainWS = require('./controllers/webSocket/mainWS');
 const swaggerSpec = require('./docs/index');
+const path = require("path");
+const mainWS = require('./controllers/webSocket/mainWS');
 
 const app = express();
 
-setupMiddlewares(app);
-
+app.use(express.static(path.resolve(__dirname, "static")));
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-app.use(express.static(path.resolve(__dirname, "static")));
+setupMiddlewares(app);
+
 app.use('/api', apiRouter);
 app.use('/auth', authRouter);
 app.use('/', mainRouter);
