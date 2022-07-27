@@ -1,5 +1,5 @@
-import { createContext } from "react"
+import { createContext } from 'react';
 
-const BoardContext = createContext()
+const BoardContext = createContext();
 
 export default BoardContext;
