@@ -2,7 +2,7 @@ import React from 'react';
 import { useContext } from 'react';
 import ChessContext from './ChessContext';
 import BoardContext from './BoardContext';
-import { Chess } from 'chess.js';
+import * as Chess from 'chess.js';
 
 const PieceComponent = ({
 	skin,
@@ -86,7 +86,7 @@ const PieceComponent = ({
 	const { chess, setChess } = useContext(ChessContext);
 	const { board, setBoard } = useContext(BoardContext);
 
-	const SideEnum = String(chess.turn()) === 'b' ? 'black' : 'white';
+	const side = String(chess.turn()) === 'b' ? 'black' : 'white';
 
 	const handleClick = () => {
 		if (!access) return;
@@ -99,14 +99,13 @@ const PieceComponent = ({
 				console.log(getCODE(from), getCODE(index));
 				return next;
 			});
-		} else if (SideEnum === color) {
+		} else if (side === color) {
 			setBoard((prev) => {
 				const next = [...prev].map((elem) => {
 					return { ...elem };
 				});
 				next.map((elem) => {
-					if (elem.color === SideEnum)
-						elem.selected = false;
+					if (elem.color === side) elem.selected = false;
 					elem.targeted = false;
 					elem.idle = false;
 					return { ...elem };

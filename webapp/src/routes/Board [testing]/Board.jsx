@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Chess } from 'chess.js';
+import * as Chess from 'chess.js';
 import BoardComponent from './BoardComponent'
 import './style.css'
 import ChessContext from './ChessContext'
