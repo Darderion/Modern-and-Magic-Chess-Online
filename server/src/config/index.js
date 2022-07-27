@@ -1,16 +1,21 @@
 require('dotenv').config();
 
 module.exports = {
-    postgres: {
-        user: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        database: process.env.POSTGRES_DB,
-    },
-    env: {
-        isDevelopment: process.env.NODE_ENV === "development",
-        isProduction: process.env.NODE_ENV === "development",
-    },
-    server: {
-        port: process.env.SERVER_PORT,
-    }
-}
+  sequelizeInfo: {
+    syncType: process.env.MODELS_SYNC_TYPE,
+  },
+  env: {
+    nodeEnv: process.env.NODE_ENV,
+    isDevelopment: process.env.NODE_ENV === 'development',
+    isProduction: process.env.NODE_ENV === 'production',
+    isSecureCookies: process.env.SECURE_COOKIES === 'true',
+    cookieName: process.env.COOKIE_NAME,
+    accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,
+    refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+    accessTokenExpTime: process.env.ACCESS_TOKEN_EXPIRATION_TIME,
+    refreshTokenExpTime: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
+  },
+  server: {
+    port: process.env.SERVER_PORT,
+  },
+};
