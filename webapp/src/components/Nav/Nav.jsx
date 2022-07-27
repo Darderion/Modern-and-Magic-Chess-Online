@@ -22,6 +22,9 @@ export default function Nav() {
 					<NavComponent.Link as={Link} to="/About">
 						About
 					</NavComponent.Link>
+					<NavComponent.Link as={Link} to="/login">
+						Sign in
+					</NavComponent.Link>
 				</NavComponent>
 			</Container>
 		</Navbar>
