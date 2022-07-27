@@ -5,9 +5,12 @@ const config = require('./config');
 const { apiRouter, mainRouter, authRouter } = require('./routers');
 const setupMiddlewares = require('./middlewares');
 const swaggerSpec = require('./docs/index');
+const path = require("path");
+const mainWS = require('./controllers/webSocket/mainWS');
 
 const app = express();
 
+app.use(express.static(path.resolve(__dirname, "static")));
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 setupMiddlewares(app);
