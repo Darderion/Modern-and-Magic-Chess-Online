@@ -7,6 +7,7 @@ import './Inventory.css';
 import { startCase } from 'lodash';
 import config from '../../config/index.js';
 <<<<<<< HEAD
+<<<<<<< HEAD
 const server = config.server;
 <<<<<<< HEAD
 =======
@@ -14,9 +15,15 @@ const server = config.server;
 const { server } = config;
 >>>>>>> 833c915 (Huge code refactoring: inventary, lobby, readme, new install_web.hs)
 
+=======
+import Figure from '../../components/Figure/Figure';
+
+const { server, game } = config;
+const { figures, colors } = game;
+>>>>>>> 1df9e65 (Move Figure to components, move figures and colors names to webapp/src/config/index.)
 const imageSource = server.serverURL + server.skinFolder + '/';
-const figures = ['bishop', 'king', 'knight', 'queen', 'pawn', 'rook'];
-const colors = ['black', 'white'];
+
+
 const stylesSelected = {
 	black: {
 		bishop: 'go',
@@ -46,21 +53,6 @@ const stylesAll = Object.fromEntries(
 	colors.map((color) => [color, allFiguresWithStyles]),
 );
 
-function Figure({ isSelected, figureInfo, onClick }) {
-	const { color, figure, style } = figureInfo;
-	return (
-		<label
-			className={isSelected() ? 'selected' : ''}
-			onClick={onClick}
-			id={`${figure}__${color}__${style}`}>
-			<img
-				src={`${imageSource}${style}/${color}/${figure}.svg`}
-				alt={`${style}`}
-			/>
-		</label>
-	);
-}
-
 export default function Inventory() {
 	const [current, setCurrent] = useState({
 		color: 'black',
@@ -88,6 +80,7 @@ export default function Inventory() {
 									key={`${color}__${figure}`}
 									onClick={() => setCurrent(() => figureInfo)}
 									figureInfo={figureInfo}
+									imageSource={imageSource}
 								/>
 							);
 						})}
@@ -112,6 +105,7 @@ export default function Inventory() {
 								...current,
 								style,
 							}}
+							imageSource={imageSource}
 						/>
 					))}
 				</div>

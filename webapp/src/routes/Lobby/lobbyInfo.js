@@ -1,9 +1,5 @@
-class LobbyInfo{
-	constructor(id, userName, lobbyName) {
-		this.id = id;
-		this.userName = userName;
-		this.lobbyName = lobbyName;
-	}
+function lobbyInfo(id, userName, lobbyName) {
+	return { id, userName, lobbyName };
 }
 
-export default LobbyInfo;
+export default lobbyInfo;
