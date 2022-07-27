@@ -8,9 +8,10 @@ import { Connector } from './Connector'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const title = "MaMCO - Modern and Magic Chess Online";
+// pechenux: Почему бы не задать заголовок просто в index.html?
 root.render(
     <Connector>
-      <DocumentTitle title={title}> // pechenux: Почему бы просто не задать заголовок в index.html?
+      <DocumentTitle title={title}>
         <React.StrictMode>
             <App/>
         </React.StrictMode>
