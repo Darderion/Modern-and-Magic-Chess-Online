@@ -12,7 +12,7 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 		b: 'bishop',
 	};
 
-	const turn = String(chess.turn()) === 'b' ? 'black' : 'white';
+	const side = String(chess.turn()) === 'b' ? 'black' : 'white';
 
 	const field = chess.board();
 
@@ -31,7 +31,20 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 		});
 	});
 
-	const access = SideEnum === view;
+	const history = chess.history({ verbose: true });
+
+	const getIND = (code) => {
+	  const pos = String(code);
+	  const codes = { h: 7, g: 6, f: 5, e: 4, d: 3, c: 2, b: 1, a: 0 };
+	  return codes[pos[0]] + (8 - Number(pos[1])) * 8;
+	};
+
+	if (history.length > 0 && (view === side || view === "observer")) {
+		Board[getIND(history.at(-1).from)].selected = true;
+		Board[getIND(history.at(-1).to)].selected = true;
+	}
+
+	const access = side === view;
 
 	const [board, setBoard] = useState(Board.map((it) => ({ ...it })));
 
@@ -41,7 +54,7 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 
 	let from = null;
 	board.forEach((elem, i) => {
-		if (elem.selected && elem.color === turn) from = i;
+		if (elem.selected && elem.color === side) from = i;
 	});
 
 	let layout;

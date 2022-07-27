@@ -24,12 +24,8 @@
 	background-color: #779556;
 }
 
-.selected-white {
-	background-color: #f6f48b;
-}
-
-.selected-black {
-	background-color: #bbca47;
+.selected {
+	background-color: #f7ff1f72;
 }
 
 .box img {
@@ -71,34 +67,21 @@
 	left: 0%;
 }
 
-/* default skins */
 
-.box .default-bishop {
-	margin-left: 20%;
-	margin-top: 10%;
+.box .default-bishop, .default-king, .default-knight, .default-pawn, .default-queen, .default-rook,
+.go-bishop, .go-king, .go-knight, .go-pawn, .go-queen, .go-rook, .br-bishop, .br-king, .br-knight, .br-pawn,
+.br-queen, .br-rook {
+	width: 90%;
+	margin-top: 3%;
 }
 
-.box .default-pawn {
-	margin-left: 25%;
-	margin-top: 20%;
+.box .wikipedia-bishop, .wikipedia-king, .wikipedia-knight, .wikipedia-pawn, .wikipedia-queen, .wikipedia-rook {
+	width: 100%;
+	margin-top: 2%;
 }
 
-.box .default-rook {
-	margin-left: 22%;
-	margin-top: 19%;
+.box .wikipedia-bishop {
+	margin-top: -3%;
 }
 
-.box .default-knight {
-	margin-left: 15%;
-	margin-top: 12%;
-}
 
-.box .default-queen {
-	margin-left: 10%;
-	margin-top: 12%;
-}
-
-.box .default-king {
-	margin-left: 11.5%;
-	margin-top: 10%;
-}

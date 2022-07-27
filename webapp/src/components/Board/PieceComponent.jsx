@@ -15,17 +15,6 @@ const PieceComponent = ({
 	lobbyID,
 	chess,
 }) => {
-	/**
-	 * Вернет true, если клетка черная
-	 * @param {int} ind 0 - 63
-	 * @returns
-	 */
-	const isBlackCell = (ind) => {
-		const row = Math.floor(ind / 8);
-		const col = ind % 8;
-		return (row % 2 === 0 && col % 2 === 1) || (row % 2 === 1 && col % 2 === 0);
-	};
-	/**
 	 * Преобразует индекс клетки в классическую нотацию
 	 * @param {int} ind 0 - 63
 	 * @returns
@@ -38,19 +27,9 @@ const PieceComponent = ({
 	 * @param {String} code
 	 * @returns
 	 */
-	const getIND = (code) => {
+	 const getIND = (code) => {
 		const pos = String(code);
-
-		const codes = {
-			h: 7,
-			g: 6,
-			f: 5,
-			e: 4,
-			d: 3,
-			c: 2,
-			b: 1,
-			a: 0,
-		};
+		const codes = { h: 7, g: 6, f: 5, e: 4, d: 3, c: 2, b: 1, a: 0 };
 		return codes[pos[0]] + (8 - Number(pos[1])) * 8;
 	};
 
@@ -62,7 +41,7 @@ const PieceComponent = ({
 
 	const { board, setBoard } = useContext(BoardContext);
 
-	const SideEnum = String(chess.turn()) === 'b' ? 'black' : 'white';
+	const side = String(chess.turn()) === 'b' ? 'black' : 'white';
 
 	const handleClick = () => {
 		// Если нет доступа, ничего не делаем
@@ -80,14 +59,14 @@ const PieceComponent = ({
 				},
 			});
 			// Если нажал на непомеченную клетку своего цвета, то надо для этого игрока изменить доску из BoardComponent
-		} else if (turn === color) {
+		} else if (side === color) {
 			setBoard((prev) => {
 				const next = [...prev].map((elem) => {
 					return { ...elem };
 				});
 				// Убрать все отметки
 				next.map((elem) => {
-					elem.selected = false;
+					if (side === color) elem.selected = false;
 					elem.targeted = false;
 					elem.idle = false;
 					return { ...elem };
@@ -117,13 +96,7 @@ const PieceComponent = ({
 	return (
 		<div className="box">
 			<div
-				className={`underlay ${
-					selected
-						? isBlackCell(index)
-							? 'selected-black'
-							: 'selected-white'
-						: null
-				}`}>
+				className={`underlay ${ selected ? 'selected' : null }`}>
 				{idle ? <img src={idleSRC} alt="idle" className="idle" /> : null}
 				{targeted ? (
 					<img src={targetedSRC} alt="targeted" className="targeted" />
