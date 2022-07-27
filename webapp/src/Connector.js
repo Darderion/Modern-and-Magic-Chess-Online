@@ -73,9 +73,6 @@ function Connector(props) {
     useEffect(connect, []);
 
     function sendMessage(message) {
-        console.log(ws.current.readyState);
-        console.log(WebSocket.OPEN);
-        console.log(message);
         if (ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(JSON.stringify(message || {}));
         }
