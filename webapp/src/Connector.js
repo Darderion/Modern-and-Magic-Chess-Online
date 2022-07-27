@@ -29,9 +29,8 @@ function Connector(props) {
     ];
 
     function connect() {
-        // TODO get url from config file
-        // console.log(config);
-        ws.current = new WebSocket("ws://localhost:5000/main");
+        console.log(`WebSocket path ${config.server.serverWebsockerURL}`);
+        ws.current = new WebSocket(config.server.serverWebsockerURL);
         ws.current.onopen = onOpen;
         ws.current.onclose = onClose;
         ws.current.onmessage = onMessage;
@@ -74,6 +73,9 @@ function Connector(props) {
     useEffect(connect, []);
 
     function sendMessage(message) {
+        console.log(ws.current.readyState);
+        console.log(WebSocket.OPEN);
+        console.log(message);
         if (ws.current.readyState === WebSocket.OPEN) {
             ws.current.send(JSON.stringify(message || {}));
         }
