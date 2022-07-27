@@ -1,8 +1,9 @@
 import './App.css';
-import { Nav } from './components';
+import { Nav, BoardComponent } from './components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import About from './routes/About/About'
 import Main from './routes/Main/Main'
+import Board from './routes/Board [testing]/Board';
 import Inventory from './routes/Inventory/Inventory';
 import Lobby from './routes/Lobby/Lobby';
 import LobbyInfo from './routes/Lobby/lobbyInfo';
@@ -22,6 +23,8 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Main></Main>}></Route>
 					<Route path="/about" element={<About></About>}></Route>
+					{/* Placeholder */}
+					<Route path="/board" element={<Board />} />
 					<Route path="/inventory" element={<Inventory></Inventory>}></Route>
 					<Route path="/lobby" element={<Lobby lobbies={lobbies}></Lobby>}></Route>
 					<Route path="/about" element={<About></About>}></Route>
