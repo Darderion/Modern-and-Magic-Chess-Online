@@ -50,6 +50,7 @@ module.exports = async (req, res) => {
     .filter((t) => t[1] === 'x')
     .map((t) => t.substring(2, t.length));
 
+  // The # symbol at the end means that the move leads to a checkmate
   // 'd7' ~ Pawn can make a move on d7
   // 'd7+' ~ Pawn can make a move on d7 and this move will lead to a checkmate
   // 'Qd7' ~ Queen can make a move on d7
@@ -67,6 +68,5 @@ module.exports = async (req, res) => {
     moves: moves,
     eatMoves: eatMoves,
     turn: game.turn(),
-    board: game.board(),
   });
 };
