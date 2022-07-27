@@ -29,7 +29,6 @@ function Connector(props) {
     ];
 
     function connect() {
-        console.log(`WebSocket path ${config.server.serverWebsockerURL}`);
         ws.current = new WebSocket(config.server.serverWebsockerURL);
         ws.current.onopen = onOpen;
         ws.current.onclose = onClose;
