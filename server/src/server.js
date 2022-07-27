@@ -2,7 +2,7 @@ const http = require('http');
 const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const config = require('./config');
-const { apiRouter, mainRouter, authRouter } = require('./routers');
+const { apiRouter, mainRouter, authRouter, shopRouter } = require('./routers');
 const setupMiddlewares = require('./middlewares');
 const swaggerSpec = require('./docs/index');
 const path = require("path");
@@ -16,6 +16,7 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 setupMiddlewares(app);
 
 app.use('/api', apiRouter);
+app.use('/shop', shopRouter);
 app.use('/auth', authRouter);
 app.use('/', mainRouter);
 
