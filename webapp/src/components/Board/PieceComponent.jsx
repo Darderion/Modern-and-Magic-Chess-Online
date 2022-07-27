@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import axios from 'axios';
 import BoardContext from './BoardContext';
+import { ConnectorContext } from '../../Connector';
 
 const PieceComponent = ({
 	skin,
@@ -12,10 +13,9 @@ const PieceComponent = ({
 	index,
 	access,
 	from,
-	lobbyID,
 	chess,
 }) => {
-	 * Преобразует индекс клетки в классическую нотацию
+	/** Преобразует индекс клетки в классическую нотацию
 	 * @param {int} ind 0 - 63
 	 * @returns
 	 */
@@ -43,21 +43,19 @@ const PieceComponent = ({
 
 	const side = String(chess.turn()) === 'b' ? 'black' : 'white';
 
+	const { boardData, sendMessage } = useContext(ConnectorContext);
+
 	const handleClick = () => {
 		// Если нет доступа, ничего не делаем
 		if (!access) return;
 		// Если нажатая клетка уже помечена как таргетед или свободная для хода, то просто делаем туда ход
 		if (targeted || idle) {
 			// Приблизительно так будет выглядеть запрос
-			axios({
-				method: 'POST',
-				url: '/api/makeMove',
-				data: {
-					lobbyId: lobbyID,
-					from: getCODE(from),
-					to: getCODE(index),
-				},
-			});
+			sendMessage({
+				'type': "myStep",
+				"data":
+				{"move":{"from":getCODE(from), "to":getCODE(index)}}
+			})
 			// Если нажал на непомеченную клетку своего цвета, то надо для этого игрока изменить доску из BoardComponent
 		} else if (side === color) {
 			setBoard((prev) => {
@@ -81,7 +79,7 @@ const PieceComponent = ({
 						const pos = dict.to;
 						const ind = getIND(pos);
 						if (next[ind].color === null)
-							next[ind].idle = true; // если клетка путсая, отметим как idle
+							next[ind].idle = true; // если клетка пустая, отметим как idle
 						else next[ind].targeted = true; // иначе не пустая, значит targeted
 					});
 				}
@@ -93,20 +91,24 @@ const PieceComponent = ({
 		}
 	};
 
-	return (
-		<div className="box">
-			<div
-				className={`underlay ${ selected ? 'selected' : null }`}>
-				{idle ? <img src={idleSRC} alt="idle" className="idle" /> : null}
-				{targeted ? (
-					<img src={targetedSRC} alt="targeted" className="targeted" />
+	return useMemo(
+		() => {
+			return (
+				<div className="box">
+				<div
+					className={`underlay ${ selected ? 'selected' : null }`}>
+					{idle ? <img src={idleSRC} alt="idle" className="idle" /> : null}
+					{targeted ? (
+						<img src={targetedSRC} alt="targeted" className="targeted" />
+					) : null}
+				</div>
+				<div className="overlay" onClick={handleClick} />
+				{color !== null ? (
+					<img src={src} alt={`${color} ${name}`} className={`${skin}-${name}`} />
 				) : null}
 			</div>
-			<div className="overlay" onClick={handleClick} />
-			{color !== null ? (
-				<img src={src} alt={`${color} ${name}`} className={`${skin}-${name}`} />
-			) : null}
-		</div>
+			)
+		}, [boardData]
 	);
 };
 

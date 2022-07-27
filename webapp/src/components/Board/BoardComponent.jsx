@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PieceComponent from './PieceComponent';
 import BoardContext from './BoardContext';
 
-const BoardComponent = ({ chess, view, lobbyID }) => {
+const BoardComponent = ({ chess, view, skins }) => {
 	const PiecesEnum = {
 		k: 'king',
 		n: 'knight',
@@ -74,7 +74,7 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 				{layout.map((elem, i) => (
 					<PieceComponent
 						key={view === 'black' ? 63 - i : i}
-						skin={elem.skin}
+						skin={skins[elem.color][elem.name]}
 						color={elem.color}
 						name={elem.name}
 						selected={elem.selected}
@@ -83,7 +83,6 @@ const BoardComponent = ({ chess, view, lobbyID }) => {
 						index={view === 'black' ? 63 - i : i}
 						access={access}
 						from={from}
-						lobbyID={lobbyID}
 						chess={chess}
 					/>
 				))}
