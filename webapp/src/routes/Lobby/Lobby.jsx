@@ -2,7 +2,6 @@ import React from 'react';
 import './Lobby.css';
 
 export default function Main({ lobbies }) {
-  console.log(lobbies);
   const playGame = (lobbyId) => {
     console.log('Join lobby = ' + lobbyId);
   }
