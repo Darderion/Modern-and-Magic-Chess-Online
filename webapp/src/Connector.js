@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 
+import config from './config/index'
+
 const ConnectorContext = React.createContext();
 
 function Connector(props) {
@@ -27,7 +29,8 @@ function Connector(props) {
     ];
 
     function connect() {
-        // TODO generate url from config file
+        // TODO get url from config file
+        // console.log(config);
         ws.current = new WebSocket("ws://localhost:5000/main");
         ws.current.onopen = onOpen;
         ws.current.onclose = onClose;
