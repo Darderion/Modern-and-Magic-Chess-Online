@@ -36,8 +36,8 @@ class GameMaster {
   move(ws, move) {
     if (ws === this.currentStep) {
       const movement = gameExecutor.makeMove(this.chess, move.from, move.to);
-      if(movement.success) {
-        if(movement?.fieldsToUpdate.isFinished) {
+      if (movement.success) {
+        if (movement?.fieldsToUpdate.isFinished) {
           this.isFinished = true;
           this.game.update({
             description: this.chess.pgn(),
