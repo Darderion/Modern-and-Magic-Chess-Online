@@ -24,7 +24,6 @@ apiRouter.get('/getStyles', verifyAccess, api.getStyles);
 apiRouter.post('/getUserStyles', verifyAccess, api.getUserStyles);
 apiRouter.post('/setStyle/:id', verifyAccess, api.setStyle);
 apiRouter.get('/getUserMoney', verifyAccess, api.getUserMoney);
-+apiRouter.post('/addMoney', verifyAccess, api.addMoney);
 
 shopRouter.get('/getLootboxStyles/:id', verifyAccess, shop.getLootboxStyles);
 shopRouter.post('/buyLootbox/:id', verifyAccess, shop.buyLootbox);
