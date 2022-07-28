@@ -7,6 +7,8 @@ import Inventory from './routes/Inventory/Inventory';
 import Lobby from './routes/Lobby/Lobby';
 import LobbyInfo from './routes/Lobby/lobbyInfo';
 
+import GameComponent from './components/Game/GameComponent';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const lobbies = Array.from({length: 16}).map((_, i) => {
@@ -25,6 +27,8 @@ function App() {
 					<Route path="/inventory" element={<Inventory></Inventory>}></Route>
 					<Route path="/lobby" element={<Lobby lobbies={lobbies}></Lobby>}></Route>
 					<Route path="/about" element={<About></About>}></Route>
+
+					<Route path='/game' element={<GameComponent />} />
 				</Routes>
 			</div>
 		</BrowserRouter>

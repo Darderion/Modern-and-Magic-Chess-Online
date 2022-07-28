@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import axios from 'axios';
 import BoardContext from './BoardContext';
-import { ConnectorContext } from '../../Connector';
+// import { ConnectorContext } from '../../Connector';
 
 const PieceComponent = ({
 	skin,
@@ -43,7 +43,7 @@ const PieceComponent = ({
 
 	const side = String(chess.turn()) === 'b' ? 'black' : 'white';
 
-	const { boardData, sendMessage } = useContext(ConnectorContext);
+	// const { boardData, sendMessage } = useContext(ConnectorContext);
 
 	const handleClick = () => {
 		// Если нет доступа, ничего не делаем
@@ -51,11 +51,11 @@ const PieceComponent = ({
 		// Если нажатая клетка уже помечена как таргетед или свободная для хода, то просто делаем туда ход
 		if (targeted || idle) {
 			// Приблизительно так будет выглядеть запрос
-			sendMessage({
-				'type': "myStep",
-				"data":
-				{"move":{"from":getCODE(from), "to":getCODE(index)}}
-			})
+			// sendMessage({
+			// 	'type': "myStep",
+			// 	"data":
+			// 	{"move":{"from":getCODE(from), "to":getCODE(index)}}
+			// })
 			// Если нажал на непомеченную клетку своего цвета, то надо для этого игрока изменить доску из BoardComponent
 		} else if (side === color) {
 			setBoard((prev) => {
@@ -108,7 +108,7 @@ const PieceComponent = ({
 				) : null}
 			</div>
 			)
-		}, [boardData]
+		}, []
 	);
 };
 

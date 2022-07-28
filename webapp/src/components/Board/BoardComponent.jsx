@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PieceComponent from './PieceComponent';
 import BoardContext from './BoardContext';
+import './style.css'
 
 const BoardComponent = ({ chess, view, skins }) => {
 	const PiecesEnum = {
