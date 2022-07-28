@@ -1,5 +1,6 @@
 const { Style } = require('../../db/models');
 const { ApiError } = require('../../validators/errors/ApiError');
+const { getStyles } = require('../sharedFunctions/getStyles');
 
 module.exports = async (req, res, next) => {
   const where = {};
@@ -8,12 +9,8 @@ module.exports = async (req, res, next) => {
   if (req?.body?.typeOfPiece) where.typeOfPiece = req.body.typeOfPiece;
   if (req?.body?.packName) where.packName = req.body.packName;
   try {
-    return res.json({
-      styles: await Style.findAll({
-        where,
-      }),
-    });
+    await getStyles(where);
   } catch (e) {
-    return new ApiError(500, e.message).sendResponse(res);
+    return e.sendResponse(res);
   }
 };
