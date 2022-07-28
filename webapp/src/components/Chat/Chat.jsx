@@ -7,7 +7,9 @@ function Chat() {
 
     useEffect(
         () => {
-
+            if (chatData.type == 'message') {
+                console.log(chatData.message)
+            }
         }, [chatData]
     )
 
