@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useState } from 'react';
+import { useState, useRef, useContext } from 'react';
 
 import { Link } from 'react-router-dom';
 import { Navbar, Container, Nav as NavComponent } from 'react-bootstrap';
@@ -8,19 +8,29 @@ import './Nav.css'
 import SignUpIn from '../SignUpIn/SignUpIn';
 import axios from 'axios';
 import config from '../../config';
+import accTokenFuncs from '../../sharedFuncs/accToken';
+import { ConnectorContext } from '../../Connector';
 
 const showLoginType = config.client.showLoginType;
 const regUrl = config.server.serverURL + config.server.registerFolder;
 const loginUrl = config.server.serverURL + config.server.loginFolder;
 
-function signOut() {
-	// TODO make sign out later;
-	console.log('sign out');
-}
-
-export default function Nav({ isAuthenticated }) {
+export default function Nav({ isAuth, setIsAuth }) {
+	const { sendMessage } = useContext(ConnectorContext);
 	const [show, setShow] = useState(showLoginType.none);
 	const closeAll = () => setShow(() => showLoginType.none);
+	const mainBarEl = useRef(null);
+	const loginEl = useRef(null);
+
+	const setLoginMargin = () => {
+		if(loginEl.current)
+			loginEl.current.style.marginTop =  mainBarEl.current.clientHeight - 40 + 'px';
+	}
+
+	const signOut = () => {
+		accTokenFuncs.delToken();
+		setIsAuth(() => false);
+	}	
 
 	const signUpHandler = (data) => {
 		axios.post(regUrl, data)
@@ -38,10 +48,16 @@ export default function Nav({ isAuthenticated }) {
 	const signInHandler = (data) => {
 		axios.post(loginUrl, data)
     .then(res => {
-      console.log(res);
-			const accToken = res?.data?.accessToken;
-			// TODO setCookie access; and use it in other parts of app
-			console.log(accToken);
+      if(res?.statusText === 'OK') {
+				const accToken = res?.data?.accessToken;
+				accTokenFuncs.setToken(accToken);
+				//alert('Log in successfully');
+				setIsAuth(() => true);
+				setShow(showLoginType.none);
+				console.log(accTokenFuncs.getToken())
+				if(accTokenFuncs.isAuth())
+    			sendMessage({type: 'accToken', data: accTokenFuncs.getToken()});
+			}
     })
     .catch(err => {
       console.log(err);
@@ -49,9 +65,11 @@ export default function Nav({ isAuthenticated }) {
       alert(message ? message : 'Something went wrong!');
     });
 	}
+
+	window.addEventListener('resize', setLoginMargin);
 	return (
 		<Navbar bg="dark" variant="dark">
-			<Container>
+			<Container ref={mainBarEl}>
 				<Navbar.Brand href="#">Navbar</Navbar.Brand>
 				<NavComponent className="me-auto">
 					<NavComponent.Link as={Link} to="/" onClick={closeAll}>
@@ -70,8 +88,8 @@ export default function Nav({ isAuthenticated }) {
 						Connector Example
 					</NavComponent.Link>
 				</NavComponent>
-				<div className="login__btns">
-				{isAuthenticated?  
+				<div className="login__btns" onClick={ setLoginMargin }>
+				{isAuth?  
 					<div className="authoff">
 						<Link to='/'>
 							<button onClick={signOut}>Sign out</button>
@@ -85,7 +103,7 @@ export default function Nav({ isAuthenticated }) {
 							Sign In
 						</button>
 					</div> }
-					<div className="absolute">
+					<div className="absolute" ref={loginEl}>
 						{show === showLoginType.signUp ? 
 							<SignUpIn closeSelf={ closeAll } submitText="Sign up" workWithData={signUpHandler}></SignUpIn> : ''}
 						{show === showLoginType.signIn ? 

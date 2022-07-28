@@ -21,6 +21,6 @@ module.exports = {
   client: {
     url: process.env.CLIENT_PROTOCOL + '://' + 
          process.env.CLIENT_HOST + ':' + 
-         process.env.CLIENT_PORT + '/',
+         process.env.CLIENT_PORT,
   },
 };
