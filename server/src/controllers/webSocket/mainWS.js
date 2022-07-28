@@ -190,7 +190,7 @@ const workWithWS = (ws, data) => {
           new Message(data.data.message)
         );
       } else if (!serverInfo.games.has(ws)) {
-        sendToWS(ws, 400, new Message(errorMessages.userIsntInGame));
+        sendToWS(ws, 'sendMessage', 400, new Message(errorMessages.userIsntInGame));
       }
       break;
     case 'myStep':
