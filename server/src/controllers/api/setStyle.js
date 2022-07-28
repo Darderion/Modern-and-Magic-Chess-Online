@@ -1,7 +1,7 @@
 const { Style, UserStyle } = require('../../db/models');
 const { Op } = require('sequelize');
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res) => {
   try {
     const style = await Style.findByPk(req.params.id);
 
