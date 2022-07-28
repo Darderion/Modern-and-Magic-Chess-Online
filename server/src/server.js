@@ -1,6 +1,7 @@
 const http = require('http');
 const express = require('express');
 const swaggerUI = require('swagger-ui-express');
+
 const config = require('./config');
 const { apiRouter, mainRouter, authRouter, shopRouter } = require('./routers');
 const setupMiddlewares = require('./middlewares');
