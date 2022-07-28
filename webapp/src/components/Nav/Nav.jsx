@@ -22,6 +22,9 @@ export default function Nav() {
 					<NavComponent.Link as={Link} to="/About">
 						About
 					</NavComponent.Link>
+					<NavComponent.Link as={Link} to="/ConnectorExample">
+						Connector Example
+					</NavComponent.Link>
 				</NavComponent>
 			</Container>
 		</Navbar>

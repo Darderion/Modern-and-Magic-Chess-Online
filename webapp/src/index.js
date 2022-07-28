@@ -4,12 +4,16 @@ import './index.css';
 import App from './App';
 import DocumentTitle from 'react-document-title';
 
+import { Connector } from './Connector'
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const title = "MaMCO - Modern and Magic Chess Online";
 root.render(
-    <DocumentTitle title={title}>
-    <React.StrictMode>
-        <App/>
-    </React.StrictMode>
-    </DocumentTitle>
+    <Connector>
+      <DocumentTitle title={title}>
+        <React.StrictMode>
+            <App/>
+        </React.StrictMode>
+      </DocumentTitle>
+    </Connector>,
 );
