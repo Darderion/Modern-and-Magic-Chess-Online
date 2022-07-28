@@ -1,5 +1,5 @@
 import './App.css';
-import { Nav, BoardComponent } from './components';
+import { Nav, /* BoardComponent */ } from './components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import About from './routes/About/About'
 import Main from './routes/Main/Main'
@@ -20,7 +20,7 @@ function App() {
 	return (
 		<BrowserRouter>
 			<div className="App">
-				<Nav></Nav>
+				<Nav isAuthenticated={false}></Nav>
 				<Routes>
 					<Route path="/" element={<Main></Main>}></Route>
 					<Route path="/about" element={<About></About>}></Route>
