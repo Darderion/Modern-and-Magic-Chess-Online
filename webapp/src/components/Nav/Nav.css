@@ -1,0 +1,16 @@
+.login__btns button {
+  border-radius: 0.7rem;
+}
+.login__btns button:hover {
+  background-color: lightcyan;
+}
+.absolute {
+  position: absolute;
+  top: 4rem;
+  right: 1rem;
+  z-index: 2;
+  background-color: white;
+}
+.authon button {
+  margin-left: 0.5rem;
+}

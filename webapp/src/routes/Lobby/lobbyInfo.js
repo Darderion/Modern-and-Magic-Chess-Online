@@ -1,5 +1,5 @@
-function LobbyInfo(id, username, lobbyname) {
-	return { username, id, lobbyname }
+function lobbyInfo(id, userName, lobbyName) {
+	return { id, userName, lobbyName };
 }
 
-export default LobbyInfo;
+export default lobbyInfo;

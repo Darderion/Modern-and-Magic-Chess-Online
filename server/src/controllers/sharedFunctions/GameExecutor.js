@@ -33,7 +33,11 @@ class GameExecutor {
     const newPgn = game.pgn();
 
     if (game.game_over()) {
-      result = game.turn() === 'w' ? 'black' : 'white';
+      if (game.in_draw()) {
+        result = 'draw';
+      } else {
+        result = game.turn() === 'w' ? 'black' : 'white';
+      }
     }
 
     const fieldsToUpdate = game.game_over()
