@@ -5,24 +5,22 @@ import React, { useContext, useMemo, useState, useRef, useEffect } from 'react';
 
 import { ConnectorContext } from '../../Connector';
 
-export default function Lobby({ onJoin }) {
+export default function Lobby({ onJoin, setGameData }) {
   const { lobbyData, sendMessage } = useContext(ConnectorContext);
   const [ lobby, setLobby ] = useState({id: undefined, desc: ''});  
   const [ allLobbies, setAllLobbies ] = useState([]);
   const descEl = useRef(null);
 
-  useEffect(() => {
-    try{
-      sendMessage({type: 'allLobbies'});
-    } catch(err) {
-      setTimeout(() => sendMessage({type: 'allLobbies'}), 1000);
+  const sendAllLobbiesMessage = () => {
+    try {
+      sendMessage({ type: 'allLobbies' });
+    } catch (err) {
+      setTimeout(sendAllLobbiesMessage, 50);
     }
-    
-  }, []);
-
-  const playGame = (lobbyId) => {
-    onJoin(lobbyId);
   }
+  
+  useEffect(sendAllLobbiesMessage, []);
+
   const createLobby = () => {
     sendMessage({type: 'openLobby', data: { lobbyName: descEl.current.value }});
   }
@@ -33,7 +31,7 @@ export default function Lobby({ onJoin }) {
     });
   }
 
-  return useMemo(() => {
+  useEffect(() => {
     switch(lobbyData?.type) {
       case 'allLobbies':
         setAllLobbies(lobbyData.data);
@@ -44,9 +42,15 @@ export default function Lobby({ onJoin }) {
             return {id: lobbyData?.data?.lobbyID, desc: lobbyData?.data?.lobbyName }
           });
         break;
+      case 'startGame':
+        setGameData(lobbyData?.data);
+        break;
       default:
         break;
     }
+  }, [lobbyData]);
+
+  return useMemo(() => {
     return (
       <div className="lobby__container">
         { !(lobby.id + 1) ? 
@@ -70,14 +74,16 @@ export default function Lobby({ onJoin }) {
                 <div className="username">{userName}</div>
                 <div className="lobbyname">{lobbyName}</div>
               </div>
-              <button className="lobby__info__btn" onClick={() => playGame(lobbyID)}>
-                Play
-             </button>
+              {(lobbyID !== lobby.id) ?
+                <button className="lobby__info__btn" onClick={() => onJoin(lobbyID)}>
+                  Play
+               </button> : ''
+            }
             </div>
             );
           })}
         </div>
       </div>
     );
-  }, [lobbyData, descEl, allLobbies]);
+  }, [descEl, allLobbies]);
 }
