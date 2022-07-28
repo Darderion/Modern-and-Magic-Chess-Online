@@ -7,7 +7,7 @@ const hashPassword = require('../../util/hashPassword');
 module.exports = async (req, res) => {
   if (!req.body || !req.body.password || !req.body.nick) {
     return new BadRequestApiError(
-      'Request body should contains password and nick fields'
+      'Request body should contain password and nick fields'
     ).sendResponse(res);
   }
 
