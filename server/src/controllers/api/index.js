@@ -5,6 +5,8 @@ const getLobbies = require('./getLobbies');
 const getLobby = require('./getLobby');
 const highlightMoves = require('./highlightMoves');
 const makeMove = require('./makeMove');
+const getStyles = require('./getStyles');
+const setStyle = require('./setStyle');
 
 module.exports = {
   history: require('./history'),
@@ -12,6 +14,8 @@ module.exports = {
   deleteLobby,
   getGameStatus,
   getLobbies,
+  getStyles,
+  setStyle,
   getLobby,
   highlightMoves,
   makeMove,
