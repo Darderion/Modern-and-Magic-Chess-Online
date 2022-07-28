@@ -7,6 +7,7 @@ export default function SignUpIn({ closeSelf, submitText, workWithData }) {
   const { register, handleSubmit } = useForm();
 
   const isCorrectStr = (str) => {
+    // lenngth >= 3 and str contains only letters (rus, eng), ' ' or digits
     return /^[а-яА-ЯA-Za-z0-9 -]*$/.test(str) && str.length >= 3;
   }
   

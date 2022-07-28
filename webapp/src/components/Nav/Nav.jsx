@@ -14,7 +14,7 @@ const regUrl = config.server.serverURL + config.server.registerFolder;
 const loginUrl = config.server.serverURL + config.server.loginFolder;
 
 function signOut() {
-	// sign out later;
+	// TODO make sign out later;
 	console.log('sign out');
 }
 
@@ -40,6 +40,7 @@ export default function Nav({ isAuthenticated }) {
     .then(res => {
       console.log(res);
 			const accToken = res?.data?.accessToken;
+			// TODO setCookie access; and use it in other parts of app
 			console.log(accToken);
     })
     .catch(err => {

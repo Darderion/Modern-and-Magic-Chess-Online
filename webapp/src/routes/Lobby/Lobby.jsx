@@ -2,6 +2,7 @@ import React from 'react';
 import './Lobby.css';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useState } from 'react';
+import { useRef } from 'react';
 
 export default function Main({ lobbies }) {
   const [ lobby, setLobby ] = useState({id: 10, desc: 'TestTestTestTestTestTest dasgh dgsha gd hsg ahfsdg hfjdsa ghjf sgadhjfg shadgf hsadgh fsdagh fsgadh jfasgdj ghj'});
@@ -9,11 +10,12 @@ export default function Main({ lobbies }) {
     console.log('Join lobby = ' + lobbyId);
   }
 
+  const descEl = useRef(null);
+
   const createLobby = () => {
-    const textarea =  document.querySelector('.create__lobby__description');
-    //send desc on server;
+    // TODO send desc on server;
     setLobby(() => {
-      return {id: 1, desc: textarea.value}
+      return {id: 1, desc: descEl.current.value}
     });
   }
   const closeLobby = () => {
@@ -28,7 +30,7 @@ export default function Main({ lobbies }) {
       { !(lobby.id + 1) ? 
       <div className="create__lobby">
         <TextareaAutosize className="create__lobby__description" 
-          placeholder="Description"/>
+          placeholder="Description" ref={descEl}/>
         <button className="create__lobby__btn" onClick={createLobby}>Create lobby</button>
       </div> : 
       <div className="wait__player">
