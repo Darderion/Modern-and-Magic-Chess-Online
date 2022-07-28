@@ -57,7 +57,7 @@ class UserDispatcher {
         }
       );
 
-      if (updateInfo.includes(0)) {
+      if (updateInfo[0] === 0) {
         return {
           success: false,
           newMoney: null,
