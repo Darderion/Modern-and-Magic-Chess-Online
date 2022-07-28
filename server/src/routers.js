@@ -19,6 +19,8 @@ apiRouter.delete('/lobbies/:id', verifyAccess, api.deleteLobby);
 apiRouter.post('/createLobby', verifyAccess, api.createLobby);
 apiRouter.post('/makeMove', verifyAccess, api.makeMove);
 apiRouter.post('/highlightMoves', verifyAccess, api.highlightMoves);
+apiRouter.get('/getStyles', verifyAccess, api.getStyles);
+apiRouter.post('/setStyle/:id', verifyAccess, api.setStyle);
 
 shopRouter.get('/getLootboxStyles/:id', verifyAccess, shop.getLootboxStyles);
 shopRouter.post('/buyLootbox/:id', verifyAccess, shop.buyLootbox);
