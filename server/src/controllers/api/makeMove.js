@@ -15,21 +15,18 @@ module.exports = async (req, res) => {
   const { lobbyId, from, to } = req.body;
 
   let gameModel;
-  let whitePiecesUserId, blackPiecesUserId, pgn;
+  let pgn;
 
   const game = new Chess();
 
   try {
     const gameModels = await Game.findAll({
-      attributes: ['whitePiecesUserId', 'blackPiecesUserId', 'description'],
+      attributes: ['description'],
       where: { id: lobbyId },
     });
 
     gameModel = gameModels[0];
-
     pgn = gameModel.description;
-    whitePiecesUserId = gameModel.whitePiecesUserId;
-    blackPiecesUserId = gameModel.blackPiecesUserId;
 
     if (!game.load_pgn(pgn)) {
       const pgnError = new PgnLoadingChessError();
@@ -50,8 +47,11 @@ module.exports = async (req, res) => {
     return error.sendResponse(res);
   }
 
-  if (fieldsToUpdate.isFinished) {
-    const operationInfo = await GameExecutor.addMoneyToPlayers(game);
+  if (fieldsToUpdate.result) {
+    const operationInfo = await GameExecutor.addMoneyToPlayers(
+      game,
+      fieldsToUpdate.result
+    );
 
     if (!operationInfo.success) {
       return operationInfo.error.sendResponse(res);

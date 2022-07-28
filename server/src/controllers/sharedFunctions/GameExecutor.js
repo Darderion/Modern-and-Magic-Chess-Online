@@ -58,51 +58,61 @@ class GameExecutor {
     };
   }
 
-  async addMoneyToPlayers(game) {
+  async addMoneyToPlayers(game, result) {
+    const WIN_MONEY_AMOUNT = 100;
+    const DRAW_MONEY_AMOUNT = 50;
+    const LOSE_MONEY_AMOUNT = 25;
+
     const whitePiecesUserId = game.header().White;
     const blackPiecesUserId = game.header().Black;
-    
+
     let whitePlayerProfit, blackPlayerProfit;
 
-    if (fieldsToUpdate.result === 'white') {
-      whitePlayerProfit = 100;
-      blackPlayerProfit = 25;
-    } else if (fieldsToUpdate.result === 'black') {
-      whitePlayerProfit = 25;
-      blackPlayerProfit = 100;
-    } else {
-      whitePlayerProfit = 50;
-      blackPlayerProfit = 50;
+    switch (result) {
+      case 'white':
+        whitePlayerProfit = WIN_MONEY_AMOUNT;
+        blackPlayerProfit = LOSE_MONEY_AMOUNT;
+        break;
+
+      case 'black':
+        whitePlayerProfit = LOSE_MONEY_AMOUNT;
+        blackPlayerProfit = WIN_MONEY_AMOUNT;
+        break;
+
+      default:
+        whitePlayerProfit = DRAW_MONEY_AMOUNT;
+        blackPlayerProfit = DRAW_MONEY_AMOUNT;
+        break;
     }
 
-    const opInfo1 = await UserDispatcher.increaseMoney(
+    const whiteUserUpdateInfo = await UserDispatcher.increaseMoney(
       whitePiecesUserId,
       whitePlayerProfit
     );
 
-    if (!opInfo1.success) {
+    if (!whiteUserUpdateInfo.success) {
       return {
         success: false,
-        error: opInfo1.error,
-      }
+        error: whiteUserUpdateInfo.error,
+      };
     }
 
-    const opInfo2 = await UserDispatcher.increaseMoney(
+    const blackUserUpdateInfo = await UserDispatcher.increaseMoney(
       blackPiecesUserId,
       blackPlayerProfit
     );
 
-    if (!opInfo2.success) {
+    if (!blackUserUpdateInfo.success) {
       return {
         success: false,
-        error: opInfo2.error,
-      }
+        error: blackUserUpdateInfo.error,
+      };
     }
 
     return {
       success: true,
       error: null,
-    }
+    };
   }
 }
 
