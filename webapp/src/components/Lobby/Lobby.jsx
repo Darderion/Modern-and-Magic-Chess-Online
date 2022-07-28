@@ -5,7 +5,7 @@ import React, { useContext, useMemo, useState, useRef, useEffect } from 'react';
 
 import { ConnectorContext } from '../../Connector';
 
-export default function Lobby() {
+export default function Lobby({ onJoin }) {
   const { lobbyData, sendMessage } = useContext(ConnectorContext);
   const [ lobby, setLobby ] = useState({id: undefined, desc: ''});  
   const [ allLobbies, setAllLobbies ] = useState([]);
@@ -21,13 +21,10 @@ export default function Lobby() {
   }, []);
 
   const playGame = (lobbyId) => {
-    console.log('Join lobby = ' + lobbyId);
+    onJoin(lobbyId);
   }
   const createLobby = () => {
     sendMessage({type: 'openLobby', data: { lobbyName: descEl.current.value }});
-    setLobby(() => {
-      return {id: 1, desc: descEl.current.value}
-    });
   }
   const closeLobby = () => {
     sendMessage({type: 'closeLobby'});
@@ -44,7 +41,7 @@ export default function Lobby() {
       case 'openLobby':
         if(lobbyData?.data?.lobbyID)
           setLobby(prev => {
-            return {...prev, id: lobbyData?.data?.lobbyID}
+            return {id: lobbyData?.data?.lobbyID, desc: lobbyData?.data?.lobbyName }
           });
         break;
       default:
