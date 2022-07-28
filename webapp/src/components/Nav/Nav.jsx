@@ -66,6 +66,9 @@ export default function Nav({ isAuthenticated }) {
 					<NavComponent.Link as={Link} to="/About" onClick={closeAll}>
 						About
 					</NavComponent.Link>
+					<NavComponent.Link as={Link} to="/ConnectorExample">
+						Connector Example
+					</NavComponent.Link>
 				</NavComponent>
 				<div className="login__btns">
 				{isAuthenticated?  

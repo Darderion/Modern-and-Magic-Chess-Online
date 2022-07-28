@@ -6,6 +6,7 @@ import Main from './routes/Main/Main'
 import Board from './routes/Board [testing]/Board';
 import Inventory from './routes/Inventory/Inventory';
 import Lobby from './routes/Lobby/Lobby';
+import ConnectorExample from './routes/ConnectorExample/ConnectorExample';
 import lobbyInfo from './routes/Lobby/lobbyInfo';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -28,6 +29,7 @@ function App() {
 					<Route path="/inventory" element={<Inventory></Inventory>}></Route>
 					<Route path="/lobby" element={<Lobby lobbies={lobbies}></Lobby>}></Route>
 					<Route path="/about" element={<About></About>}></Route>
+					<Route path="/ConnectorExample" element={<ConnectorExample></ConnectorExample>}></Route>
 				</Routes>
 			</div>
 		</BrowserRouter>

@@ -64,7 +64,7 @@ const removeFromLobbies = (ws) => {
   serverInfo.lobbyClients.delete(ws);
 };
 const closeGame = (ws) => {
-  if(serverInfo.games.has(ws)) {
+  if (serverInfo.games.has(ws)) {
     serverInfo.games.get(ws).save();
     const ws2 = serverInfo.games.get(ws).getOtherWS(ws);
     sendToWS(ws2, 'closeGame', 200, new Message(errorMessages.otherUserLeft));
@@ -210,7 +210,12 @@ const workWithWS = (ws, data) => {
         closeGame(ws);
         sendToWS(ws, 'closeGame', 200, new Message(successMessages.gameClosed));
       } else {
-        sendToWS(ws, 'closeGame', 400, new Message(errorMessages.userIsntInGame));
+        sendToWS(
+          ws,
+          'closeGame',
+          400,
+          new Message(errorMessages.userIsntInGame)
+        );
       }
       break;
     case 'auth': //for test
