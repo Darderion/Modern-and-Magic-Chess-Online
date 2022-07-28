@@ -84,7 +84,6 @@ const sendToWS = (ws, type, code, data) => {
     ws.send(JSON.stringify({ type: type, data: data, code: code }));
 };
 const sendAllLobbiesForWS = (ws) => {
-  console.log(1);
   sendToWS(
     ws,
     'allLobbies',
@@ -232,15 +231,17 @@ const workWithWS = (ws, data) => {
       })();
       break;
     case 'accToken': 
-      ws.user = getUser(data.data);
-      if (ws.user) {
-        sendToWS(ws, 'accToken', 200, {
-          message: successMessages.connected,
-          userID: ws.user.id,
-        });
-      } else {
-        sendToWS(ws, 'accToken', 200, new Message(successMessages.guestAuth));
-      }
+      getUser(data.data).then(res => {
+        ws.user = res?.dataValues;
+        if (ws.user) {
+          sendToWS(ws, 'accToken', 200, {
+            message: successMessages.connected,
+            userID: ws.user.id,
+          });
+        } else {
+          sendToWS(ws, 'accToken', 200, new Message(successMessages.guestAuth));
+        }
+      });
       break;
   }
   console.log('lobbies count: ', serverInfo.lobbies.size);
@@ -248,14 +249,19 @@ const workWithWS = (ws, data) => {
   //console.log('games size: ', serverInfo.games.size);
 };
 
-const getUser = (message) => {
+const getUser = async (message) => {
   if (!message)
     return undefined;
   const [method, accessToken] = message.split(' ');
   if (method !== 'Bearer' || !accessToken) return undefined;
   try {
     const decodedPayload = jwt.verify(accessToken, env.accessTokenSecret);
-    return decodedPayload || undefined;
+    const tmp = decodedPayload || undefined;
+    if(tmp) {
+      const user = await User.findOne({
+        where: { id: tmp.id } });
+      return user;
+    }
   } catch(err) {
     console.log('err: ', err);
   }

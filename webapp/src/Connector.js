@@ -40,7 +40,7 @@ function Connector(props) {
     function onOpen(event) {
         setGeneralData({ status: "opened" });
         if(accTokenFuncs.isAuth())
-            sendMessage({type: 'accToken', data: accTokenFuncs.getToken});
+            sendMessage({type: 'accToken', data: accTokenFuncs.getToken() });
     }
 
     function reset(event) {

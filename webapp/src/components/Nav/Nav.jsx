@@ -75,9 +75,6 @@ export default function Nav({ isAuth, setIsAuth }) {
 					<NavComponent.Link as={Link} to="/" onClick={closeAll}>
 						Home
 					</NavComponent.Link>
-					<NavComponent.Link as={Link} to="/Lobby" onClick={closeAll}>
-						Lobby
-					</NavComponent.Link>
 					<NavComponent.Link as={Link} to="/Inventory" onClick={closeAll}>
 						Inventory
 					</NavComponent.Link>
