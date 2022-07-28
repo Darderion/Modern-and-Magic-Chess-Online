@@ -7,7 +7,6 @@ const {
 const { PgnLoadingChessError } = require('../../validators/errors/ChessError');
 
 const GameExecutor = require('../sharedFunctions/GameExecutor');
-const UserDispatcher = require('../sharedFunctions/UserDispatcher');
 
 // TEST
 // curl -X POST -H "Content-Type: application/json" -d '{"lobbyId": "2", "from": "a2", "to": "a3"}' http://localhost:5000/api/makeMove
@@ -51,36 +50,11 @@ module.exports = async (req, res) => {
     return error.sendResponse(res);
   }
 
-  if (fieldsToUpdate.result) {
-    let whitePlayerProfit, blackPlayerProfit;
+  if (fieldsToUpdate.isFinished) {
+    const operationInfo = await GameExecutor.addMoneyToPlayers(game);
 
-    if (fieldsToUpdate.result === 'white') {
-      whitePlayerProfit = 100;
-      blackPlayerProfit = 25;
-    } else if (fieldsToUpdate.result === 'black') {
-      whitePlayerProfit = 25;
-      blackPlayerProfit = 100;
-    } else {
-      whitePlayerProfit = 50;
-      blackPlayerProfit = 50;
-    }
-
-    const opInfo1 = await UserDispatcher.increaseMoney(
-      whitePiecesUserId,
-      whitePlayerProfit
-    );
-
-    if (!opInfo1.success) {
-      return opInfo1.error.sendResponse(res);
-    }
-
-    const opInfo2 = await UserDispatcher.increaseMoney(
-      blackPiecesUserId,
-      blackPlayerProfit
-    );
-
-    if (!opInfo2.success) {
-      return opInfo2.error.sendResponse(res);
+    if (!operationInfo.success) {
+      return operationInfo.error.sendResponse(res);
     }
   }
 
