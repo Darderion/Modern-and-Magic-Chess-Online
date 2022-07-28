@@ -6,6 +6,7 @@ const getAccessToken = require('./middlewares/getAccessToken');
 const verifyAccess = require('./middlewares/verifyAccess');
 const setRefreshToken = require('./middlewares/setRefreshToken');
 const lobbyExists = require('./middlewares/lobbyExists');
+const addDefaultStyles = require('./middlewares/addDefaultStyles');
 
 const apiRouter = new express.Router();
 const mainRouter = new express.Router();
@@ -26,7 +27,7 @@ apiRouter.post('/setStyle/:id', verifyAccess, api.setStyle);
 shopRouter.get('/getLootboxStyles/:id', verifyAccess, shop.getLootboxStyles);
 shopRouter.post('/buyLootbox/:id', verifyAccess, shop.buyLootbox);
 
-authRouter.post('/register', auth.register);
+authRouter.post('/register', auth.register, addDefaultStyles);
 authRouter.post('/login', auth.login, setRefreshToken, getAccessToken);
 authRouter.post('/refresh', auth.refresh, setRefreshToken, getAccessToken);
 authRouter.get('/logout', auth.logout);
