@@ -12,10 +12,7 @@ module.exports = async (req, res, next) => {
       },
     });
 
-    let similarStyleIds;
-    await Promise.all(similarStyles.map((style) => style.id)).then((arr) => {
-      similarStyleIds = arr;
-    });
+    const similarStyleIds = similarStyles.map((style) => style.id);
 
     const selectedSimilarUserStyle = await UserStyle.findOne({
       where: {
@@ -36,6 +33,7 @@ module.exports = async (req, res, next) => {
       UserId: req.user.id,
       StyleId: style.id,
     });
+
     userStyle.set({ isSelected: true });
     userStyle.save();
 
