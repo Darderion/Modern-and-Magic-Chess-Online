@@ -51,34 +51,38 @@ module.exports = async (req, res) => {
     return error.sendResponse(res);
   }
 
-  if (fieldsToUpdate.result) {   
-        let whitePlayerProfit, blackPlayerProfit;
-    
-        if (fieldsToUpdate.result === 'white') {
-          whitePlayerProfit = 100;
-          blackPlayerProfit = 25;
-        }
-        else if (fieldsToUpdate.result === 'black') {
-          whitePlayerProfit = 25;
-          blackPlayerProfit = 100;
-        }
-        else {
-          whitePlayerProfit = 50;
-          blackPlayerProfit = 50;
-        }
-    
-        const opInfo1 = await UserDispatcher.increaseMoney(whitePiecesUserId, whitePlayerProfit);
-    
-        if (!opInfo1.success) {
-          return opInfo1.error.sendResponse(res);
-        }
-    
-        const opInfo2 = await UserDispatcher.increaseMoney(blackPiecesUserId, blackPlayerProfit);
-    
-        if (!opInfo2.success) {
-          return opInfo2.error.sendResponse(res);
-        }
-      }
+  if (fieldsToUpdate.result) {
+    let whitePlayerProfit, blackPlayerProfit;
+
+    if (fieldsToUpdate.result === 'white') {
+      whitePlayerProfit = 100;
+      blackPlayerProfit = 25;
+    } else if (fieldsToUpdate.result === 'black') {
+      whitePlayerProfit = 25;
+      blackPlayerProfit = 100;
+    } else {
+      whitePlayerProfit = 50;
+      blackPlayerProfit = 50;
+    }
+
+    const opInfo1 = await UserDispatcher.increaseMoney(
+      whitePiecesUserId,
+      whitePlayerProfit
+    );
+
+    if (!opInfo1.success) {
+      return opInfo1.error.sendResponse(res);
+    }
+
+    const opInfo2 = await UserDispatcher.increaseMoney(
+      blackPiecesUserId,
+      blackPlayerProfit
+    );
+
+    if (!opInfo2.success) {
+      return opInfo2.error.sendResponse(res);
+    }
+  }
 
   try {
     await Game.update(fieldsToUpdate, {
