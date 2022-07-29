@@ -13,7 +13,7 @@ const imageSource = server.serverURL + server.skinFolder + '/';
 const allStylesURL = server.serverURL + server.allStylesFolder + '/';
 const setStyleURL = server.serverURL + server.setStyleFolder + '/';
 
-const defaultStyle = {id: -1, packName: 'default'};
+const defaultStyle = { id: -1, packName: 'default' };
 
 const allFiguresWithStylesInit = Object.fromEntries(
 	figures.map((figure) => [figure, [defaultStyle]]),
@@ -32,37 +32,56 @@ const stylesSelectedInit = Object.fromEntries(
 );
 
 const setStyle = (styleId) => {
-	axios.post(setStyleURL, { id: styleId }, {headers: {
-		'Authorization': accTokenFuncs.getToken(),
-		}}).catch(err => console.log(err));
-}
+	axios
+		.post(
+			setStyleURL,
+			{ id: styleId },
+			{
+				headers: {
+					Authorization: accTokenFuncs.getToken(),
+				},
+			},
+		)
+		.catch((err) => console.log(err));
+};
 
 const getStyles = (isSelected = true, setter) => {
-	axios.post(allStylesURL, {isSelected: isSelected}, {headers: {
-		'Authorization': accTokenFuncs.getToken(),
-		}})
-    .then(res => {
-      if(res?.statusText === 'OK') {
+	axios
+		.post(
+			allStylesURL,
+			{ isSelected: isSelected },
+			{
+				headers: {
+					Authorization: accTokenFuncs.getToken(),
+				},
+			},
+		)
+		.then((res) => {
+			if (res?.statusText === 'OK') {
 				const styles = res?.data?.styles;
 				setter(styles);
 			} else {
 				console.log('Something went wrong!');
 			}
-    })
-    .catch(err => {
-      console.log(err);
-      //const message = err?.response?.data?.message;
-      //alert(message ? message : 'Something went wrong!');
+		})
+		.catch((err) => {
+			console.log(err);
+			//const message = err?.response?.data?.message;
+			//alert(message ? message : 'Something went wrong!');
 			const allFiguresWithStyles = Object.fromEntries(
-				figures.map((figure) => [figure, isSelected ? {style: 'default', id: -1 } 
-					: [{style: 'default', id: -1 }]]),
+				figures.map((figure) => [
+					figure,
+					isSelected
+						? { style: 'default', id: -1 }
+						: [{ style: 'default', id: -1 }],
+				]),
 			);
 			const stylesAll = Object.fromEntries(
 				colors.map((color) => [color, allFiguresWithStyles]),
 			);
 			setter(stylesAll);
-    });
-}
+		});
+};
 
 export default function Inventory() {
 	const [current, setCurrent] = useState({
@@ -73,13 +92,13 @@ export default function Inventory() {
 	});
 	const [stylesSelected, setStylesSelected] = useState(stylesSelectedInit);
 	const [stylesAll, setStylesAll] = useState(stylesAllInit);
-	
+
 	useEffect(() => {
-		if(accTokenFuncs.isAuth()) {
+		if (accTokenFuncs.isAuth()) {
 			getStyles(true, setStylesSelected);
 			getStyles(false, setStylesAll);
 		}
-	}, [])
+	}, []);
 	return (
 		<div className="figures">
 			<div className="selected">
@@ -118,7 +137,11 @@ export default function Inventory() {
 							key={`style_${style.packName}`}
 							onClick={() => {
 								setStyle(style.id);
-								setCurrent((prev) => ({ ...prev, style: style.packName, id: style.id }));
+								setCurrent((prev) => ({
+									...prev,
+									style: style.packName,
+									id: style.id,
+								}));
 								stylesSelected[current.color][current.figure] = style;
 								// send request to save selected color
 							}}

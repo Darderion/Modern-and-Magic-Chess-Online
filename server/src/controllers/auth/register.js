@@ -5,6 +5,7 @@ const {
 const { User } = require('../../db/models');
 const hashPassword = require('../../util/hashPassword');
 const addStylePack = require('../sharedFunctions/addStylePack');
+const { gameObjs } = require('../../config');
 
 module.exports = async (req, res) => {
   if (!req.body || !req.body.password || !req.body.nick) {
@@ -30,8 +31,9 @@ module.exports = async (req, res) => {
       passwordHash,
       salt,
     });
-    addStylePack(newUser.id, 'default', true);
-    addStylePack(newUser.id, 'wikipedia', false);
+    gameObjs.defaultPacks.forEach((pack) =>
+      addStylePack(newUser.id, pack.packName, pack.isSelected)
+    );
     req.user = { id: newUser.id };
     return res.json(req.user);
   } catch (e) {

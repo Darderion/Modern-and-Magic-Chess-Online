@@ -7,6 +7,11 @@ module.exports = {
   gameObjs: {
     figures: ['bishop', 'king', 'knight', 'queen', 'pawn', 'rook'],
     colors: ['black', 'white'],
+    defaultStyle: {id: -1, packName: 'default'},
+    defaultPacks: [
+      {packName: 'default', isSelected: true},
+      {packName: 'wikipedia', isSelected: false},
+    ]
   },
   env: {
     nodeEnv: process.env.NODE_ENV,

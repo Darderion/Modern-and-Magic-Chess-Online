@@ -18,32 +18,36 @@ module.exports = async (req, res) => {
       }, {});
       return prev;
     }, {});
-    for(const style of styles) {
+    for (const style of styles) {
       const styleContent = style?.dataValues;
-      if(styleContent) {
+      if (styleContent) {
         const styleEl = await Style.findOne({
           where: {
             id: styleContent.StyleId,
           },
         });
         const style2 = styleEl.dataValues;
-        if(isSelected) {
-          res2[style2.pieceColor][style2.typeOfPiece] = 
-            {id: style2.id, packName: style2.packName};
+        if (isSelected) {
+          res2[style2.pieceColor][style2.typeOfPiece] = {
+            id: style2.id,
+            packName: style2.packName,
+          };
         } else {
-          res2[style2.pieceColor][style2.typeOfPiece].push(
-            {id: style2.id, packName: style2.packName});
+          res2[style2.pieceColor][style2.typeOfPiece].push({
+            id: style2.id,
+            packName: style2.packName,
+          });
         }
       }
-      for(let color of gameObjs.colors) {
-        for(let figure of gameObjs.figures) {
-          if(isSelected) {
-            if(!res2[color][figure]){
-              res2[color][figure] = {id: -1, packName: 'default'};
+      for (let color of gameObjs.colors) {
+        for (let figure of gameObjs.figures) {
+          if (isSelected) {
+            if (!res2[color][figure]) {
+              res2[color][figure] = gameObjs.defaultStyle;
             }
           } else {
-            if(res2[color][figure] === {}) {
-              res2[color][figure].push({id: -1, packName: 'default'});
+            if (res2[color][figure] === {}) {
+              res2[color][figure].push(gameObjs.defaultStyle);
             }
           }
         }

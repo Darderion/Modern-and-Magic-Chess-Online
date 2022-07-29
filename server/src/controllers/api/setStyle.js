@@ -30,11 +30,12 @@ module.exports = async (req, res) => {
       await selectedSimilarUserStyle.save();
     }
 
-    const userStyle = await UserStyle.findOne({ 
+    const userStyle = await UserStyle.findOne({
       where: {
         UserId: req.user.id,
         StyleId: newId,
-    }});
+      },
+    });
 
     userStyle.set({ isSelected: true });
     userStyle.save();
