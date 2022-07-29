@@ -84,6 +84,9 @@ export default function Nav({ isAuth, setIsAuth }) {
 					<NavComponent.Link as={Link} to="/ConnectorExample">
 						Connector Example
 					</NavComponent.Link>
+					<NavComponent.Link as={Link} to="/GameExample">
+						Game Example
+					</NavComponent.Link>
 				</NavComponent>
 				<div className="login__btns" onClick={ setLoginMargin }>
 				{isAuth?  
