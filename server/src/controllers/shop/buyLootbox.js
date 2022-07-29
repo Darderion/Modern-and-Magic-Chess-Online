@@ -85,7 +85,7 @@ module.exports = async (req, res) => {
     UserStyle.create({
       UserId: userId,
       StyleId: fellStyle,
-      isSelected: 0,
+      isSelected: false,
     });
 
     User.update(

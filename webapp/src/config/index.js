@@ -17,6 +17,7 @@ const config = {
     },
     client: {
         showLoginType: { none: 0, signIn: 1, signUp: 2},
+        accTokenCookie: process.env.ACC_TOKEN_COOKIE,
     },
 };
 

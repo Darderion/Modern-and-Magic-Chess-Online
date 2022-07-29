@@ -107,8 +107,9 @@ const closeLobby = (ws) => {
 };
 const workWithWS = (ws, data) => {
   console.log(data);
-  switch (data.type) {
+  switch (data?.type) {
     case 'openLobby':
+      console.log(ws.user);
       if (ws.user && !serverInfo.games.has(ws)) {
         ws.lobbyName = data.data.lobbyName || 'Unnamed';
         ws.lobbyID = serverInfo.lobbies.maxID++;
@@ -140,6 +141,7 @@ const workWithWS = (ws, data) => {
           200,
           new Message(successMessages.lobbyClosed)
         );
+        sendAllLobbies();
       } else {
         sendToWS(ws, 'closeLobby', 400, new Message(errorMessages.noOpenLobby));
       }
@@ -188,7 +190,7 @@ const workWithWS = (ws, data) => {
           new Message(data.data.message)
         );
       } else if (!serverInfo.games.has(ws)) {
-        sendToWS(ws, 400, new Message(errorMessages.userIsntInGame));
+        sendToWS(ws, 'sendMessage', 400, new Message(errorMessages.userIsntInGame));
       }
       break;
     case 'myStep':
@@ -228,38 +230,50 @@ const workWithWS = (ws, data) => {
         sendToWS(ws, 'auth', 200, ws.user);
       })();
       break;
+    case 'accToken': 
+      getUser(data.data).then(res => {
+        ws.user = res?.dataValues;
+        if (ws.user) {
+          sendToWS(ws, 'accToken', 200, {
+            message: successMessages.connected,
+            userID: ws.user.id,
+          });
+        } else {
+          sendToWS(ws, 'accToken', 200, new Message(successMessages.guestAuth));
+        }
+      });
+      break;
   }
-  //console.log('lobbies count: ', serverInfo.lobbies.size);
-  //console.log('lobbyClientsSize: ', serverInfo.lobbyClients.size);
+  console.log('lobbies count: ', serverInfo.lobbies.size);
+  console.log('lobbyClientsSize: ', serverInfo.lobbyClients.size);
   //console.log('games size: ', serverInfo.games.size);
 };
 
-const getUser = (req) => {
-  if (
-    !req.headers.authorization ||
-    !req.cookies ||
-    !req.cookies[env.cookieName]
-  )
+const getUser = async (message) => {
+  if (!message)
     return undefined;
-  const [method, accessToken] = req.headers.authorization.split(' ');
+  const [method, accessToken] = message.split(' ');
   if (method !== 'Bearer' || !accessToken) return undefined;
-  const decodedPayload = jwt.verify(accessToken, env.accessTokenSecret);
-  return decodedPayload || undefined;
+  try {
+    const decodedPayload = jwt.verify(accessToken, env.accessTokenSecret);
+    const tmp = decodedPayload || undefined;
+    if(tmp) {
+      const user = await User.findOne({
+        where: { id: tmp.id } });
+      return user;
+    }
+  } catch(err) {
+    console.log('err: ', err);
+  }
+  return undefined;
 };
 
 module.exports = (server) => {
   serverInfo.wsServer = new WebSocket.Server({ server });
   serverInfo.lobbies.maxID = 0;
   serverInfo.wsServer.on('connection', async (ws, req) => {
-    ws.user = getUser(req);
-    if (ws.user) {
-      sendToWS(ws, 'connection', 200, {
-        message: successMessages.connected,
-        userID: ws.user.id,
-      });
-    } else {
-      sendToWS(ws, 'connection', 200, new Message(successMessages.guestAuth));
-    }
+    ws.user = undefined;
+    sendToWS(ws, 'connection', 200, new Message(successMessages.guestAuth));
     addOnError(ws);
     if (req.url === '/main') {
       ws.on('message', (message) => {

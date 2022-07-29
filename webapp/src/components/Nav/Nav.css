@@ -9,8 +9,12 @@
   top: 4rem;
   right: 1rem;
   z-index: 2;
-  background-color: white;
 }
 .authon button {
   margin-left: 0.5rem;
+}
+.me-auto{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
