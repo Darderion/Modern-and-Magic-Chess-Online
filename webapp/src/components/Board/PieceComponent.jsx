@@ -43,7 +43,7 @@ const PieceComponent = ({
 
 	const side = String(chess.turn()) === 'b' ? 'black' : 'white';
 
-	// const { boardData, sendMessage } = useContext(ConnectorContext);
+	const { boardData, sendMessage } = useContext(ConnectorContext);
 
 	const handleClick = () => {
 		// Если нет доступа, ничего не делаем
@@ -108,7 +108,7 @@ const PieceComponent = ({
 				) : null}
 			</div>
 			)
-		}, []
+		}, [board]
 	);
 };
 

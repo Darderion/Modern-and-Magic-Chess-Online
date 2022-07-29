@@ -18,28 +18,31 @@ const GameComponent = ({ pgn, skins, view }) => {
 		});
 	}, []);
 
+	const whitePlayer = chess.header()['White'];
+	const blackPlayer = chess.header()['Black'];
+
 	useEffect(() => {
 		if (boardData['type'] === 'myStep' || boardData['type'] === 'otherStep') {
-			setChess(() => {
-				const newPGN = boardData['data']['pgn'].split('\n').slice(3).join('\n');
-				const next = new Chess();
-				next.load_pgn(newPGN);
-
-				if (next.in_checkmate()) {
-					const winner = String(next.turn() === 'b') ? 'White' : 'Black';
-					alert(`${winner} Wins!`);
-					sendMessage({
-						type: 'closeGame',
-					});
-				}
-
-				return next;
-			});
+			const newChess = new Chess();
+			newChess.load_pgn(boardData['data']['pgn']);
+			if (newChess.header()['White'] === whitePlayer && newChess.header()['Black'] === blackPlayer) {
+				setChess(() => {
+					if (newChess.in_checkmate()) {
+						const winner = String(next.turn() === 'b') ? whitePlayer : blackPlayer;
+						alert(`${winner} Wins!`);
+						sendMessage({
+							type: 'closeGame',
+						});
+					}
+					return newChess;
+				});
+			}
+			
 		}
 	}, [boardData]);
 
 	const handleSurrenderClick = () => {
-		const winner = String(next.turn() === 'b') ? 'White' : 'Black';
+		const winner = String(next.turn() === 'b') ? whitePlayer : blackPlayer;
 		alert(`${winner} Wins!`);
 	};
 
