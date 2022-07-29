@@ -1,0 +1,6 @@
+.ChatContainer {
+    width: 360px;
+    height: 360px;
+    margin: 20px;
+    display: flex;
+}

@@ -15,11 +15,12 @@ class GameMaster {
     this.chess.header('Black', ws2.user.id);
     this.currentStep = ws1;
     this.isFinished = false;
+    this.messages = [];
     try {
       (async () => {
         const newGame = await Game.create({
-          whitePiecesUserId: ws1.user.id,
-          blackPiecesUserId: ws2.user.id,
+          whitePiecesUserId: ws1.user.id, // firstUser
+          blackPiecesUserId: ws2.user.id, //secondUser
           startTime: sequelize.fn('NOW'),
           isFinished: 0,
           description: this.chess.pgn(),
