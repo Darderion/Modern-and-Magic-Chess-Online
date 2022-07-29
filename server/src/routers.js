@@ -23,6 +23,7 @@ apiRouter.post('/highlightMoves', verifyAccess, api.highlightMoves);
 apiRouter.get('/getStyles', verifyAccess, api.getStyles);
 apiRouter.post('/getUserStyles', verifyAccess, api.getUserStyles);
 apiRouter.post('/setStyle', verifyAccess, api.setStyle);
+apiRouter.get('/getUserMoney', verifyAccess, api.getUserMoney);
 
 shopRouter.get('/getLootboxStyles/:id', verifyAccess, shop.getLootboxStyles);
 shopRouter.post('/buyLootbox/:id', verifyAccess, shop.buyLootbox);

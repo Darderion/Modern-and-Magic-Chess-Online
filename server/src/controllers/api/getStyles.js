@@ -1,7 +1,7 @@
 const { ApiError } = require('../../validators/errors/ApiError');
 const StyleDispatcher = require('../sharedFunctions/StyleDispatcher');
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res) => {
   if (!req || !req.body) {
     return new ApiError(
       500,

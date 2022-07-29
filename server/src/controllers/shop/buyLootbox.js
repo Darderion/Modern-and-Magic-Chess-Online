@@ -82,13 +82,13 @@ module.exports = async (req, res) => {
   let style;
 
   try {
-    UserStyle.create({
+    await UserStyle.create({
       UserId: userId,
       StyleId: fellStyle,
       isSelected: false,
     });
 
-    User.update(
+    await User.update(
       { money: userRemainingMoney },
       {
         where: { id: userId },

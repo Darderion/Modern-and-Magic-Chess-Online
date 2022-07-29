@@ -46,6 +46,7 @@ class GameMaster {
             winnerId: movement.fieldsToUpdate.winnerId,
             finishTime: sequelize.fn('NOW'),
           });
+          this.addMoneyToPlayers(movement.fieldsToUpdate.result);
         } else {
           this.save();
         }
@@ -61,6 +62,9 @@ class GameMaster {
         description: this.chess.pgn(),
       });
     }
+  }
+  async addMoneyToPlayers(result) {
+    await gameExecutor.addMoneyToPlayers(this.chess, result);
   }
 }
 

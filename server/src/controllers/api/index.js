@@ -8,6 +8,8 @@ const makeMove = require('./makeMove');
 const getStyles = require('./getStyles');
 const getUserStyles = require('./getUserStyles');
 const setStyle = require('./setStyle');
+const addMoney = require('./addMoney');
+const getUserMoney = require('./getUserMoney');
 
 module.exports = {
   history: require('./history'),
@@ -21,4 +23,6 @@ module.exports = {
   getLobby,
   highlightMoves,
   makeMove,
+  addMoney,
+  getUserMoney,
 };

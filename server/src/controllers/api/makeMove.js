@@ -47,6 +47,17 @@ module.exports = async (req, res) => {
     return error.sendResponse(res);
   }
 
+  if (fieldsToUpdate.result) {
+    const operationInfo = await GameExecutor.addMoneyToPlayers(
+      game,
+      fieldsToUpdate.result
+    );
+
+    if (!operationInfo.success) {
+      return operationInfo.error.sendResponse(res);
+    }
+  }
+
   try {
     await Game.update(fieldsToUpdate, {
       where: { id: lobbyId },

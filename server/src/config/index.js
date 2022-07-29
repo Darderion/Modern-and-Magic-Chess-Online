@@ -28,8 +28,11 @@ module.exports = {
     port: process.env.SERVER_PORT,
   },
   client: {
-    url: process.env.CLIENT_PROTOCOL + '://' + 
-         process.env.CLIENT_HOST + ':' + 
-         process.env.CLIENT_PORT,
+    url:
+      process.env.CLIENT_PROTOCOL +
+      '://' +
+      process.env.CLIENT_HOST +
+      ':' +
+      process.env.CLIENT_PORT,
   },
 };
