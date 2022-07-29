@@ -12,12 +12,13 @@ function Connector(props) {
     const [boardData, setBoardData] = useState({});
     const [lobbyData, setLobbyData] = useState({});
     const [generalData, setGeneralData] = useState({});
+    const messageLocalID = useRef(0);
 
     const webSocketMessageTypes = [
         [setChatData,
             ['sendMessage', 'message']],
         [setBoardData,
-            ['myStep', 'otherStep', 'closeGame']],
+            ['myStep', 'otherStep', 'closeGame', 'createGame']],
         [setLobbyData,
             [
                 'allLobbies',
@@ -25,6 +26,7 @@ function Connector(props) {
                 'openLobby',
                 'closeLobby',
                 'connectToLobby',
+                'createGame'
             ],
         ],
     ];
@@ -58,6 +60,10 @@ function Connector(props) {
         console.log(event);
         if (event.data) {
             const data = JSON.parse(event.data);
+
+            data['messageLocalID'] = messageLocalID;
+            messageLocalID.current += 1;
+
             const { type } = data;
             const value = webSocketMessageTypes.find(([_, types]) =>
                 types.includes(type),

@@ -1,23 +1,28 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { ConnectorContext } from "../../Connector";
 
-import './chat.css'
+import './Chat.css'
 
 function Chat() {
     const { chatData, sendMessage } = useContext(ConnectorContext);
-    const [inputText, setInputText] = useState('');
+    const [ inputText, setInputText ] = useState('');
+    const [ messages, setMessages ] = useState([]);
 
     useEffect(
         () => {
+            console.log(chatData);
             if (chatData.type == 'message') {
-                console.log(chatData.message)
+                setMessages(prev => [...prev, chatData.data.message]);
+                console.log(chatData.data.message)
             }
         }, [chatData]
     )
 
     function sendChatMessage() {
-        sendMessage({ type: 'sendMessage', message: inputText });
-        setInputText('');
+        sendMessage(JSON.parse(inputText));
+        setMessages(prev => [...prev, inputText]);
+        console.log(JSON.parse(inputText));
+        // setInputText('');
     }
 
     function handleChange(event) {
@@ -29,7 +34,15 @@ function Chat() {
             return (
                 <div className="ChatContainer">
                     <div className="ChatMessages">
-
+                        {
+                            messages.map(
+                                (message) => {
+                                    return (
+                                        <div className="ChatMessage">{ message }</div>
+                                    );
+                                }
+                            )
+                        }
                     </div>
                     <div className="ChatInputContainer">
                         <input onChange={handleChange} value={inputText} type="text" className="ChatTextInput" />
