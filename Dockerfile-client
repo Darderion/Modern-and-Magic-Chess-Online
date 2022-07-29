@@ -1,0 +1,10 @@
+FROM debian:bullseye-slim
+RUN apt-get update && apt-get -y install npm curl
+RUN npm install --global yarn
+RUN npm install -g n
+RUN n stable
+COPY webapp/package.json webapp/package.json
+WORKDIR /webapp/
+RUN yarn
+COPY webapp/ /webapp/
+ENTRYPOINT ["yarn", "start"]

@@ -1,0 +1,11 @@
+FROM debian:bullseye-slim
+RUN apt-get update && apt-get -y install npm curl
+RUN npm install --global yarn
+RUN npm install -g n
+RUN n stable
+COPY server/package.json server/package.json
+COPY install_web_docker.sh server/install_web_docker.sh
+WORKDIR /server/
+RUN yarn
+COPY server/ /server/
+ENTRYPOINT ["bash", "install_web_docker.sh"]
