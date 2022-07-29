@@ -9,8 +9,10 @@ module.exports = {
     colors: ['black', 'white'],
     defaultStyle: {id: -1, packName: 'default'},
     defaultPacks: [
-      {packName: 'default', isSelected: true},
-      {packName: 'wikipedia', isSelected: false},
+      {packName: 'default', isSelected: false},
+      {packName: 'wikipedia', isSelected: true},
+      {packName: 'go', isSelected: false},
+      {packName: 'br', isSelected: false},
     ]
   },
   env: {

@@ -46,7 +46,11 @@ function Chat() {
                         }
                     </div>
                     <div className="ChatInputContainer">
-                        <input onChange={handleChange} value={inputText} type="text" className="ChatTextInput" />
+                        <input onChange={handleChange} value={inputText} type="text" className="ChatTextInput" 
+                        onKeyDown={(event) => {
+                            if(event.key === 'Enter') 
+                                sendChatMessage();
+                        }}/>
                         <button onClick={sendChatMessage} className="ChatSendButton">Send</button>
                     </div>
                 </div>

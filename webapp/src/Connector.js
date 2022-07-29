@@ -32,6 +32,7 @@ function Connector(props) {
     ];
 
     function connect() {
+        ws.current?.close();
         ws.current = new WebSocket(config.server.serverWebsockerURL);
         ws.current.onopen = onOpen;
         ws.current.onclose = onClose;
@@ -40,6 +41,7 @@ function Connector(props) {
     }
 
     function onOpen(event) {
+        sendMessage({type: 'allLobbies'});
         setGeneralData({ status: "opened" });
         if(accTokenFuncs.isAuth())
             sendMessage({type: 'accToken', data: accTokenFuncs.getToken() });
@@ -92,7 +94,7 @@ function Connector(props) {
         lobbyData,
         generalData,
         sendMessage,
-        setBoardData
+        connect,
     }
 
     return (
@@ -102,4 +104,4 @@ function Connector(props) {
     );
 }
 
-export { Connector, ConnectorContext };
+export { Connector, ConnectorContext};

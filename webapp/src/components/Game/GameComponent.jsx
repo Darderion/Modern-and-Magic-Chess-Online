@@ -5,6 +5,7 @@ import BoardComponent from '../Board/BoardComponent';
 import * as Chess from 'chess.js';
 import './styles.css';
 import Chat from '../Chat/Chat';
+import { Prompt } from 'react-router-dom';
 
 const GameComponent = ({ pgn, skins, view, onClose, prevId }) => {
 	
@@ -64,6 +65,17 @@ const GameComponent = ({ pgn, skins, view, onClose, prevId }) => {
 	return useMemo(() => {
 		return (
 			<div className="wrapper">
+				<Prompt
+			  message={(location, action) => {
+			    if (action === 'POP') {
+			      console.log("Backing up...")
+			    }
+					console.log(action);
+					console.log(location.pathname);
+			    return location.pathname === '/'
+			      ? true
+			      : `Are you sure you want to go to ${location.pathname}?`
+			  }}/>
 				<div className="window">
 					<div className="left-container">
 						<div className="board-container">

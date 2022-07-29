@@ -38,6 +38,14 @@ class Message {
 const getStyle = async (ws) => {
   return await oneUserStyles(ws.user.id, true);
 };
+
+const getMixedStyles = (whiteStyles, blackStyles) => {
+  return {
+    white: whiteStyles.white,
+    black: blackStyles.black,
+  }
+}
+
 const createGame = async (ws1, ws2) => {
   closeLobby(ws1);
   closeLobby(ws2);
@@ -46,17 +54,19 @@ const createGame = async (ws1, ws2) => {
   const gameMaster = new GameMaster(ws1, ws2, serverInfo, (gameID, pgn) => {
     serverInfo.games.set(ws1, gameMaster);
     serverInfo.games.set(ws2, gameMaster);
+    const styles = gameMaster.isFirstFirst ? getMixedStyles(styles1, styles2) :
+      getMixedStyles(styles2, styles1);
     sendToWS(ws1, 'createGame', 200, {
       gameID,
       pgn,
       isFirst: gameMaster.isFirstFirst,
-      styles: styles1,
+      styles,
     });
     sendToWS(ws2, 'createGame', 200, {
       gameID,
       pgn,
       isFirst: !gameMaster.isFirstFirst,
-      styles: styles2,
+      styles,
     });
   });
 };

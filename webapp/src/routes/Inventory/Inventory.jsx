@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './Inventory.css';
 import { startCase } from 'lodash';
 import config from '../../config/index.js';

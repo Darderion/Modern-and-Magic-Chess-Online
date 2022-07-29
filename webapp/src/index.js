@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import DocumentTitle from 'react-document-title';
-
 import { Connector } from './Connector'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -12,7 +11,7 @@ root.render(
     <Connector>
       <DocumentTitle title={title}>
         <>
-        <App/>
+          <App/>
         </>
       </DocumentTitle>
     </Connector>,

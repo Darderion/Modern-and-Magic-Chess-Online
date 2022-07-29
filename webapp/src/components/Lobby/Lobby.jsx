@@ -7,27 +7,16 @@ import { ConnectorContext } from '../../Connector';
 
 export default function Lobby({ setGameData }) {
   const { lobbyData, sendMessage } = useContext(ConnectorContext);
-  const [ lobby, setLobby ] = useState({id: Number(sessionStorage.getItem('curLobbyId')), desc: ''});  
+  const [ lobby, setLobby ] = useState({id: undefined, desc: ''});  
   const [ allLobbies, setAllLobbies ] = useState([]);
   const descEl = useRef(null);
-
-  const sendAllLobbiesMessage = () => {
-    try {
-      sendMessage({ type: 'allLobbies' });
-    } catch (err) {
-      setTimeout(sendAllLobbiesMessage, 50);
-    }
-  }
   
-  useEffect(sendAllLobbiesMessage, []);
-
   const createLobby = () => {
     sendMessage({type: 'openLobby', data: { lobbyName: descEl.current.value }});
   }
   const closeLobby = () => {
     sendMessage({type: 'closeLobby'});
     setLobby(() => {
-      sessionStorage.setItem('curLobbyId', undefined);
       return {id: undefined, desc: ''}
     });
   }
@@ -44,16 +33,13 @@ export default function Lobby({ setGameData }) {
       case 'openLobby':
         if(lobbyData?.data?.lobbyID)
           setLobby(prev => {
-            sessionStorage.setItem('curLobbyId', lobbyData?.data?.lobbyID);
             return {id: lobbyData?.data?.lobbyID, desc: lobbyData?.data?.lobbyName }
           });
         break;
       case 'startGame':
+      case 'createGame':
         setGameData(lobbyData?.data);
         break;
-      case 'createGame':
-          setGameData(lobbyData?.data);
-          break;
       default:
         break;
     }
@@ -64,9 +50,9 @@ export default function Lobby({ setGameData }) {
       <div className="lobby__container">
         { !(lobby.id + 1) ? 
         <div className="create__lobby">
-          <TextareaAutosize className="create__lobby__description" 
-            placeholder="Description" ref={descEl}/>
-          <button className="create__lobby__btn" onClick={createLobby}>Create lobby</button>
+            <TextareaAutosize className="create__lobby__description" 
+              placeholder="Description" ref={descEl}/>
+            <button className="create__lobby__btn" onClick={createLobby}>Create lobby</button>
         </div> : 
         <div className="wait__player">
           <div className="player__lobby__info">
