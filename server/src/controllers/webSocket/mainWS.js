@@ -225,18 +225,8 @@ const workWithWS = (ws, data) => {
         );
       }
       break;
-    case 'auth': //for test
-      (async () => {
-        ws.user = await User.findOne({
-          where: {
-            id: data.id,
-          },
-        });
-        sendToWS(ws, 'auth', 200, ws.user);
-      })();
-      break;
-    case 'accToken':
-      getUser(data.data).then((res) => {
+    case 'accToken': 
+      getUser(data.data).then(res => {
         ws.user = res?.dataValues;
         if (ws.user) {
           sendToWS(ws, 'accToken', 200, {

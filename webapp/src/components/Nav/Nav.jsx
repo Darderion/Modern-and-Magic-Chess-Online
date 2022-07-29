@@ -48,7 +48,7 @@ export default function Nav({ isAuth, setIsAuth }) {
 	const signInHandler = (data) => {
 		axios.post(loginUrl, data)
     .then(res => {
-      if(res?.statusText === 'OK') {
+			if(res?.statusText === 'OK') {
 				const accToken = res?.data?.accessToken;
 				accTokenFuncs.setToken(accToken);
 				//alert('Log in successfully');

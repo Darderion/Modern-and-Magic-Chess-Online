@@ -9,10 +9,10 @@ module.exports = async (req, res, next) => {
     return new BadRequestApiError(
       'No access auth header provided'
     ).sendResponse(res);
-  if (!req.cookies || !req.cookies[env.cookieName])
+  /* if (!req.cookies || !req.cookies[env.cookieName])
     return new BadRequestApiError('No refresh token provided').sendResponse(
       res
-    );
+    ); */ // TODO use refresh later
 
   const [method, accessToken] = req.headers.authorization.split(' ');
   if (method !== 'Bearer' || !accessToken)
