@@ -8,7 +8,7 @@ const StyleDispatcher = require('../controllers/sharedFunctions/StyleDispatcher'
 
 module.exports = async (req, res, next) => {
   const userId = req.user.id;
-  
+
   const operationInfo = await StyleDispatcher.getStyles({
     packName: 'default',
   });
