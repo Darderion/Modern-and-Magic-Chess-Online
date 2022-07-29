@@ -105,6 +105,7 @@ const sendAllLobbiesForWS = (ws) => {
         lobbyID: el.lobbyID,
         lobbyName: el.lobbyName,
         userName: el.user.nick,
+        isMy: el.user.id === ws?.user?.id,
       };
     })
   );
@@ -126,10 +127,6 @@ const workWithWS = (ws, data) => {
         ws.lobbyName = data.data.lobbyName || 'Unnamed';
         ws.lobbyID = serverInfo.lobbies.maxID++;
         serverInfo.lobbies.add(ws);
-        sendToWS(ws, 'openLobby', 200, {
-          lobbyID: ws.lobbyID,
-          lobbyName: ws.lobbyName,
-        });
         sendAllLobbies();
       } else {
         if (!ws.user) {
