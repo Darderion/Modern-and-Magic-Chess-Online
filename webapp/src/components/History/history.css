@@ -1,0 +1,10 @@
+#game-container {
+    background-color: aliceblue;
+}
+
+.game-card {
+    display: flex;
+    background-color: #779556;
+    margin: 40px;
+    justify-content: space-evenly;
+}

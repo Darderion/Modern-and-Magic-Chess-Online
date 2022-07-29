@@ -19,6 +19,9 @@ export default function Nav() {
 					<NavComponent.Link as={Link} to="/Inventory">
 						Inventory
 					</NavComponent.Link>
+					<NavComponent.Link as={Link} to="/History">
+						History
+					</NavComponent.Link>
 					<NavComponent.Link as={Link} to="/About">
 						About
 					</NavComponent.Link>

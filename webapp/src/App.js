@@ -9,6 +9,7 @@ import Lobby from './routes/Lobby/Lobby';
 import lobbyInfo from './routes/Lobby/lobbyInfo';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import History from "./components/History/History";
 
 const lobbies = Array.from({length: 16}).map((_, i) => {
 	return lobbyInfo(i, `Ivan${i}`, `Lobby for Ivan #${i}`) 
@@ -28,6 +29,7 @@ function App() {
 					<Route path="/inventory" element={<Inventory></Inventory>}></Route>
 					<Route path="/lobby" element={<Lobby lobbies={lobbies}></Lobby>}></Route>
 					<Route path="/about" element={<About></About>}></Route>
+					<Route path="/history" element={<History></History>}></Route>
 				</Routes>
 			</div>
 		</BrowserRouter>

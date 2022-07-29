@@ -6,3 +6,5 @@
 server/src/db/config/config.json
 */yarn.lock
 /webapp/.vscode
+test
+
