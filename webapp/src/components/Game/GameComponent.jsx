@@ -1,13 +1,13 @@
-import React, { useContext, useMemo, useState, useEffect } from 'react';
+import React, { useContext, useMemo, useState, useEffect, useRef } from 'react';
 import { ConnectorContext } from '../../Connector';
 import BoardComponent from '../Board/BoardComponent';
 // import ChatComponent from '../Chat/ChatComponent';
 import * as Chess from 'chess.js';
 import './styles.css';
 
-const GameComponent = ({ pgn, skins, view }) => {
+const GameComponent = ({ pgn, skins, view, onClose, prevId }) => {
+	
 	const { boardData, sendMessage } = useContext(ConnectorContext);
-
 	const tmp = new Chess();
 	tmp.load_pgn(pgn);
 
@@ -17,31 +17,45 @@ const GameComponent = ({ pgn, skins, view }) => {
 	const blackPlayer = chess.header()['Black'];
 
 	useEffect(() => {
-		if (boardData['type'] === 'myStep' || boardData['type'] === 'otherStep') {
-			const newChess = new Chess();
-			newChess.load_pgn(boardData['data']['pgn']);
-			if (
-				newChess.header()['White'] === whitePlayer &&
-				newChess.header()['Black'] === blackPlayer
-			) {
-				setChess(() => {
-					if (newChess.in_checkmate()) {
-						const winner =
-							String(newChess.turn()) === 'b' ? whitePlayer : blackPlayer;
-						alert(`${winner} Wins!`);
-						sendMessage({
-							type: 'closeGame',
-						});
+		if(boardData.messageLocalID !== prevId.current){
+			console.log(boardData);
+			prevId.current = boardData.messageLocalID;
+			switch(boardData.type) {
+				case 'myStep':
+				case 'otherStep':
+					if(boardData?.code === 200) {
+						const newChess = new Chess();
+						newChess.load_pgn(boardData['data']['pgn']);
+						setChess(() => {
+							if (newChess.in_checkmate()) {
+								const winner =
+									String(newChess.turn()) === 'b' ? whitePlayer : blackPlayer;
+								alert(`${winner} Wins!`);
+								sendMessage({
+									type: 'closeGame',
+								});
+							}
+							return newChess;
+							});
 					}
-					return newChess;
-				});
+					break;
+				case 'closeGame':
+					onClose('left');
+					break;
+				case 'otherLeft':
+					onClose('win');
+					break;
+				default:
+					break;
 			}
 		}
+		
 	}, [boardData]);
 
 	const handleSurrenderClick = () => {
-		const winner = String(chess.turn()) === 'b' ? whitePlayer : blackPlayer;
-		alert(`${winner} Wins!`);
+		/* const winner = String(chess.turn()) === 'b' ? whitePlayer : blackPlayer; */
+		sendMessage({ type: 'closeGame'})
+		//alert(`${winner} Wins!`);
 	};
 
 	const currentTurn = String(chess.turn()) === 'b' ? 'Black' : 'White';
@@ -58,8 +72,8 @@ const GameComponent = ({ pgn, skins, view }) => {
 					<div className="right-container">
 						<div className="info">
 							<div className="block">Current Turn: {currentTurn}</div>
-							<button class="button" onClick={handleSurrenderClick}>
-								<span>Surrender </span>
+							<button className="button" onClick={handleSurrenderClick}>
+								<span>Resign </span>
 							</button>
 						</div>
 						<div className="text-block">
@@ -73,7 +87,7 @@ const GameComponent = ({ pgn, skins, view }) => {
 				</div>
 			</div>
 		);
-	}, [boardData]);
+	}, [chess]);
 };
 
 export default GameComponent;

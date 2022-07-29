@@ -18,7 +18,7 @@ function Connector(props) {
         [setChatData,
             ['sendMessage', 'message']],
         [setBoardData,
-            ['myStep', 'otherStep', 'closeGame', 'createGame']],
+            ['myStep', 'otherStep', 'closeGame', 'otherLeft']],
         [setLobbyData,
             [
                 'allLobbies',
@@ -46,7 +46,7 @@ function Connector(props) {
     }
 
     function reset(event) {
-        webSocketMessageTypes.forEach(([setData]) => setData({}));
+        webSocketMessageTypes.forEach(([setData]) => setData({messageLocalID: -100}));
     }
 
     function onClose(event) {
@@ -61,7 +61,7 @@ function Connector(props) {
         if (event.data) {
             const data = JSON.parse(event.data);
 
-            data['messageLocalID'] = messageLocalID;
+            data['messageLocalID'] = messageLocalID.current;
             messageLocalID.current += 1;
 
             const { type } = data;
@@ -91,7 +91,8 @@ function Connector(props) {
         boardData,
         lobbyData,
         generalData,
-        sendMessage
+        sendMessage,
+        setBoardData
     }
 
     return (

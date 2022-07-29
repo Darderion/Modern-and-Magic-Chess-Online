@@ -37,7 +37,7 @@ const PieceComponent = ({
 	};
 
 	//   Приблизительно так будет выглядеть запрос
-	const src = `${imageSource}/${skin}/${color}/${name}.svg`;
+	const src = `${imageSource}/${skin.packName}/${color}/${name}.svg`;
 
 	const idleSRC = require('./idle.svg').default;
 	const targetedSRC = require('./targeted.svg').default;

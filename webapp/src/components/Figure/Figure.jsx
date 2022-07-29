@@ -8,7 +8,7 @@ export default function Figure({ isSelected, figureInfo, onClick }) {
 	const { color, figure, style } = figureInfo;
 	return (
 		<label
-			className={isSelected() ? 'selected' : ''}
+			className={isSelected() ? 'selected-figure' : ''}
 			onClick={onClick}
 			id={`${figure}__${color}__${style}`}>
 			<img

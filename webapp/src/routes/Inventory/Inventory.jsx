@@ -101,7 +101,7 @@ export default function Inventory() {
 	}, []);
 	return (
 		<div className="figures">
-			<div className="selected">
+			<div className="selector">
 				{colors.map((color) => (
 					<div className="selected__line" key={`color__${color}`}>
 						<p className="color">{startCase(color)} styles:</p>

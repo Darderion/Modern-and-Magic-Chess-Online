@@ -3,6 +3,7 @@ const { env } = require('../../config/index');
 const WebSocket = require('ws');
 const GameMaster = require('./gameMaster');
 const jwt = require('jsonwebtoken');
+const oneUserStyles = require('../sharedFunctions/oneUserStyles');
 
 const serverInfo = {
   wsServer: undefined,
@@ -13,7 +14,7 @@ const serverInfo = {
 
 const errorMessages = {
   notAuth: 'Not authorized user',
-  wrongLobbyID: 'Wrond lobbyID',
+  wrongLobbyID: 'Wrong lobbyID',
   wrongStep: 'Wrong step or not your step',
   userIsInGame: 'This user is in game',
   userIsntInGame: "This user isn't in game",
@@ -34,14 +35,14 @@ class Message {
   }
 }
 
-const getStyle = (/* ws */) => {
-  //возовем функцию из стилей для получения всех стилей из ws.user.id
-  const data = {};
-  return data;
+const getStyle = async (ws) => {
+  return await oneUserStyles(ws.user.id, true);
 };
-const createGame = (ws1, ws2) => {
+const createGame = async (ws1, ws2) => {
   closeLobby(ws1);
   closeLobby(ws2);
+  const styles1 = await getStyle(ws1);
+  const styles2 = await getStyle(ws2);
   const gameMaster = new GameMaster(ws1, ws2, serverInfo, (gameID, pgn) => {
     serverInfo.games.set(ws1, gameMaster);
     serverInfo.games.set(ws2, gameMaster);
@@ -49,13 +50,13 @@ const createGame = (ws1, ws2) => {
       gameID,
       pgn,
       isFirst: gameMaster.isFirstFirst,
-      styles: getStyle(ws1),
+      styles: styles1,
     });
     sendToWS(ws2, 'createGame', 200, {
       gameID,
       pgn,
       isFirst: !gameMaster.isFirstFirst,
-      styles: getStyle(ws2),
+      styles: styles2,
     });
   });
 };
@@ -67,7 +68,7 @@ const closeGame = (ws) => {
   if (serverInfo.games.has(ws)) {
     serverInfo.games.get(ws).save();
     const ws2 = serverInfo.games.get(ws).getOtherWS(ws);
-    sendToWS(ws2, 'closeGame', 200, new Message(errorMessages.otherUserLeft));
+    sendToWS(ws2, 'otherLeft', 200, new Message(errorMessages.otherUserLeft));
     serverInfo.games.delete(ws);
     serverInfo.games.delete(ws2);
   }
