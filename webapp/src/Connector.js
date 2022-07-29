@@ -18,7 +18,7 @@ function Connector(props) {
         [setChatData,
             ['sendMessage', 'message']],
         [setBoardData,
-            ['myStep', 'otherStep', 'closeGame', 'createGame']],
+            ['myStep', 'otherStep', 'closeGame']],
         [setLobbyData,
             [
                 'allLobbies',
@@ -61,7 +61,7 @@ function Connector(props) {
         if (event.data) {
             const data = JSON.parse(event.data);
 
-            data['messageLocalID'] = messageLocalID;
+            data['messageLocalID'] = messageLocalID.current;
             messageLocalID.current += 1;
 
             const { type } = data;
