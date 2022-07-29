@@ -1,7 +1,8 @@
 import React, { useContext, useMemo } from 'react';
-import axios from 'axios';
+import config from '../../config/index';
 import BoardContext from './BoardContext';
-// import { ConnectorContext } from '../../Connector';
+import { ConnectorContext } from '../../Connector';
+import './board-styles.css';
 
 const PieceComponent = ({
 	skin,
@@ -15,6 +16,8 @@ const PieceComponent = ({
 	from,
 	chess,
 }) => {
+	const { server } = config;
+	const imageSource = server.serverURL + server.skinFolder + '/';
 	/** Преобразует индекс клетки в классическую нотацию
 	 * @param {int} ind 0 - 63
 	 * @returns
@@ -34,7 +37,7 @@ const PieceComponent = ({
 	};
 
 	//   Приблизительно так будет выглядеть запрос
-	const src = axios.get(`localhost:5000/skins/${skin}/${color}/${name}.svg`);
+	const src = `${imageSource}/${skin}/${color}/${name}.svg`;
 
 	const idleSRC = require('./idle.svg').default;
 	const targetedSRC = require('./targeted.svg').default;

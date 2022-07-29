@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PieceComponent from './PieceComponent';
 import BoardContext from './BoardContext';
-import './style.css'
+import './board-styles.css'
 
 const BoardComponent = ({ chess, view, skins }) => {
 	const PiecesEnum = {
@@ -75,7 +75,7 @@ const BoardComponent = ({ chess, view, skins }) => {
 				{layout.map((elem, i) => (
 					<PieceComponent
 						key={view === 'black' ? 63 - i : i}
-						skin={skins[elem.color][elem.name]}
+						skin={elem.color === null ? 'default' : skins[elem.color][elem.name]}
 						color={elem.color}
 						name={elem.name}
 						selected={elem.selected}

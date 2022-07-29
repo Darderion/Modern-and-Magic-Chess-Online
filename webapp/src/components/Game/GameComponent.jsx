@@ -1,22 +1,17 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { ConnectorContext } from '../../Connector';
 import BoardComponent from '../Board/BoardComponent';
-import ChatComponent from '../Chat/ChatComponent'; // Как-то так
+// import ChatComponent from '../Chat/ChatComponent';
 import * as Chess from 'chess.js';
 import './styles.css';
 
-const GameComponent = ({ pgn, skins, view }) => {
-	const { lobbyData, boardData, sendMessage } = useContext(ConnectorContext);
+const GameComponent = ({pgn, skins, view}) => {
+	const { boardData, sendMessage } = useContext(ConnectorContext);
 
-	const { chess, setChess } = useState(new Chess());
+	const tmp = new Chess();
+	tmp.load_pgn(pgn)
 
-	useEffect(() => {
-		setChess(() => {
-			const next = new Chess();
-			next.load_pgn(pgn);
-			return next;
-		});
-	}, []);
+	const [ chess, setChess ] = useState(tmp);
 
 	const whitePlayer = chess.header()['White'];
 	const blackPlayer = chess.header()['Black'];
@@ -28,7 +23,7 @@ const GameComponent = ({ pgn, skins, view }) => {
 			if (newChess.header()['White'] === whitePlayer && newChess.header()['Black'] === blackPlayer) {
 				setChess(() => {
 					if (newChess.in_checkmate()) {
-						const winner = String(next.turn() === 'b') ? whitePlayer : blackPlayer;
+						const winner = String(newChess.turn()) === 'b' ? whitePlayer : blackPlayer;
 						alert(`${winner} Wins!`);
 						sendMessage({
 							type: 'closeGame',
@@ -42,11 +37,11 @@ const GameComponent = ({ pgn, skins, view }) => {
 	}, [boardData]);
 
 	const handleSurrenderClick = () => {
-		const winner = String(next.turn() === 'b') ? whitePlayer : blackPlayer;
+		const winner = String(chess.turn()) === 'b' ? whitePlayer : blackPlayer;
 		alert(`${winner} Wins!`);
 	};
 
-	const currentTurn = String(chess.turn() === 'b') ? 'Black' : 'White';
+	const currentTurn = String(chess.turn()) === 'b' ? 'Black' : 'White';
 
 	return useMemo(() => {
 		return (
@@ -65,13 +60,14 @@ const GameComponent = ({ pgn, skins, view }) => {
 							</button>
 						</div>
 						<div className="text-block">
-							<ChatComponent />
+							{/* <ChatComponent /> */}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia magnam vero iusto sed doloremque maxime architecto provident quaerat in. Velit error sed, dolor pariatur facilis inventore quo porro voluptatem aspernatur!
 						</div>
 					</div>
 				</div>
 			</div>
 		);
-	}, [boardData, lobbyData]);
+	}, [boardData]);
 };
 
 export default GameComponent;
