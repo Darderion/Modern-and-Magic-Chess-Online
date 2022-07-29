@@ -51,11 +51,11 @@ const PieceComponent = ({
 		// Если нажатая клетка уже помечена как таргетед или свободная для хода, то просто делаем туда ход
 		if (targeted || idle) {
 			// Приблизительно так будет выглядеть запрос
-			// sendMessage({
-			// 	'type': "myStep",
-			// 	"data":
-			// 	{"move":{"from":getCODE(from), "to":getCODE(index)}}
-			// })
+			sendMessage({
+				'type': "myStep",
+				"data":
+				{"move":{"from":getCODE(from), "to":getCODE(index)}}
+			})
 			// Если нажал на непомеченную клетку своего цвета, то надо для этого игрока изменить доску из BoardComponent
 		} else if (side === color) {
 			setBoard((prev) => {

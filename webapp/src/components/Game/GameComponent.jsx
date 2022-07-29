@@ -1,36 +1,49 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { ConnectorContext } from '../../Connector';
 import BoardComponent from '../Board/BoardComponent';
+import ChatComponent from '../Chat/ChatComponent'; // Как-то так
 import * as Chess from 'chess.js';
-import axios from 'axios';
 import './styles.css';
 
-const GameComponent = ({ pgn, skins }) => {
-
+const GameComponent = ({ pgn, skins, view }) => {
 	const { lobbyData, boardData, sendMessage } = useContext(ConnectorContext);
 
-	const {chess, setChess} = useState(new Chess());
+	const { chess, setChess } = useState(new Chess());
 
-    useEffect((prev) => {
-        const next = new Chess();
-        next.load_pgn(pgn.join('\n'));
-        return next;
-    }, [])
+	useEffect(() => {
+		setChess(() => {
+			const next = new Chess();
+			next.load_pgn(pgn);
+			return next;
+		});
+	}, []);
 
-    useEffect(() => {
-        const newPGN = null; // TODO: получение pgn из boardData
-        const next = new Chess();
-        next.load_pgn(newPGN.join('\n'));
-        return next;
-    }, [boardData])
+	useEffect(() => {
+		if (boardData['type'] === 'myStep' || boardData['type'] === 'otherStep') {
+			setChess(() => {
+				const newPGN = boardData['data']['pgn'].split('\n').slice(3).join('\n');
+				const next = new Chess();
+				next.load_pgn(newPGN);
+
+				if (next.in_checkmate()) {
+					const winner = String(next.turn() === 'b') ? 'White' : 'Black';
+					alert(`${winner} Wins!`);
+					sendMessage({
+						type: 'closeGame',
+					});
+				}
+
+				return next;
+			});
+		}
+	}, [boardData]);
 
 	const handleSurrenderClick = () => {
-		// ???
+		const winner = String(next.turn() === 'b') ? 'White' : 'Black';
+		alert(`${winner} Wins!`);
 	};
 
-    const currentTurn = String(chess.turn() === 'b') ? 'Black' : 'White';
-
-    const view = null; // TODO: добавить получение смотрящей стороны
+	const currentTurn = String(chess.turn() === 'b') ? 'Black' : 'White';
 
 	return useMemo(() => {
 		return (
@@ -49,10 +62,7 @@ const GameComponent = ({ pgn, skins }) => {
 							</button>
 						</div>
 						<div className="text-block">
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo,
-							natus unde nesciunt itaque ea aliquam dolorum sint officia sunt
-							repellendus expedita esse, minima neque amet molestiae enim et
-							suscipit iure!
+							<ChatComponent />
 						</div>
 					</div>
 				</div>
