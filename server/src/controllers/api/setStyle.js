@@ -1,9 +1,10 @@
 const { Style, UserStyle } = require('../../db/models');
 const { Op } = require('sequelize');
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res) => {
   try {
-    const style = await Style.findByPk(req.params.id);
+    const newId = req.body?.id;
+    const style = await Style.findByPk(newId);
 
     const similarStyles = await Style.findAll({
       where: {
@@ -29,15 +30,16 @@ module.exports = async (req, res, next) => {
       await selectedSimilarUserStyle.save();
     }
 
-    const userStyle = await UserStyle.findOne({
-      UserId: req.user.id,
-      StyleId: style.id,
-    });
+    const userStyle = await UserStyle.findOne({ 
+      where: {
+        UserId: req.user.id,
+        StyleId: newId,
+    }});
 
     userStyle.set({ isSelected: true });
     userStyle.save();
 
-    return res.json({ style });
+    return res.json({ userStyle });
   } catch (e) {
     console.log(e);
   }

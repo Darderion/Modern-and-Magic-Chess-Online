@@ -4,6 +4,10 @@ module.exports = {
   sequelizeInfo: {
     syncType: process.env.MODELS_SYNC_TYPE,
   },
+  gameObjs: {
+    figures: ['bishop', 'king', 'knight', 'queen', 'pawn', 'rook'],
+    colors: ['black', 'white'],
+  },
   env: {
     nodeEnv: process.env.NODE_ENV,
     isDevelopment: process.env.NODE_ENV === 'development',

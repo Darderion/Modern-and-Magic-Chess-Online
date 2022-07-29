@@ -4,6 +4,8 @@ const {
 } = require('../../validators/errors/ApiError');
 const { User } = require('../../db/models');
 const hashPassword = require('../../util/hashPassword');
+const addStylePack = require('../sharedFunctions/addStylePack');
+
 module.exports = async (req, res) => {
   if (!req.body || !req.body.password || !req.body.nick) {
     return new BadRequestApiError(
@@ -28,6 +30,8 @@ module.exports = async (req, res) => {
       passwordHash,
       salt,
     });
+    addStylePack(newUser.id, 'default', true);
+    addStylePack(newUser.id, 'wikipedia', false);
     req.user = { id: newUser.id };
     return res.json(req.user);
   } catch (e) {
