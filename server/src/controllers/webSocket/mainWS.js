@@ -190,7 +190,12 @@ const workWithWS = (ws, data) => {
           new Message(data.data.message)
         );
       } else if (!serverInfo.games.has(ws)) {
-        sendToWS(ws, 'sendMessage', 400, new Message(errorMessages.userIsntInGame));
+        sendToWS(
+          ws,
+          'sendMessage',
+          400,
+          new Message(errorMessages.userIsntInGame)
+        );
       }
       break;
     case 'myStep':
@@ -230,8 +235,8 @@ const workWithWS = (ws, data) => {
         sendToWS(ws, 'auth', 200, ws.user);
       })();
       break;
-    case 'accToken': 
-      getUser(data.data).then(res => {
+    case 'accToken':
+      getUser(data.data).then((res) => {
         ws.user = res?.dataValues;
         if (ws.user) {
           sendToWS(ws, 'accToken', 200, {
@@ -250,19 +255,19 @@ const workWithWS = (ws, data) => {
 };
 
 const getUser = async (message) => {
-  if (!message)
-    return undefined;
+  if (!message) return undefined;
   const [method, accessToken] = message.split(' ');
   if (method !== 'Bearer' || !accessToken) return undefined;
   try {
     const decodedPayload = jwt.verify(accessToken, env.accessTokenSecret);
     const tmp = decodedPayload || undefined;
-    if(tmp) {
+    if (tmp) {
       const user = await User.findOne({
-        where: { id: tmp.id } });
+        where: { id: tmp.id },
+      });
       return user;
     }
-  } catch(err) {
+  } catch (err) {
     console.log('err: ', err);
   }
   return undefined;
