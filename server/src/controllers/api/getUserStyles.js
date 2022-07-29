@@ -11,12 +11,12 @@ module.exports = async (req, res) => {
 
   try {
     const styles = await UserStyle.findAll({ where });
-    const res2 = gameObjs.colors.reduce((prev, cur) => {
-      prev[cur] = gameObjs.figures.reduce((prev2, cur2) => {
-        prev2[cur2] = isSelected ? undefined : [];
-        return prev2;
+    const res2 = gameObjs.colors.reduce((colors, color) => {
+      colors[color] = gameObjs.figures.reduce((figures, figure) => {
+        figures[figure] = isSelected ? undefined : [];
+        return figures;
       }, {});
-      return prev;
+      return colors;
     }, {});
     for (const style of styles) {
       const styleContent = style?.dataValues;
