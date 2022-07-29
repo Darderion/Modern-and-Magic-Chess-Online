@@ -11,18 +11,17 @@ function Chat() {
     useEffect(
         () => {
             console.log(chatData);
-            if (chatData.type == 'message') {
-                setMessages(prev => [...prev, chatData.data.message]);
+            if (chatData?.type == 'message') {
+                setMessages(prev => [...prev, { fromYou: false, message: chatData.data.message }]);
                 console.log(chatData.data.message)
             }
         }, [chatData]
     )
 
     function sendChatMessage() {
-        sendMessage(JSON.parse(inputText));
-        setMessages(prev => [...prev, inputText]);
-        console.log(JSON.parse(inputText));
-        // setInputText('');
+        sendMessage({ type: "sendMessage", data: { message: inputText }});
+        setMessages(prev => [...prev, { fromYou: true, message: inputText }]);
+        setInputText('');
     }
 
     function handleChange(event) {
@@ -36,9 +35,9 @@ function Chat() {
                     <div className="ChatMessages">
                         {
                             messages.map(
-                                (message) => {
+                                (fromYou, message) => {
                                     return (
-                                        <div className="ChatMessage">{ message }</div>
+                                        <div className={`ChatMessage ${fromYou ? 'ChatYourMessage' : 'ChatOpponentMessage'}`}>{ message }</div>
                                     );
                                 }
                             )
@@ -50,7 +49,7 @@ function Chat() {
                     </div>
                 </div>
             )
-        }, [chatData, inputText]
+        }, [chatData, inputText, messages]
     );
 }
 
