@@ -6,6 +6,12 @@ const swaggerDefinition = {
     title: 'Modern-and-Magic-Chess-Online',
     version: '1.0.0',
   },
+  servers: [
+    {
+      url: 'http://localhost:5000',
+      description: 'Development server',
+    },
+  ],
 };
 
 const swaggerOptions = {
