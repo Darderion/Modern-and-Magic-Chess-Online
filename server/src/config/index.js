@@ -4,6 +4,15 @@ module.exports = {
   sequelizeInfo: {
     syncType: process.env.MODELS_SYNC_TYPE,
   },
+  gameObjs: {
+    figures: ['bishop', 'king', 'knight', 'queen', 'pawn', 'rook'],
+    colors: ['black', 'white'],
+    defaultStyle: {id: -1, packName: 'default'},
+    defaultPacks: [
+      {packName: 'default', isSelected: true},
+      {packName: 'wikipedia', isSelected: false},
+    ]
+  },
   env: {
     nodeEnv: process.env.NODE_ENV,
     isDevelopment: process.env.NODE_ENV === 'development',
@@ -17,5 +26,13 @@ module.exports = {
   },
   server: {
     port: process.env.SERVER_PORT,
+  },
+  client: {
+    url:
+      process.env.CLIENT_PROTOCOL +
+      '://' +
+      process.env.CLIENT_HOST +
+      ':' +
+      process.env.CLIENT_PORT,
   },
 };

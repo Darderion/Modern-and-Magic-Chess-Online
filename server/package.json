@@ -7,7 +7,7 @@
     "start": "node src/server",
     "dev": "nodemon -L src/server",
     "test": "jest",
-    "createdb": "sequelize db:create --config src/db/config/config.json && node ./src/db/create.js",
+    "createdb": "sequelize db:create --config src/db/config/config.json && node ./src/db/create.js && node ./src/db/initStyles.js && node ./src/db/initLootboxes.js",
     "dropdb": "sequelize db:drop --config src/db/config/config.json"
   },
   "author": "vs9lh",

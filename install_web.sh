@@ -25,6 +25,8 @@ elif [[ $create ]]; then
   yarn createdb
 elif [[ $fill ]]; then
   node ./src/db/create.js
+  node ./src/db/initStyles.js
+  node ./src/db/initLootboxes.js
 fi
 if [[ $inst_web ]]; then
   cd ../webapp

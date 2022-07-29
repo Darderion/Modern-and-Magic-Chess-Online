@@ -3,48 +3,102 @@ import './Inventory.css';
 import { startCase } from 'lodash';
 import config from '../../config/index.js';
 import Figure from '../../components/Figure/Figure';
+import axios from 'axios';
+import accTokenFuncs from '../../sharedFuncs/accToken';
+import { useEffect } from 'react';
 
 const { server, game } = config;
 const { figures, colors } = game;
 const imageSource = server.serverURL + server.skinFolder + '/';
+const allStylesURL = server.serverURL + server.allStylesFolder + '/';
+const setStyleURL = server.serverURL + server.setStyleFolder + '/';
 
+const defaultStyle = { id: -1, packName: 'default' };
 
-const stylesSelected = {
-	black: {
-		bishop: 'go',
-		king: 'br',
-		knight: 'br',
-		queen: 'br',
-		pawn: 'default',
-		rook: 'go',
-	},
-	white: {
-		bishop: 'go',
-		king: 'br',
-		knight: 'br',
-		queen: 'br',
-		pawn: 'default',
-		rook: 'go',
-	},
+const allFiguresWithStylesInit = Object.fromEntries(
+	figures.map((figure) => [figure, [defaultStyle]]),
+);
+
+const stylesAllInit = Object.fromEntries(
+	colors.map((color) => [color, allFiguresWithStylesInit]),
+);
+
+const selectedFiguresWithStylesInit = Object.fromEntries(
+	figures.map((figure) => [figure, defaultStyle]),
+);
+
+const stylesSelectedInit = Object.fromEntries(
+	colors.map((color) => [color, selectedFiguresWithStylesInit]),
+);
+
+const setStyle = (styleId) => {
+	axios
+		.post(
+			setStyleURL,
+			{ id: styleId },
+			{
+				headers: {
+					Authorization: accTokenFuncs.getToken(),
+				},
+			},
+		)
+		.catch((err) => console.log(err));
 };
 
-const packs = ['go', 'br', 'default'];
-
-const allFiguresWithStyles = Object.fromEntries(
-	figures.map((figure) => [figure, packs]),
-);
-
-const stylesAll = Object.fromEntries(
-	colors.map((color) => [color, allFiguresWithStyles]),
-);
+const getStyles = (isSelected = true, setter) => {
+	axios
+		.post(
+			allStylesURL,
+			{ isSelected: isSelected },
+			{
+				headers: {
+					Authorization: accTokenFuncs.getToken(),
+				},
+			},
+		)
+		.then((res) => {
+			if (res?.statusText === 'OK') {
+				const styles = res?.data?.styles;
+				setter(styles);
+			} else {
+				console.log('Something went wrong!');
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			//const message = err?.response?.data?.message;
+			//alert(message ? message : 'Something went wrong!');
+			const allFiguresWithStyles = Object.fromEntries(
+				figures.map((figure) => [
+					figure,
+					isSelected
+						? { style: 'default', id: -1 }
+						: [{ style: 'default', id: -1 }],
+				]),
+			);
+			const stylesAll = Object.fromEntries(
+				colors.map((color) => [color, allFiguresWithStyles]),
+			);
+			setter(stylesAll);
+		});
+};
 
 export default function Inventory() {
 	const [current, setCurrent] = useState({
+		id: -1,
 		color: 'black',
 		figure: 'bishop',
 		style: 'default',
 	});
+	const [stylesSelected, setStylesSelected] = useState(stylesSelectedInit);
+	const [stylesAll, setStylesAll] = useState(stylesAllInit);
 
+	useEffect(() => {
+		if (accTokenFuncs.isAuth()) {
+			getStyles(true, setStylesSelected);
+			getStyles(false, setStylesAll);
+		}
+	}, []);
 	return (
 		<div className="figures">
 			<div className="selected">
@@ -57,7 +111,7 @@ export default function Inventory() {
 							const figureInfo = {
 								color,
 								figure,
-								style: stylesSelected[color][figure],
+								style: stylesSelected[color][figure].packName,
 							};
 							return (
 								<Figure
@@ -79,16 +133,21 @@ export default function Inventory() {
 				<div className="show__line">
 					{stylesAll[current.color][current.figure].map((style) => (
 						<Figure
-							isSelected={() => current.style === style}
-							key={`style_${style}`}
+							isSelected={() => current.style === style.packName}
+							key={`style_${style.packName}`}
 							onClick={() => {
-								setCurrent((prev) => ({ ...prev, style }));
+								setStyle(style.id);
+								setCurrent((prev) => ({
+									...prev,
+									style: style.packName,
+									id: style.id,
+								}));
 								stylesSelected[current.color][current.figure] = style;
 								// send request to save selected color
 							}}
 							figureInfo={{
 								...current,
-								style,
+								style: style.packName,
 							}}
 							imageSource={imageSource}
 						/>
