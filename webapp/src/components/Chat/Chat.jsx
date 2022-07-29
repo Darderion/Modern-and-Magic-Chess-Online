@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { ConnectorContext } from "../../Connector";
 
+import './chat.css'
+
 function Chat() {
     const { chatData, sendMessage } = useContext(ConnectorContext);
     const [inputText, setInputText] = useState('');
