@@ -6,9 +6,9 @@ import React, { useContext, useMemo, useState, useRef, useEffect } from 'react';
 import { ConnectorContext } from '../../Connector';
 
 export default function Lobby({ setGameData }) {
-  const { lobbyData, sendMessage } = useContext(ConnectorContext);
-  const [ lobby, setLobby ] = useState({id: undefined, desc: ''});  
+  const { lobbyData, sendMessage } = useContext(ConnectorContext); 
   const [ allLobbies, setAllLobbies ] = useState([]);
+  const [desc, setDesc] = useState('');
   const descEl = useRef(null);
   
   const createLobby = () => {
@@ -16,25 +16,24 @@ export default function Lobby({ setGameData }) {
   }
   const closeLobby = () => {
     sendMessage({type: 'closeLobby'});
-    setLobby(() => {
-      return {id: undefined, desc: ''}
-    });
   }
 
   const onJoin = (lobbyID) => {
     sendMessage({type: 'connectToLobby', data: {lobbyID}});
   }
 
+  const hasMy = () => {
+    return allLobbies.filter(el => {
+      if(el.isMy)
+        setDesc(el.lobbyName);
+      return el.isMy;
+    }).length !== 0;
+  }
+
   useEffect(() => {
     switch(lobbyData?.type) {
       case 'allLobbies':
         setAllLobbies(lobbyData.data);
-        break;
-      case 'openLobby':
-        if(lobbyData?.data?.lobbyID)
-          setLobby(prev => {
-            return {id: lobbyData?.data?.lobbyID, desc: lobbyData?.data?.lobbyName }
-          });
         break;
       case 'startGame':
       case 'createGame':
@@ -48,7 +47,7 @@ export default function Lobby({ setGameData }) {
   return useMemo(() => {
     return (
       <div className="lobby__container">
-        {(lobby.id === undefined) ? 
+        {(!hasMy()) ? 
         <div className="create__lobby">
             <TextareaAutosize className="create__lobby__description" 
               placeholder="Description" ref={descEl}/>
@@ -57,20 +56,19 @@ export default function Lobby({ setGameData }) {
         <div className="wait__player">
           <div className="player__lobby__info">
             <div className="wait__title">Wait  other player connection to your lobby.</div>
-            <div className="lobby__desc" id="lobbyDesc">Description: {lobby.desc}</div>
+            <div className="lobby__desc" id="lobbyDesc">Description: {desc}</div>
           </div>
           <button className="close__lobby" onClick={closeLobby}>X</button>
         </div>
         }
         <div className="open__lobbies">
-          {allLobbies.map(({ lobbyID, userName, lobbyName }) => {
-            console.log(lobbyID, lobby.id);
+          {allLobbies.map(({ lobbyID, userName, lobbyName, isMy }) => {
             return (<div className="lobby__info" key={lobbyID}>
               <div className="lobby__info__desc">
                 <div className="username">{userName}</div>
                 <div className="lobbyname">{lobbyName}</div>
               </div>
-              {(lobbyID !== lobby.id) ?
+              {(!isMy) ?
                 <button className="lobby__info__btn" onClick={() => onJoin(lobbyID)}>
                   Play
                </button> : ''}
@@ -80,5 +78,5 @@ export default function Lobby({ setGameData }) {
         </div>
       </div>
     );
-  }, [descEl, allLobbies, lobby]);
+  }, [descEl, allLobbies]);
 }
