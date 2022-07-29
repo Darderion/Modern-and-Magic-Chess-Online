@@ -7,7 +7,7 @@ import { ConnectorContext } from '../../Connector';
 
 export default function Lobby({ setGameData }) {
   const { lobbyData, sendMessage } = useContext(ConnectorContext);
-  const [ lobby, setLobby ] = useState({id: undefined, desc: ''});  
+  const [ lobby, setLobby ] = useState({id: Number(sessionStorage.getItem('curLobbyId')), desc: ''});  
   const [ allLobbies, setAllLobbies ] = useState([]);
   const descEl = useRef(null);
 
@@ -27,6 +27,7 @@ export default function Lobby({ setGameData }) {
   const closeLobby = () => {
     sendMessage({type: 'closeLobby'});
     setLobby(() => {
+      sessionStorage.setItem('curLobbyId', undefined);
       return {id: undefined, desc: ''}
     });
   }
@@ -43,6 +44,7 @@ export default function Lobby({ setGameData }) {
       case 'openLobby':
         if(lobbyData?.data?.lobbyID)
           setLobby(prev => {
+            sessionStorage.setItem('curLobbyId', lobbyData?.data?.lobbyID);
             return {id: lobbyData?.data?.lobbyID, desc: lobbyData?.data?.lobbyName }
           });
         break;

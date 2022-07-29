@@ -35,9 +35,11 @@ function Chat() {
                     <div className="ChatMessages">
                         {
                             messages.map(
-                                (fromYou, message) => {
+                                ({fromYou, message}) => {
                                     return (
-                                        <div className={`ChatMessage ${fromYou ? 'ChatYourMessage' : 'ChatOpponentMessage'}`}>{ message }</div>
+                                        <div className={`ChatMessage ${fromYou ? 'ChatYourMessage' : 'ChatOpponentMessage'}`}>
+                                            <div className="inner__message">{ message }
+                                                </div></div>
                                     );
                                 }
                             )
@@ -49,7 +51,7 @@ function Chat() {
                     </div>
                 </div>
             )
-        }, [chatData, inputText, messages]
+        }, [inputText, messages]
     );
 }
 

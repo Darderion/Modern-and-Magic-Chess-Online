@@ -35,14 +35,7 @@ function App() {
 				<Nav isAuth={isAuth} setIsAuth={setIsAuth}></Nav>
 				<Routes>
 					<Route path="/" element={<Main></Main>}></Route>
-					<Route path="/about" element={<About></About>}></Route>
 					<Route path="/inventory" element={<Inventory></Inventory>}></Route>
-					<Route path="/about" element={<About></About>}></Route>
-
-					<Route path="/GameExample" element={<GameExample />} />
-					<Route
-						path="/ConnectorExample"
-						element={<ConnectorExample></ConnectorExample>}></Route>
 				</Routes>
 			</div>
 		</BrowserRouter>

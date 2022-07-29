@@ -4,6 +4,7 @@ import BoardComponent from '../Board/BoardComponent';
 // import ChatComponent from '../Chat/ChatComponent';
 import * as Chess from 'chess.js';
 import './styles.css';
+import Chat from '../Chat/Chat';
 
 const GameComponent = ({ pgn, skins, view, onClose, prevId }) => {
 	
@@ -77,11 +78,7 @@ const GameComponent = ({ pgn, skins, view, onClose, prevId }) => {
 							</button>
 						</div>
 						<div className="text-block">
-							{/* <ChatComponent /> */}
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-							magnam vero iusto sed doloremque maxime architecto provident
-							quaerat in. Velit error sed, dolor pariatur facilis inventore quo
-							porro voluptatem aspernatur!
+							<Chat />
 						</div>
 					</div>
 				</div>

@@ -266,7 +266,7 @@ const getUser = async (message) => {
 
 module.exports = (server) => {
   serverInfo.wsServer = new WebSocket.Server({ server });
-  serverInfo.lobbies.maxID = 0;
+  serverInfo.lobbies.maxID = 1;
   serverInfo.wsServer.on('connection', async (ws, req) => {
     ws.user = undefined;
     sendToWS(ws, 'connection', 200, new Message(successMessages.guestAuth));

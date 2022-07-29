@@ -19,6 +19,7 @@ class GameExecutor {
     const move = game.move({
       from: from,
       to: to,
+      promotion: 'q',
     });
 
     if (move === null) {

@@ -70,22 +70,17 @@ export default function Nav({ isAuth, setIsAuth }) {
 	return (
 		<Navbar bg="dark" variant="dark">
 			<Container ref={mainBarEl}>
-				<Navbar.Brand href="#">Navbar</Navbar.Brand>
+				<Navbar.Brand href="#"> 
+					<div className="navbar__brand">
+						Modern and Magic Chess Online
+					</div>
+				</Navbar.Brand>
 				<NavComponent className="me-auto">
 					<NavComponent.Link as={Link} to="/" onClick={closeAll}>
 						Home
 					</NavComponent.Link>
 					<NavComponent.Link as={Link} to="/Inventory" onClick={closeAll}>
 						Inventory
-					</NavComponent.Link>
-					<NavComponent.Link as={Link} to="/About" onClick={closeAll}>
-						About
-					</NavComponent.Link>
-					<NavComponent.Link as={Link} to="/ConnectorExample">
-						Connector Example
-					</NavComponent.Link>
-					<NavComponent.Link as={Link} to="/GameExample">
-						Game Example
 					</NavComponent.Link>
 				</NavComponent>
 				<div className="login__btns" onClick={ setLoginMargin }>
