@@ -5,13 +5,13 @@ import BoardComponent from '../Board/BoardComponent';
 import * as Chess from 'chess.js';
 import './styles.css';
 
-const GameComponent = ({pgn, skins, view}) => {
+const GameComponent = ({ pgn, skins, view }) => {
 	const { boardData, sendMessage } = useContext(ConnectorContext);
 
 	const tmp = new Chess();
-	tmp.load_pgn(pgn)
+	tmp.load_pgn(pgn);
 
-	const [ chess, setChess ] = useState(tmp);
+	const [chess, setChess] = useState(tmp);
 
 	const whitePlayer = chess.header()['White'];
 	const blackPlayer = chess.header()['Black'];
@@ -20,10 +20,14 @@ const GameComponent = ({pgn, skins, view}) => {
 		if (boardData['type'] === 'myStep' || boardData['type'] === 'otherStep') {
 			const newChess = new Chess();
 			newChess.load_pgn(boardData['data']['pgn']);
-			if (newChess.header()['White'] === whitePlayer && newChess.header()['Black'] === blackPlayer) {
+			if (
+				newChess.header()['White'] === whitePlayer &&
+				newChess.header()['Black'] === blackPlayer
+			) {
 				setChess(() => {
 					if (newChess.in_checkmate()) {
-						const winner = String(newChess.turn()) === 'b' ? whitePlayer : blackPlayer;
+						const winner =
+							String(newChess.turn()) === 'b' ? whitePlayer : blackPlayer;
 						alert(`${winner} Wins!`);
 						sendMessage({
 							type: 'closeGame',
@@ -32,7 +36,6 @@ const GameComponent = ({pgn, skins, view}) => {
 					return newChess;
 				});
 			}
-			
 		}
 	}, [boardData]);
 
@@ -61,7 +64,10 @@ const GameComponent = ({pgn, skins, view}) => {
 						</div>
 						<div className="text-block">
 							{/* <ChatComponent /> */}
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia magnam vero iusto sed doloremque maxime architecto provident quaerat in. Velit error sed, dolor pariatur facilis inventore quo porro voluptatem aspernatur!
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
+							magnam vero iusto sed doloremque maxime architecto provident
+							quaerat in. Velit error sed, dolor pariatur facilis inventore quo
+							porro voluptatem aspernatur!
 						</div>
 					</div>
 				</div>
