@@ -48,7 +48,7 @@ export default function Lobby({ setGameData }) {
   return useMemo(() => {
     return (
       <div className="lobby__container">
-        { !(lobby.id + 1) ? 
+        {(lobby.id === undefined) ? 
         <div className="create__lobby">
             <TextareaAutosize className="create__lobby__description" 
               placeholder="Description" ref={descEl}/>
@@ -63,7 +63,8 @@ export default function Lobby({ setGameData }) {
         </div>
         }
         <div className="open__lobbies">
-          {allLobbies.map(({lobbyID, userName, lobbyName}) => {
+          {allLobbies.map(({ lobbyID, userName, lobbyName }) => {
+            console.log(lobbyID, lobby.id);
             return (<div className="lobby__info" key={lobbyID}>
               <div className="lobby__info__desc">
                 <div className="username">{userName}</div>
@@ -72,13 +73,12 @@ export default function Lobby({ setGameData }) {
               {(lobbyID !== lobby.id) ?
                 <button className="lobby__info__btn" onClick={() => onJoin(lobbyID)}>
                   Play
-               </button> : ''
-            }
+               </button> : ''}
             </div>
             );
           })}
         </div>
       </div>
     );
-  }, [descEl, allLobbies]);
+  }, [descEl, allLobbies, lobby]);
 }
