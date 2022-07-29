@@ -1,0 +1,37 @@
+.signup__form {
+  max-width: 15rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+  border: 2px solid #212529;
+  padding: 0.3rem;
+  background-color: white;
+  overflow: hidden;
+}
+input {
+  border-radius: 0.6rem;
+  width: 100%;
+}
+input[type="submit"] {
+  width: 50%;
+  margin: 0.3rem auto 0 auto;
+}
+input[type="submit"]:hover {
+  background-color: lightcyan;
+}
+.nick {
+  margin-bottom: 0.3rem
+}
+button.close {
+  border-radius: 0rem;
+  font-weight: 900;
+  border: none;
+  background-color: white;
+  margin-left: 1rem;
+}
+button.close:hover {
+  background-color: white;
+  color: red;
+}

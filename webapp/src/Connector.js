@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 
 import config from './config/index'
+import accTokenFuncs from './sharedFuncs/accToken';
 
 const ConnectorContext = React.createContext();
 
@@ -37,7 +38,9 @@ function Connector(props) {
     }
 
     function onOpen(event) {
-        setGeneralData({ status: "opened" })
+        setGeneralData({ status: "opened" });
+        if(accTokenFuncs.isAuth())
+            sendMessage({type: 'accToken', data: accTokenFuncs.getToken() });
     }
 
     function reset(event) {

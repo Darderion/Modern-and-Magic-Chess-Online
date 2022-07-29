@@ -12,6 +12,12 @@ const config = {
             process.env.REACT_APP_SERVER_PORT + '/' +
             process.env.REACT_APP_SERVER_WEBSOCKET_PATH,
         skinFolder: process.env.REACT_APP_SERVER_STYLE_FOLDER,
+        registerFolder: process.env.REACT_APP_SERVER_REGISTER_FOLDER,
+        loginFolder: process.env.REACT_APP_SERVER_LOGIN_FOLDER,
+    },
+    client: {
+        showLoginType: { none: 0, signIn: 1, signUp: 2},
+        accTokenCookie: process.env.ACC_TOKEN_COOKIE,
     },
 };
 

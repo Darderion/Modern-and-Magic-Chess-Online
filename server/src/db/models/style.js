@@ -27,7 +27,14 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       typeOfPiece: {
-        type: DataTypes.ENUM('bishop', 'king', 'pawn', 'queen', 'rook'),
+        type: DataTypes.ENUM(
+          'bishop',
+          'king',
+          'knight',
+          'pawn',
+          'queen',
+          'rook'
+        ),
         allowNull: false,
       },
 

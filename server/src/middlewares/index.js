@@ -1,4 +1,5 @@
 const { json } = require('express');
+const allowWorkWithWeb = require('./allowWorkWithWeb');
 const disablePoweredBy = require('./disablePoweredBy');
 const requestID = require('./requestID');
 const logger = require('./logger');
@@ -7,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const rateLimiter = require('express-rate-limit');
 const slowDown = require('express-slow-down');
 module.exports = (app) => {
+  app.use(allowWorkWithWeb);
   app.use(json());
   app.use(cookieParser());
   app.use(disablePoweredBy);
