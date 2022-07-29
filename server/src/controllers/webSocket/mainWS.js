@@ -88,6 +88,7 @@ const addOnError = (ws) => {
   ws.on('close', () => {
     removeFromLobbies(ws);
     closeGame(ws);
+    sendAllLobbies();
   });
 };
 const sendToWS = (ws, type, code, data) => {

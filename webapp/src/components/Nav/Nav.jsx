@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 import { Navbar, Container, Nav as NavComponent } from 'react-bootstrap';

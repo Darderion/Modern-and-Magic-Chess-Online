@@ -32,7 +32,7 @@ function Connector(props) {
     ];
 
     function connect() {
-        ws.current?.close();
+        ws.current?.close(3456);
         ws.current = new WebSocket(config.server.serverWebsockerURL);
         ws.current.onopen = onOpen;
         ws.current.onclose = onClose;
@@ -55,7 +55,8 @@ function Connector(props) {
         reset();
         setGeneralData({ status: "closed" })
         
-        setTimeout(() => { connect(); }, 5000)
+        if (event.code !== 3456)
+            setTimeout(() => { connect(); }, 5000)
     }
 
     function onMessage(event) {

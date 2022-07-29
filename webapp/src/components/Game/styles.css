@@ -64,21 +64,21 @@
 .info .block {
     background-color: rgb(190, 190, 190);
     color: #212529;
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: 1rem;
+    padding: 0.7rem;
     font-weight: 600;
     font-size: 20px;
 }
 
 .button {
     display: inline-block;
-    border-radius: 20px;
+    border-radius: 1rem;
     background-color: #f05656;
     border: none;
     color: #FFFFFF;
     text-align: center;
     font-size: 20px;
-    padding: 20px;
+    padding: 0.7rem;
     width: 150px;
     transition: all 0.5s;
     cursor: pointer;

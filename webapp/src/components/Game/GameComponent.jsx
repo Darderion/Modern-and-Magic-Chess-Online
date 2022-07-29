@@ -1,22 +1,17 @@
 import React, { useContext, useMemo, useState, useEffect, useRef } from 'react';
 import { ConnectorContext } from '../../Connector';
 import BoardComponent from '../Board/BoardComponent';
-// import ChatComponent from '../Chat/ChatComponent';
 import * as Chess from 'chess.js';
 import './styles.css';
 import Chat from '../Chat/Chat';
 import { Prompt } from 'react-router-dom';
 
 const GameComponent = ({ pgn, skins, view, onClose, prevId }) => {
-	
 	const { boardData, sendMessage } = useContext(ConnectorContext);
 	const tmp = new Chess();
 	tmp.load_pgn(pgn);
 
 	const [chess, setChess] = useState(tmp);
-
-	const whitePlayer = chess.header()['White'];
-	const blackPlayer = chess.header()['Black'];
 
 	useEffect(() => {
 		if(boardData.messageLocalID !== prevId.current){
@@ -31,7 +26,7 @@ const GameComponent = ({ pgn, skins, view, onClose, prevId }) => {
 						setChess(() => {
 							if (newChess.in_checkmate()) {
 								const winner =
-									String(newChess.turn()) === 'b' ? whitePlayer : blackPlayer;
+									String(newChess.turn()) === 'b' ? 'white' : 'black';
 								alert(`${winner} Wins!`);
 								sendMessage({
 									type: 'closeGame',
@@ -55,7 +50,7 @@ const GameComponent = ({ pgn, skins, view, onClose, prevId }) => {
 	}, [boardData]);
 
 	const handleSurrenderClick = () => {
-		/* const winner = String(chess.turn()) === 'b' ? whitePlayer : blackPlayer; */
+		/* const winner = String(chess.turn()) === 'b' ? 'white' : 'black'; */
 		sendMessage({ type: 'closeGame'})
 		//alert(`${winner} Wins!`);
 	};
@@ -66,15 +61,10 @@ const GameComponent = ({ pgn, skins, view, onClose, prevId }) => {
 		return (
 			<div className="wrapper">
 				<Prompt
-			  message={(location, action) => {
-			    if (action === 'POP') {
-			      console.log("Backing up...")
-			    }
-					console.log(action);
-					console.log(location.pathname);
-			    return location.pathname === '/'
-			      ? true
-			      : `Are you sure you want to go to ${location.pathname}?`
+          message={(location, action) => {
+            return location.pathname === '/'
+              ? true
+              : `Are you sure you want to go to ${location.pathname}?`
 			  }}/>
 				<div className="window">
 					<div className="left-container">

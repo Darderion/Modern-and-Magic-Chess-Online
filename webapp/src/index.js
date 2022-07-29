@@ -10,9 +10,7 @@ const title = "MaMCO - Modern and Magic Chess Online";
 root.render(
     <Connector>
       <DocumentTitle title={title}>
-        <>
-          <App/>
-        </>
+        <App/>
       </DocumentTitle>
     </Connector>,
 );

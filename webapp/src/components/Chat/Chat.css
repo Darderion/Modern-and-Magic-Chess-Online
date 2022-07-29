@@ -6,6 +6,7 @@
     justify-content: space-between;
 }
 .ChatSendButton {
+    border: none;
     border-radius: 0.5rem;
     background-color: #bebebe;
     padding: 0.3rem;
@@ -18,7 +19,7 @@
     display: flex;
     flex-direction: row;
 }
-.ChatTextInput {
+.ChatTextInput {border: none;
     margin-right: 1rem;
 }
 .ChatMessages {

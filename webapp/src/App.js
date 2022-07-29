@@ -1,18 +1,19 @@
 import './App.css';
 import { Nav } from './components';
-import { BrowserRouter, Switch, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Main from './routes/Main/Main';
 import Inventory from './routes/Inventory/Inventory';
 import config from './config';
 import Cookies from 'universal-cookie';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const accTokenCookie = config.client.accTokenCookie;
 
 function App() {
 	const [isAuth, setIsAuth] = useState(new Cookies().get(accTokenCookie));
+
 	return (
 		<BrowserRouter>
 			<div className="App">
