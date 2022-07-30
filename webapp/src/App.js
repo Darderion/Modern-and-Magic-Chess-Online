@@ -10,11 +10,11 @@ import ConnectorExample from './routes/ConnectorExample/ConnectorExample';
 import lobbyInfo from './components/Lobby/lobbyInfo';
 import config from './config';
 import Cookies from 'universal-cookie';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
+import History from "./components/History/History";
 import { useState } from 'react';
-
 const accTokenCookie = config.client.accTokenCookie;
+
 
 const lobbies = Array.from({length: 16}).map((_, i) => {
 	return lobbyInfo(i, `Ivan${i}`, `Lobby for Ivan #${i}`) 
@@ -34,6 +34,7 @@ function App() {
 					<Route path="/board" element={<Board />} />
 					<Route path="/inventory" element={<Inventory></Inventory>}></Route>
 					<Route path="/about" element={<About></About>}></Route>
+					<Route path="/history" element={<History></History>}></Route>
 					<Route path="/ConnectorExample" element={<ConnectorExample></ConnectorExample>}></Route>
 				</Routes>
 			</div>

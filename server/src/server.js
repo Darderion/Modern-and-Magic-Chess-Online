@@ -8,11 +8,13 @@ const setupMiddlewares = require('./middlewares');
 const swaggerSpec = require('./docs/index');
 const path = require('path');
 const mainWS = require('./controllers/webSocket/mainWS');
+const cors = require('cors');
 
 const app = express();
 
 app.use(express.static(path.resolve(__dirname, 'static')));
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+app.use(cors({origin: '*'}));
 
 setupMiddlewares(app);
 
