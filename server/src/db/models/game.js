@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       result: DataTypes.ENUM('draw', 'black', 'white'),

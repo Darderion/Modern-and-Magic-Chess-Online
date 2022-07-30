@@ -3,6 +3,7 @@ const { env } = require('../../config/index');
 const WebSocket = require('ws');
 const GameMaster = require('./gameMaster');
 const jwt = require('jsonwebtoken');
+const oneUserStyles = require('../sharedFunctions/oneUserStyles');
 
 const serverInfo = {
   wsServer: undefined,
@@ -13,7 +14,7 @@ const serverInfo = {
 
 const errorMessages = {
   notAuth: 'Not authorized user',
-  wrongLobbyID: 'Wrond lobbyID',
+  wrongLobbyID: 'Wrong lobbyID',
   wrongStep: 'Wrong step or not your step',
   userIsInGame: 'This user is in game',
   userIsntInGame: "This user isn't in game",
@@ -34,28 +35,38 @@ class Message {
   }
 }
 
-const getStyle = (/* ws */) => {
-  //возовем функцию из стилей для получения всех стилей из ws.user.id
-  const data = {};
-  return data;
+const getStyle = async (ws) => {
+  return await oneUserStyles(ws.user.id, true);
 };
-const createGame = (ws1, ws2) => {
+
+const getMixedStyles = (whiteStyles, blackStyles) => {
+  return {
+    white: whiteStyles.white,
+    black: blackStyles.black,
+  }
+}
+
+const createGame = async (ws1, ws2) => {
   closeLobby(ws1);
   closeLobby(ws2);
+  const styles1 = await getStyle(ws1);
+  const styles2 = await getStyle(ws2);
   const gameMaster = new GameMaster(ws1, ws2, serverInfo, (gameID, pgn) => {
     serverInfo.games.set(ws1, gameMaster);
     serverInfo.games.set(ws2, gameMaster);
+    const styles = gameMaster.isFirstFirst ? getMixedStyles(styles1, styles2) :
+      getMixedStyles(styles2, styles1);
     sendToWS(ws1, 'createGame', 200, {
       gameID,
       pgn,
       isFirst: gameMaster.isFirstFirst,
-      styles: getStyle(ws1),
+      styles,
     });
     sendToWS(ws2, 'createGame', 200, {
       gameID,
       pgn,
       isFirst: !gameMaster.isFirstFirst,
-      styles: getStyle(ws2),
+      styles,
     });
   });
 };
@@ -67,7 +78,7 @@ const closeGame = (ws) => {
   if (serverInfo.games.has(ws)) {
     serverInfo.games.get(ws).save();
     const ws2 = serverInfo.games.get(ws).getOtherWS(ws);
-    sendToWS(ws2, 'closeGame', 200, new Message(errorMessages.otherUserLeft));
+    sendToWS(ws2, 'otherLeft', 200, new Message(errorMessages.otherUserLeft));
     serverInfo.games.delete(ws);
     serverInfo.games.delete(ws2);
   }
@@ -77,6 +88,7 @@ const addOnError = (ws) => {
   ws.on('close', () => {
     removeFromLobbies(ws);
     closeGame(ws);
+    sendAllLobbies();
   });
 };
 const sendToWS = (ws, type, code, data) => {
@@ -93,6 +105,7 @@ const sendAllLobbiesForWS = (ws) => {
         lobbyID: el.lobbyID,
         lobbyName: el.lobbyName,
         userName: el.user.nick,
+        isMy: el.user.id === ws?.user?.id,
       };
     })
   );
@@ -114,10 +127,6 @@ const workWithWS = (ws, data) => {
         ws.lobbyName = data.data.lobbyName || 'Unnamed';
         ws.lobbyID = serverInfo.lobbies.maxID++;
         serverInfo.lobbies.add(ws);
-        sendToWS(ws, 'openLobby', 200, {
-          lobbyID: ws.lobbyID,
-          lobbyName: ws.lobbyName,
-        });
         sendAllLobbies();
       } else {
         if (!ws.user) {
@@ -265,7 +274,7 @@ const getUser = async (message) => {
 
 module.exports = (server) => {
   serverInfo.wsServer = new WebSocket.Server({ server });
-  serverInfo.lobbies.maxID = 0;
+  serverInfo.lobbies.maxID = 1;
   serverInfo.wsServer.on('connection', async (ws, req) => {
     ws.user = undefined;
     sendToWS(ws, 'connection', 200, new Message(successMessages.guestAuth));

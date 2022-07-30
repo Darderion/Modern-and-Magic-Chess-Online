@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import './Inventory.css';
 import { startCase } from 'lodash';
 import config from '../../config/index.js';
 import Figure from '../../components/Figure/Figure';
 import axios from 'axios';
 import accTokenFuncs from '../../sharedFuncs/accToken';
-import { useEffect } from 'react';
+
+import { ConnectorContext } from "../../Connector";
 
 const { server, game } = config;
 const { figures, colors } = game;
@@ -93,6 +94,15 @@ export default function Inventory() {
 	const [stylesSelected, setStylesSelected] = useState(stylesSelectedInit);
 	const [stylesAll, setStylesAll] = useState(stylesAllInit);
 
+	const { connect } = useContext(ConnectorContext);
+
+	useEffect(
+		() => {
+			// Reconnect when entered
+			connect();
+		}, []
+	);
+
 	useEffect(() => {
 		if (accTokenFuncs.isAuth()) {
 			getStyles(true, setStylesSelected);
@@ -101,7 +111,7 @@ export default function Inventory() {
 	}, []);
 	return (
 		<div className="figures">
-			<div className="selected">
+			<div className="selector">
 				{colors.map((color) => (
 					<div className="selected__line" key={`color__${color}`}>
 						<p className="color">{startCase(color)} styles:</p>

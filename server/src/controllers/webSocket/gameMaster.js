@@ -9,17 +9,15 @@ class GameMaster {
     this.serverInfo = serverInfo;
     this.chess = new Chess();
     this.messages = [];
-    this.isFirstFirst = true;
-    //пока так, потом сделаем выбор первого хода
-    this.chess.header('White', ws1.user.id);
-    this.chess.header('Black', ws2.user.id);
-    this.currentStep = ws1;
+    this.isFirstFirst = Math.floor(Math.random() * 2) == 1;
+    this.currentStep = this.isFirstFirst ? ws1 : ws2;
     this.isFinished = false;
+    this.messages = [];
     try {
       (async () => {
         const newGame = await Game.create({
-          whitePiecesUserId: ws1.user.id,
-          blackPiecesUserId: ws2.user.id,
+          whitePiecesUserId: this.currentStep.user.id,
+          blackPiecesUserId: this.getOtherWS(this.currentStep).user.id,
           startTime: sequelize.fn('NOW'),
           isFinished: 0,
           description: this.chess.pgn(),

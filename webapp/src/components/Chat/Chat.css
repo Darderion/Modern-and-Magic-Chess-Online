@@ -1,0 +1,52 @@
+.ChatContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.ChatSendButton {
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #bebebe;
+    padding: 0.3rem;
+}
+.ChatSendButton:hover {
+    background-color: lightcyan;
+}
+.ChatInputContainer {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: row;
+}
+.ChatTextInput {border: none;
+    margin-right: 1rem;
+}
+.ChatMessages {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+.ChatMessage {
+    background-color: #303437;
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+    padding: 0.3rem 0.5rem;
+}
+.ChatYourMessage {
+    max-width: 80%;
+    align-self: flex-end;
+    margin-right: 1rem;
+}
+.ChatOpponentMessage {
+    max-width: 80%;
+    align-self: flex-start;
+    text-align: center;
+    margin-right: 1rem;
+}
+.inner__message {
+    text-align: left;
+    overflow-wrap: break-word;
+}
