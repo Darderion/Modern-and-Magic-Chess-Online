@@ -3,7 +3,8 @@
  * 
  * /api/gameStatus/{id}:
  *   get:
- *     description: Get game status
+ *     summary: Get status of the current game by its id
+ *     description: Get whether the game is finished and 
  *     parameters:
  *       - in: path
  *         name: id
@@ -12,6 +13,8 @@
  *         schema:
  *           type: integer
  *     responses:
+ *       400: 
+ *         description: User has no access to the URL (verifyAccess failed)
  *       500:
  *         description: Failed to read data from database
  *       200:
@@ -32,7 +35,7 @@
  * /api/lobby/{id}:
  *   get:
  *     summary: Get lobby by id
- *     description: Get the space for a user to play with others who join the lobby by id
+ *     description: Get info (id, ids of the players for both colors, time of the game start in ISO 8601 format) about the lobby by id
  *     parameters:
  *       - in: path
  *         name: id
@@ -41,6 +44,8 @@
  *         schema:
  *           type: integer
  *     responses:     
+ *       400: 
+ *         description: User has no access to the URL (verifyAccess failed)
  *       500:
  *         description: Failed to read data from database
  *       200:
@@ -69,6 +74,8 @@
  *     summary: Get all lobbies where games are unfinished
  *     description: Get all lobbies where games are in process to join them as an observer
  *     responses:     
+ *       400: 
+ *         description: User has no access to the URL (verifyAccess failed)
  *       500:
  *         description: Failed to read data from database
  *       200:
@@ -104,6 +111,8 @@
  *         schema:
  *           type: integer 
  *     responses:     
+ *       400: 
+ *         description: User has no access to the URL (verifyAccess failed)
  *       500:
  *         description: Failed to read data from database
  *       200:
@@ -112,9 +121,11 @@
  * 
  * /api/createLobby:
  *   post:
- *     summary: Creates new lobby
- *     description: Creates new lobby with two players and adds the corresponding row into db
+ *     summary: Create new lobby
+ *     description: Create new lobby with two players. The corresponding row is added into dbautomatically
  *     responses:     
+ *       400: 
+ *         description: User has no access to the URL (verifyAccess failed)
  *       500:
  *         description: Failed to read data from database
  *       200:
@@ -129,15 +140,15 @@
  *                  description: Lobby id in db
  * 
  * 
+ * 
+ * 
  * /api/makeMove:
  *   post:
  *     summary: Move a figure on the field
  *     description: Changes position on field of the chosen figure
  *     responses:     
  *       500:
- *         oneOf:
- *           - description: Failed to load PGN
- *           - description: Failed to read data from database
+ *         description: Failed to load PGN __OR__ Failed to read data from database
  *       400:
  *         description: Incorrect move
  *       200:
@@ -157,13 +168,11 @@
  * 
  * /api/highlightMoves:
  *   post:
- *     summary: Depicts all the moves
- *     description: Erase lobby from db by id
+ *     summary: Depict all moves
+ *     description: Make all moves visible on the field
  *     responses:     
  *       500:
- *         oneOf:
- *           - description: Failed to load PGN
- *           - description: Failed to read data from database
+ *         description: Failed to load PGN __OR__ Failed to read data from database
  *       200:
  *         description: All moves highlighted successfully
  *         content:
@@ -180,6 +189,5 @@
  *                turn:
  *                  type: string
  *                  description: The current side to move
- * 
- * 
+ *
  * */
